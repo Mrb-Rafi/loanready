@@ -1,0 +1,176 @@
+{
+  "seed": 20261014,
+  "as_of": "2026-10-14",
+  "params": {
+    "seed": 20261014,
+    "as_of": "2026-10-14",
+    "history_days": 183,
+    "pos_base_cents": [
+      30000,
+      30000,
+      30000,
+      30000,
+      38000,
+      47000,
+      42000
+    ],
+    "pos_base_scale": "0.90",
+    "pos_noise_pct": 10,
+    "pos_txn_min": 25,
+    "pos_txn_max": 60,
+    "sale_min_cents": 400,
+    "sale_max_cents": 2500,
+    "cash_share_pct": 40,
+    "card_fee_rate": "0.015",
+    "cash_cogs_ratio": "0.30",
+    "cash_cogs_noise_pct": 4,
+    "rent_cents": 120000,
+    "wages_cents": 220000,
+    "wages_first": "2026-04-23",
+    "wages_every_days": 14,
+    "power_cents": 21000,
+    "internet_cents": 5000,
+    "utilities_day": 20,
+    "bank_fee_cents": 1200,
+    "bank_fee_day": 28,
+    "catering_min_cents": 60000,
+    "catering_max_cents": 190000,
+    "cafe_min_cents": 15000,
+    "cafe_max_cents": 40000,
+    "gm_bill_min_cents": 70000,
+    "gm_bill_max_cents": 110000,
+    "boxco_bill_min_cents": 40000,
+    "boxco_bill_max_cents": 70000,
+    "closing_bank_cents": 190000,
+    "closing_till_cents": 30000,
+    "opening_till_cents": 20000,
+    "opening_equipment_cents": 800000,
+    "min_balance_cents": 30000,
+    "equipment_headroom_cents": 150000,
+    "equipment_step_cents": 50000,
+    "tuning_margin_cents": 20000,
+    "tuning_step": "0.02",
+    "tuning_max_iter": 20,
+    "extra": {}
+  },
+  "S1": {
+    "personal_ids": [
+      "txn_rina_00213",
+      "txn_rina_00278",
+      "txn_rina_00322"
+    ],
+    "total_cents": 12540
+  },
+  "S2": {
+    "bill_id": "bil_rina_2207",
+    "first_negative_week_base": 3
+  },
+  "S3": {
+    "overdue_invoice_ids": [
+      "inv_rina_1043",
+      "inv_rina_1051"
+    ]
+  },
+  "S4": {
+    "bill_id": "bil_rina_2215",
+    "cheapest_kind": "SUPPLIER_CREDIT",
+    "most_expensive_id": "mca_swiftadvance",
+    "gap_after_collect_cents": 100000,
+    "gap_after_delay_cents": 40000
+  },
+  "S5": {
+    "duplicate_ids": [
+      "txn_rina_00288",
+      "txn_rina_00290"
+    ]
+  },
+  "S6": {
+    "bill_id": "bil_rina_2211",
+    "expected_reason": "ACCOUNT_CHANGED"
+  },
+  "S7": {
+    "injection_refs": [
+      "txn_rina_00306",
+      "pos_rina_004865",
+      "rcp_rina_injected",
+      "bil_rina_2211"
+    ],
+    "min_flags": 4
+  },
+  "S8": {
+    "receipt": "receipt_blurry.png",
+    "status": "NEEDS_CONFIRMATION"
+  },
+  "S10": {
+    "bill_id": "bil_rina_2190",
+    "amount_cents": 90000
+  },
+  "closing_bank_cents": 190000,
+  "closing_till_cents": 30000,
+  "forecast_check": {
+    "base_closings_cents": [
+      268022,
+      231544,
+      -414830,
+      -76601,
+      87421,
+      71748,
+      148575,
+      92597,
+      314027,
+      289457,
+      510887,
+      334909,
+      498931
+    ],
+    "first_negative_week_base": 3,
+    "gap_cents": 420000,
+    "gap_after_collect_cents": 100000,
+    "gap_after_delay_cents": 40000,
+    "cogs_ratio": "0.3069",
+    "s2_ok": true,
+    "s4_ok": true,
+    "direction": 0
+  },
+  "tuning": {
+    "converged": true,
+    "steps": [
+      {
+        "pos_base_scale": "1.00",
+        "s2_ok": true,
+        "s4_ok": false,
+        "direction": -1
+      },
+      {
+        "pos_base_scale": "0.98",
+        "s2_ok": true,
+        "s4_ok": true,
+        "direction": -1
+      },
+      {
+        "pos_base_scale": "0.96",
+        "s2_ok": true,
+        "s4_ok": false,
+        "direction": -1
+      },
+      {
+        "pos_base_scale": "0.94",
+        "s2_ok": true,
+        "s4_ok": true,
+        "direction": -1
+      },
+      {
+        "pos_base_scale": "0.92",
+        "s2_ok": true,
+        "s4_ok": true,
+        "direction": -1
+      },
+      {
+        "pos_base_scale": "0.90",
+        "s2_ok": true,
+        "s4_ok": true,
+        "direction": 0
+      }
+    ]
+  }
+}

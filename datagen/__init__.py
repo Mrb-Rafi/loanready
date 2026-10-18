@@ -1,5 +1,7 @@
-"""Synthetic Rina's Bakery data and seed bundle (PRD/10)
+"""Synthetic "Rina's Bakery" generator and seed bundle (WP8, PRD/10).
 
-Skeleton created by WP0; WP8 replaces this package."""
+Entry point: ``python -m datagen.generate`` (``python tasks.py gen``). Public API:
+``datagen.generate.build``, ``tune``, ``write_outputs``, ``bundle_hash``.
+"""
 
 REQUIRES_CONTRACTS = "1"

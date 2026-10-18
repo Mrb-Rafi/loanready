@@ -1,0 +1,29 @@
+{
+  "as_of": "2026-10-14",
+  "events": [
+    {
+      "name": "Halloween weekend",
+      "start": "2026-10-30",
+      "end": "2026-10-31",
+      "factor": "1.15"
+    },
+    {
+      "name": "Festival week",
+      "start": "2026-11-05",
+      "end": "2026-11-11",
+      "factor": "1.30"
+    },
+    {
+      "name": "Thanksgiving week",
+      "start": "2026-11-23",
+      "end": "2026-11-29",
+      "factor": "1.20"
+    },
+    {
+      "name": "Holiday season",
+      "start": "2026-12-14",
+      "end": "2026-12-24",
+      "factor": "1.35"
+    }
+  ]
+}
