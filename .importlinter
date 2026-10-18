@@ -1,0 +1,83 @@
+[importlinter]
+root_packages =
+    contracts
+    infra
+    governance
+    sandbox
+    adapters
+    books
+    planning
+    financing
+    outputs
+    agent
+    datagen
+    orchestrator
+    ui
+    scripts
+include_external_packages = False
+
+[importlinter:contract:layers]
+name = Layering: Layer 2 packages never import each other (ARC-04)
+type = layers
+layers =
+    ui | scripts
+    orchestrator
+    governance | books | planning | financing | outputs | agent | adapters | datagen
+    infra
+    contracts
+
+[importlinter:contract:sandbox-separate]
+name = Sandbox imports only contracts (ARC-05)
+type = forbidden
+source_modules =
+    sandbox
+forbidden_modules =
+    infra
+    governance
+    adapters
+    books
+    planning
+    financing
+    outputs
+    agent
+    datagen
+    orchestrator
+    ui
+    scripts
+
+[importlinter:contract:app-not-sandbox]
+name = The app reaches the sandbox only over HTTP (ARC-05)
+type = forbidden
+source_modules =
+    contracts
+    infra
+    governance
+    adapters
+    books
+    planning
+    financing
+    outputs
+    agent
+    datagen
+    orchestrator
+    ui
+    scripts
+forbidden_modules =
+    sandbox
+
+[importlinter:contract:ui-facade-only]
+name = UI imports only orchestrator and contracts (ARC-06)
+type = forbidden
+source_modules =
+    ui
+forbidden_modules =
+    infra
+    governance
+    adapters
+    books
+    planning
+    financing
+    outputs
+    agent
+    datagen
+    scripts

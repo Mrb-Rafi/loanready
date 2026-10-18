@@ -1,0 +1,42 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    env:
+      LLM_BACKEND: mock
+      PYTHONUTF8: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: setup
+        run: python tasks.py setup
+      - name: doctor
+        run: python tasks.py doctor
+      - name: lint
+        run: python tasks.py lint
+      - name: test
+        run: python tasks.py test --all
+      - name: demo
+        if: hashFiles('scripts/run_demo.py') != ''
+        run: python tasks.py demo
+      - name: evidence
+        if: hashFiles('scripts/export_evidence.py') != ''
+        run: python tasks.py evidence
+      - name: upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: evidence-${{ matrix.os }}
+          path: evidence/
+          if-no-files-found: ignore

@@ -1,0 +1,8 @@
+{
+  "contracts_version": "1.0.0",
+  "python": "3.12",
+  "requirements_lock_sha256": "ce87c4c2b8dd56d4065fd7bd091358303ddc513f81d039a891b415e554a9e259",
+  "manifest_sha256": "b246c88856fb418e2c258c6fb99c9a22345cb3d2b7d9529409e845792ae41aaf",
+  "frozen_at": "2026-10-18T07:26:12Z",
+  "frozen_by": "pc-a"
+}

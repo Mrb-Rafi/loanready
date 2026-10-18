@@ -1,0 +1,43 @@
+[project]
+name = "loanready"
+version = "1.0.0"
+description = "LoanReady: SME finance copilot (FinTechathon 2026, Topic E)"
+requires-python = ">=3.11,<3.13"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+extend-exclude = [".venv", "var", "handoff", "PRD"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM", "DTZ"]
+
+[tool.ruff.lint.isort]
+known-first-party = [
+    "contracts", "infra", "governance", "sandbox", "adapters", "books", "planning",
+    "financing", "outputs", "agent", "datagen", "orchestrator", "ui", "scripts",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["B011"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-ra --import-mode=importlib -p no:cacheprovider"
+markers = [
+    "slow: slow test, excluded from `tasks.py test` unless --all",
+    "optional: needs Ollama, OpenAI or Tesseract; skipped unless --optional",
+    "integration: needs several packages (WP9)",
+    "e2e: whole-product test (WP11)",
+    "real: needs every package present",
+]
+filterwarnings = ["ignore::DeprecationWarning:streamlit.*"]
+
+[tool.coverage.run]
+branch = true
+omit = ["tests/*", ".venv/*"]
+
+[tool.coverage.report]
+skip_empty = true
+show_missing = false

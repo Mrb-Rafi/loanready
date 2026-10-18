@@ -1,0 +1,25 @@
+# environments and secrets
+.venv/
+.env
+
+# runtime data
+var/
+handoff/
+
+# caches
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.hypothesis/
+.import_linter_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# editors and OS
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db

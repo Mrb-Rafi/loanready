@@ -1,0 +1,250 @@
+{
+  "version": "1",
+  "seed": 20261014,
+  "as_of": "2026-10-14",
+  "business": {
+    "name": "Tiny Bakery",
+    "owner": "Tess",
+    "currency": "USD",
+    "city": "Testville"
+  },
+  "history_start": "2026-09-23",
+  "opening_balances": [
+    {
+      "account_code": "1000",
+      "debit_cents": 200000,
+      "credit_cents": 0
+    },
+    {
+      "account_code": "3000",
+      "debit_cents": 0,
+      "credit_cents": 200000
+    }
+  ],
+  "bank_accounts": [
+    {
+      "id": "acc_operating",
+      "name": "Operating account",
+      "currency": "USD",
+      "status": "open",
+      "balance_cents": 271000
+    }
+  ],
+  "bank_transactions": [
+    {
+      "id": "txn_tiny_01",
+      "account_id": "acc_operating",
+      "date": "2026-09-25",
+      "amount_cents": -30000,
+      "description": "GRAIN DEPOT WHOLESALE",
+      "counterparty": "Grain Depot",
+      "kind": "seed",
+      "payment_ref": null,
+      "balance_after_cents": 170000
+    },
+    {
+      "id": "txn_tiny_02",
+      "account_id": "acc_operating",
+      "date": "2026-09-30",
+      "amount_cents": 100000,
+      "description": "CASH DEPOSIT",
+      "counterparty": null,
+      "kind": "seed",
+      "payment_ref": null,
+      "balance_after_cents": 270000
+    },
+    {
+      "id": "txn_tiny_03",
+      "account_id": "acc_operating",
+      "date": "2026-10-01",
+      "amount_cents": -50000,
+      "description": "RENT - TINY LANDLORD",
+      "counterparty": "Tiny Landlord",
+      "kind": "seed",
+      "payment_ref": null,
+      "balance_after_cents": 220000
+    },
+    {
+      "id": "txn_tiny_04",
+      "account_id": "acc_operating",
+      "date": "2026-10-02",
+      "amount_cents": -36000,
+      "description": "GRAIN DEPOT WHOLESALE",
+      "counterparty": "Grain Depot",
+      "kind": "seed",
+      "payment_ref": null,
+      "balance_after_cents": 184000
+    },
+    {
+      "id": "txn_tiny_05",
+      "account_id": "acc_operating",
+      "date": "2026-10-07",
+      "amount_cents": 120000,
+      "description": "CASH DEPOSIT",
+      "counterparty": null,
+      "kind": "seed",
+      "payment_ref": null,
+      "balance_after_cents": 304000
+    },
+    {
+      "id": "txn_tiny_06",
+      "account_id": "acc_operating",
+      "date": "2026-10-09",
+      "amount_cents": -33000,
+      "description": "GRAIN DEPOT WHOLESALE",
+      "counterparty": "Grain Depot",
+      "kind": "seed",
+      "payment_ref": null,
+      "balance_after_cents": 271000
+    }
+  ],
+  "bank_payees": [
+    {
+      "id": "pye_tiny_mills",
+      "name": "Tiny Mills",
+      "bank_account_ref": "SBX-TM-00000001",
+      "first_paid_on": null,
+      "status": "known"
+    }
+  ],
+  "pos_sales": [
+    {
+      "id": "pos_tiny_01",
+      "ts": "2026-09-29T12:00:00Z",
+      "amount_cents": 100000,
+      "tender": "cash",
+      "items": [
+        {
+          "name": "Weekly cash sales (lump)",
+          "qty": 1,
+          "unit_cents": 100000
+        }
+      ],
+      "note": null
+    },
+    {
+      "id": "pos_tiny_02",
+      "ts": "2026-10-06T12:00:00Z",
+      "amount_cents": 120000,
+      "tender": "cash",
+      "items": [
+        {
+          "name": "Weekly cash sales (lump)",
+          "qty": 1,
+          "unit_cents": 120000
+        }
+      ],
+      "note": null
+    },
+    {
+      "id": "pos_tiny_03",
+      "ts": "2026-10-13T12:00:00Z",
+      "amount_cents": 110000,
+      "tender": "cash",
+      "items": [
+        {
+          "name": "Weekly cash sales (lump)",
+          "qty": 1,
+          "unit_cents": 110000
+        }
+      ],
+      "note": null
+    }
+  ],
+  "counterparties": [
+    {
+      "id": "cpt_tiny_catering",
+      "name": "Tiny Catering",
+      "kind": "CUSTOMER",
+      "payment_terms_days": 14,
+      "lateness_history_days": [
+        10,
+        20,
+        30
+      ],
+      "contact_ref": "ap@tiny-catering.test"
+    },
+    {
+      "id": "cpt_tiny_mills",
+      "name": "Tiny Mills",
+      "kind": "SUPPLIER",
+      "payment_terms_days": 30,
+      "lateness_history_days": [],
+      "contact_ref": "billing@tiny-mills.test"
+    },
+    {
+      "id": "cpt_grain_depot",
+      "name": "Grain Depot",
+      "kind": "SUPPLIER",
+      "payment_terms_days": 0,
+      "lateness_history_days": [],
+      "contact_ref": null
+    },
+    {
+      "id": "cpt_tiny_landlord",
+      "name": "Tiny Landlord",
+      "kind": "SUPPLIER",
+      "payment_terms_days": 0,
+      "lateness_history_days": [],
+      "contact_ref": "rent@tiny-landlord.test"
+    }
+  ],
+  "payees": [
+    {
+      "id": "pye_tiny_mills",
+      "counterparty_id": "cpt_tiny_mills",
+      "name": "Tiny Mills",
+      "bank_account_ref": "SBX-TM-00000001",
+      "first_paid_on": null,
+      "status": "KNOWN",
+      "preregistered_by_owner": true
+    }
+  ],
+  "invoices": [
+    {
+      "id": "inv_tiny_1",
+      "number": "INV-1",
+      "customer_id": "cpt_tiny_catering",
+      "issue_date": "2026-09-25",
+      "due_date": "2026-10-09",
+      "amount_cents": 60000,
+      "paid_cents": 0,
+      "status": "OPEN"
+    }
+  ],
+  "bills": [
+    {
+      "id": "bil_tiny_1",
+      "number": "BILL-1",
+      "supplier_id": "cpt_tiny_mills",
+      "payee_id": "pye_tiny_mills",
+      "issue_date": "2026-10-01",
+      "due_date": "2026-10-20",
+      "amount_cents": 80000,
+      "paid_cents": 0,
+      "status": "OPEN",
+      "category": "5000",
+      "late_penalty": true,
+      "grace_days": 0,
+      "essential": false,
+      "claimed_bank_account_ref": null,
+      "description": "Flour delivery"
+    }
+  ],
+  "receipts": [],
+  "recurring": [
+    {
+      "name": "Rent",
+      "category": "6000",
+      "amount_cents": 50000,
+      "first_date": "2026-10-01",
+      "schedule": "monthly",
+      "day_of_month": 1,
+      "every_days": null,
+      "end_date": null,
+      "essential": true
+    }
+  ],
+  "events": [],
+  "scenario_ids": {}
+}
