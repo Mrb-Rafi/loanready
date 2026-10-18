@@ -1,0 +1,2382 @@
+{
+  "components": {
+    "schemas": {
+      "AdminPayeeIn": {
+        "additionalProperties": false,
+        "properties": {
+          "bank_account_ref": {
+            "title": "Bank Account Ref",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "bank_account_ref"
+        ],
+        "title": "AdminPayeeIn",
+        "type": "object"
+      },
+      "BalanceOut": {
+        "additionalProperties": false,
+        "properties": {
+          "account_id": {
+            "title": "Account Id",
+            "type": "string"
+          },
+          "available_cents": {
+            "title": "Available Cents",
+            "type": "integer"
+          },
+          "balance_cents": {
+            "title": "Balance Cents",
+            "type": "integer"
+          },
+          "today": {
+            "format": "date",
+            "title": "Today",
+            "type": "string"
+          }
+        },
+        "required": [
+          "account_id",
+          "balance_cents",
+          "available_cents",
+          "today"
+        ],
+        "title": "BalanceOut",
+        "type": "object"
+      },
+      "BankAccountOut": {
+        "additionalProperties": false,
+        "properties": {
+          "balance_cents": {
+            "title": "Balance Cents",
+            "type": "integer"
+          },
+          "currency": {
+            "title": "Currency",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "open",
+              "frozen"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "currency",
+          "status",
+          "balance_cents"
+        ],
+        "title": "BankAccountOut",
+        "type": "object"
+      },
+      "BankTxnOut": {
+        "additionalProperties": false,
+        "properties": {
+          "account_id": {
+            "title": "Account Id",
+            "type": "string"
+          },
+          "amount_cents": {
+            "title": "Amount Cents",
+            "type": "integer"
+          },
+          "balance_after_cents": {
+            "title": "Balance After Cents",
+            "type": "integer"
+          },
+          "counterparty": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Counterparty"
+          },
+          "date": {
+            "format": "date",
+            "title": "Date",
+            "type": "string"
+          },
+          "description": {
+            "title": "Description",
+            "type": "string",
+            "untrusted": true
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "opening",
+              "seed",
+              "payment",
+              "payment_return",
+              "admin"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "payment_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Payment Ref"
+          }
+        },
+        "required": [
+          "id",
+          "account_id",
+          "date",
+          "amount_cents",
+          "description",
+          "counterparty",
+          "kind",
+          "payment_ref",
+          "balance_after_cents"
+        ],
+        "title": "BankTxnOut",
+        "type": "object"
+      },
+      "BillDTO": {
+        "additionalProperties": false,
+        "properties": {
+          "amount_cents": {
+            "title": "Amount Cents",
+            "type": "integer"
+          },
+          "category": {
+            "title": "Category",
+            "type": "string"
+          },
+          "claimed_bank_account_ref": {
+            "anyOf": [
+              {
+                "type": "string",
+                "untrusted": true
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Claimed Bank Account Ref"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string",
+                "untrusted": true
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "due_date": {
+            "format": "date",
+            "title": "Due Date",
+            "type": "string"
+          },
+          "essential": {
+            "title": "Essential",
+            "type": "boolean"
+          },
+          "grace_days": {
+            "title": "Grace Days",
+            "type": "integer"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "issue_date": {
+            "format": "date",
+            "title": "Issue Date",
+            "type": "string"
+          },
+          "late_penalty": {
+            "title": "Late Penalty",
+            "type": "boolean"
+          },
+          "number": {
+            "title": "Number",
+            "type": "string"
+          },
+          "paid_cents": {
+            "title": "Paid Cents",
+            "type": "integer"
+          },
+          "payee_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Payee Id"
+          },
+          "status": {
+            "$ref": "#/components/schemas/BillStatus"
+          },
+          "supplier_id": {
+            "title": "Supplier Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "number",
+          "supplier_id",
+          "payee_id",
+          "issue_date",
+          "due_date",
+          "amount_cents",
+          "paid_cents",
+          "status",
+          "category",
+          "late_penalty",
+          "grace_days",
+          "essential",
+          "claimed_bank_account_ref",
+          "description"
+        ],
+        "title": "BillDTO",
+        "type": "object"
+      },
+      "BillStatus": {
+        "enum": [
+          "OPEN",
+          "PARTIAL",
+          "PAID",
+          "VOID"
+        ],
+        "title": "BillStatus",
+        "type": "string"
+      },
+      "ClockIn": {
+        "additionalProperties": false,
+        "properties": {
+          "today": {
+            "format": "date",
+            "title": "Today",
+            "type": "string"
+          }
+        },
+        "required": [
+          "today"
+        ],
+        "title": "ClockIn",
+        "type": "object"
+      },
+      "ClockOut": {
+        "additionalProperties": false,
+        "properties": {
+          "today": {
+            "format": "date",
+            "title": "Today",
+            "type": "string"
+          }
+        },
+        "required": [
+          "today"
+        ],
+        "title": "ClockOut",
+        "type": "object"
+      },
+      "CounterpartyDTO": {
+        "additionalProperties": false,
+        "properties": {
+          "contact_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Contact Ref"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "kind": {
+            "$ref": "#/components/schemas/CounterpartyKind"
+          },
+          "lateness_history_days": {
+            "items": {
+              "type": "integer"
+            },
+            "title": "Lateness History Days",
+            "type": "array"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "payment_terms_days": {
+            "title": "Payment Terms Days",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "kind",
+          "payment_terms_days",
+          "lateness_history_days",
+          "contact_ref"
+        ],
+        "title": "CounterpartyDTO",
+        "type": "object"
+      },
+      "CounterpartyKind": {
+        "enum": [
+          "CUSTOMER",
+          "SUPPLIER",
+          "OTHER"
+        ],
+        "title": "CounterpartyKind",
+        "type": "string"
+      },
+      "ErrorOut": {
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "details": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Details"
+          },
+          "message": {
+            "title": "Message",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "title": "ErrorOut",
+        "type": "object"
+      },
+      "EventUplift": {
+        "additionalProperties": false,
+        "properties": {
+          "end": {
+            "format": "date",
+            "title": "End",
+            "type": "string"
+          },
+          "factor": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Factor"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "start": {
+            "format": "date",
+            "title": "Start",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "start",
+          "end",
+          "factor"
+        ],
+        "title": "EventUplift",
+        "type": "object"
+      },
+      "InvoiceDTO": {
+        "additionalProperties": false,
+        "properties": {
+          "amount_cents": {
+            "title": "Amount Cents",
+            "type": "integer"
+          },
+          "customer_id": {
+            "title": "Customer Id",
+            "type": "string"
+          },
+          "due_date": {
+            "format": "date",
+            "title": "Due Date",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "issue_date": {
+            "format": "date",
+            "title": "Issue Date",
+            "type": "string"
+          },
+          "number": {
+            "title": "Number",
+            "type": "string"
+          },
+          "paid_cents": {
+            "title": "Paid Cents",
+            "type": "integer"
+          },
+          "status": {
+            "$ref": "#/components/schemas/InvoiceStatus"
+          }
+        },
+        "required": [
+          "id",
+          "number",
+          "customer_id",
+          "issue_date",
+          "due_date",
+          "amount_cents",
+          "paid_cents",
+          "status"
+        ],
+        "title": "InvoiceDTO",
+        "type": "object"
+      },
+      "InvoiceStatus": {
+        "enum": [
+          "OPEN",
+          "PARTIAL",
+          "PAID",
+          "VOID"
+        ],
+        "title": "InvoiceStatus",
+        "type": "string"
+      },
+      "JournalLineDTO": {
+        "additionalProperties": false,
+        "properties": {
+          "account_code": {
+            "title": "Account Code",
+            "type": "string"
+          },
+          "credit_cents": {
+            "title": "Credit Cents",
+            "type": "integer"
+          },
+          "debit_cents": {
+            "title": "Debit Cents",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "account_code",
+          "debit_cents",
+          "credit_cents"
+        ],
+        "title": "JournalLineDTO",
+        "type": "object"
+      },
+      "LenderApplicationIn": {
+        "additionalProperties": false,
+        "properties": {
+          "business_name": {
+            "title": "Business Name",
+            "type": "string"
+          },
+          "lender_id": {
+            "title": "Lender Id",
+            "type": "string"
+          },
+          "pack_sha256": {
+            "title": "Pack Sha256",
+            "type": "string"
+          },
+          "pdf_base64": {
+            "title": "Pdf Base64",
+            "type": "string"
+          },
+          "purpose": {
+            "title": "Purpose",
+            "type": "string"
+          },
+          "requested_amount_cents": {
+            "title": "Requested Amount Cents",
+            "type": "integer"
+          },
+          "sections": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Sections",
+            "type": "array"
+          },
+          "term_days": {
+            "title": "Term Days",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "lender_id",
+          "business_name",
+          "requested_amount_cents",
+          "term_days",
+          "purpose",
+          "pack_sha256",
+          "sections",
+          "pdf_base64"
+        ],
+        "title": "LenderApplicationIn",
+        "type": "object"
+      },
+      "LenderReceiptOut": {
+        "additionalProperties": false,
+        "properties": {
+          "missing_sections": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Missing Sections",
+            "type": "array"
+          },
+          "pack_sha256": {
+            "title": "Pack Sha256",
+            "type": "string"
+          },
+          "receipt_id": {
+            "title": "Receipt Id",
+            "type": "string"
+          },
+          "received_at": {
+            "format": "date-time",
+            "title": "Received At",
+            "type": "string"
+          },
+          "status": {
+            "const": "received_under_review",
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "receipt_id",
+          "status",
+          "pack_sha256",
+          "received_at",
+          "missing_sections"
+        ],
+        "title": "LenderReceiptOut",
+        "type": "object"
+      },
+      "LimitsIn": {
+        "properties": {
+          "daily_outgoing_cents": {
+            "exclusiveMinimum": 0.0,
+            "title": "Daily Outgoing Cents",
+            "type": "integer"
+          },
+          "max_payment_cents": {
+            "exclusiveMinimum": 0.0,
+            "title": "Max Payment Cents",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "max_payment_cents",
+          "daily_outgoing_cents"
+        ],
+        "title": "LimitsIn",
+        "type": "object"
+      },
+      "MessageOut": {
+        "additionalProperties": false,
+        "properties": {
+          "body_sha256": {
+            "title": "Body Sha256",
+            "type": "string"
+          },
+          "channel": {
+            "enum": [
+              "EMAIL",
+              "SMS"
+            ],
+            "title": "Channel",
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "sbx_ref": {
+            "title": "Sbx Ref",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "subject": {
+            "title": "Subject",
+            "type": "string"
+          },
+          "to_ref": {
+            "title": "To Ref",
+            "type": "string"
+          }
+        },
+        "required": [
+          "sbx_ref",
+          "channel",
+          "to_ref",
+          "subject",
+          "body_sha256",
+          "status",
+          "created_at"
+        ],
+        "title": "MessageOut",
+        "type": "object"
+      },
+      "MessageSendIn": {
+        "additionalProperties": false,
+        "properties": {
+          "body": {
+            "title": "Body",
+            "type": "string"
+          },
+          "channel": {
+            "enum": [
+              "EMAIL",
+              "SMS"
+            ],
+            "title": "Channel",
+            "type": "string"
+          },
+          "subject": {
+            "title": "Subject",
+            "type": "string"
+          },
+          "to_ref": {
+            "title": "To Ref",
+            "type": "string"
+          }
+        },
+        "required": [
+          "channel",
+          "to_ref",
+          "subject",
+          "body"
+        ],
+        "title": "MessageSendIn",
+        "type": "object"
+      },
+      "PayeeDTO": {
+        "additionalProperties": false,
+        "properties": {
+          "bank_account_ref": {
+            "title": "Bank Account Ref",
+            "type": "string"
+          },
+          "counterparty_id": {
+            "title": "Counterparty Id",
+            "type": "string"
+          },
+          "first_paid_on": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "First Paid On"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "preregistered_by_owner": {
+            "title": "Preregistered By Owner",
+            "type": "boolean"
+          },
+          "status": {
+            "$ref": "#/components/schemas/PayeeStatus"
+          }
+        },
+        "required": [
+          "id",
+          "counterparty_id",
+          "name",
+          "bank_account_ref",
+          "first_paid_on",
+          "status",
+          "preregistered_by_owner"
+        ],
+        "title": "PayeeDTO",
+        "type": "object"
+      },
+      "PayeeOut": {
+        "additionalProperties": false,
+        "properties": {
+          "bank_account_ref": {
+            "title": "Bank Account Ref",
+            "type": "string"
+          },
+          "first_paid_on": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "First Paid On"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "known",
+              "closed"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "bank_account_ref",
+          "first_paid_on",
+          "status"
+        ],
+        "title": "PayeeOut",
+        "type": "object"
+      },
+      "PayeeStatus": {
+        "enum": [
+          "KNOWN",
+          "PENDING_VERIFICATION",
+          "BLOCKED"
+        ],
+        "title": "PayeeStatus",
+        "type": "string"
+      },
+      "PaymentOut": {
+        "additionalProperties": false,
+        "properties": {
+          "amount_cents": {
+            "title": "Amount Cents",
+            "type": "integer"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "failure_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Failure Code"
+          },
+          "from_account_id": {
+            "title": "From Account Id",
+            "type": "string"
+          },
+          "payee_id": {
+            "title": "Payee Id",
+            "type": "string"
+          },
+          "reference": {
+            "title": "Reference",
+            "type": "string"
+          },
+          "sbx_ref": {
+            "title": "Sbx Ref",
+            "type": "string"
+          },
+          "settled_on": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Settled On"
+          },
+          "status": {
+            "enum": [
+              "scheduled",
+              "settled",
+              "cancelled",
+              "failed",
+              "returned"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "value_date": {
+            "format": "date",
+            "title": "Value Date",
+            "type": "string"
+          }
+        },
+        "required": [
+          "sbx_ref",
+          "from_account_id",
+          "payee_id",
+          "amount_cents",
+          "value_date",
+          "reference",
+          "status",
+          "failure_code",
+          "settled_on",
+          "created_at"
+        ],
+        "title": "PaymentOut",
+        "type": "object"
+      },
+      "PaymentScheduleIn": {
+        "additionalProperties": false,
+        "properties": {
+          "amount_cents": {
+            "title": "Amount Cents",
+            "type": "integer"
+          },
+          "bank_account_ref": {
+            "title": "Bank Account Ref",
+            "type": "string"
+          },
+          "from_account_id": {
+            "title": "From Account Id",
+            "type": "string"
+          },
+          "payee_id": {
+            "title": "Payee Id",
+            "type": "string"
+          },
+          "reference": {
+            "maxLength": 60,
+            "title": "Reference",
+            "type": "string"
+          },
+          "value_date": {
+            "format": "date",
+            "title": "Value Date",
+            "type": "string"
+          }
+        },
+        "required": [
+          "from_account_id",
+          "payee_id",
+          "bank_account_ref",
+          "amount_cents",
+          "value_date",
+          "reference"
+        ],
+        "title": "PaymentScheduleIn",
+        "type": "object"
+      },
+      "PosItem": {
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "qty": {
+            "title": "Qty",
+            "type": "integer"
+          },
+          "unit_cents": {
+            "title": "Unit Cents",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "name",
+          "qty",
+          "unit_cents"
+        ],
+        "title": "PosItem",
+        "type": "object"
+      },
+      "PosSaleOut": {
+        "additionalProperties": false,
+        "properties": {
+          "amount_cents": {
+            "title": "Amount Cents",
+            "type": "integer"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/PosItem"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string",
+                "untrusted": true
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          },
+          "tender": {
+            "enum": [
+              "cash",
+              "card"
+            ],
+            "title": "Tender",
+            "type": "string"
+          },
+          "ts": {
+            "format": "date-time",
+            "title": "Ts",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "ts",
+          "amount_cents",
+          "tender",
+          "items"
+        ],
+        "title": "PosSaleOut",
+        "type": "object"
+      },
+      "RecurringObligation": {
+        "additionalProperties": false,
+        "description": "monthly: on day_of_month each month from first_date (clamped to month length);\nevery_n_days: first_date + n * every_days.",
+        "properties": {
+          "amount_cents": {
+            "title": "Amount Cents",
+            "type": "integer"
+          },
+          "category": {
+            "title": "Category",
+            "type": "string"
+          },
+          "day_of_month": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Day Of Month"
+          },
+          "end_date": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "End Date"
+          },
+          "essential": {
+            "title": "Essential",
+            "type": "boolean"
+          },
+          "every_days": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Every Days"
+          },
+          "first_date": {
+            "format": "date",
+            "title": "First Date",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "schedule": {
+            "enum": [
+              "monthly",
+              "every_n_days"
+            ],
+            "title": "Schedule",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "category",
+          "amount_cents",
+          "first_date",
+          "schedule",
+          "day_of_month",
+          "every_days",
+          "end_date",
+          "essential"
+        ],
+        "title": "RecurringObligation",
+        "type": "object"
+      },
+      "SeedBundle": {
+        "additionalProperties": false,
+        "properties": {
+          "as_of": {
+            "format": "date",
+            "title": "As Of",
+            "type": "string"
+          },
+          "bank_accounts": {
+            "items": {
+              "$ref": "#/components/schemas/BankAccountOut"
+            },
+            "title": "Bank Accounts",
+            "type": "array"
+          },
+          "bank_payees": {
+            "items": {
+              "$ref": "#/components/schemas/PayeeOut"
+            },
+            "title": "Bank Payees",
+            "type": "array"
+          },
+          "bank_transactions": {
+            "items": {
+              "$ref": "#/components/schemas/BankTxnOut"
+            },
+            "title": "Bank Transactions",
+            "type": "array"
+          },
+          "bills": {
+            "items": {
+              "$ref": "#/components/schemas/BillDTO"
+            },
+            "title": "Bills",
+            "type": "array"
+          },
+          "business": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Business",
+            "type": "object"
+          },
+          "counterparties": {
+            "items": {
+              "$ref": "#/components/schemas/CounterpartyDTO"
+            },
+            "title": "Counterparties",
+            "type": "array"
+          },
+          "events": {
+            "items": {
+              "$ref": "#/components/schemas/EventUplift"
+            },
+            "title": "Events",
+            "type": "array"
+          },
+          "history_start": {
+            "format": "date",
+            "title": "History Start",
+            "type": "string"
+          },
+          "invoices": {
+            "items": {
+              "$ref": "#/components/schemas/InvoiceDTO"
+            },
+            "title": "Invoices",
+            "type": "array"
+          },
+          "opening_balances": {
+            "items": {
+              "$ref": "#/components/schemas/JournalLineDTO"
+            },
+            "title": "Opening Balances",
+            "type": "array"
+          },
+          "payees": {
+            "items": {
+              "$ref": "#/components/schemas/PayeeDTO"
+            },
+            "title": "Payees",
+            "type": "array"
+          },
+          "pos_sales": {
+            "items": {
+              "$ref": "#/components/schemas/PosSaleOut"
+            },
+            "title": "Pos Sales",
+            "type": "array"
+          },
+          "receipts": {
+            "items": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "type": "object"
+            },
+            "title": "Receipts",
+            "type": "array"
+          },
+          "recurring": {
+            "items": {
+              "$ref": "#/components/schemas/RecurringObligation"
+            },
+            "title": "Recurring",
+            "type": "array"
+          },
+          "scenario_ids": {
+            "additionalProperties": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "title": "Scenario Ids",
+            "type": "object"
+          },
+          "seed": {
+            "title": "Seed",
+            "type": "integer"
+          },
+          "version": {
+            "const": "1",
+            "title": "Version",
+            "type": "string"
+          }
+        },
+        "required": [
+          "version",
+          "seed",
+          "as_of",
+          "business",
+          "history_start",
+          "opening_balances",
+          "bank_accounts",
+          "bank_transactions",
+          "bank_payees",
+          "pos_sales",
+          "counterparties",
+          "payees",
+          "invoices",
+          "bills",
+          "receipts",
+          "recurring",
+          "events",
+          "scenario_ids"
+        ],
+        "title": "SeedBundle",
+        "type": "object"
+      },
+      "StatementOut": {
+        "additionalProperties": false,
+        "properties": {
+          "account_id": {
+            "title": "Account Id",
+            "type": "string"
+          },
+          "closing_cents": {
+            "title": "Closing Cents",
+            "type": "integer"
+          },
+          "month": {
+            "title": "Month",
+            "type": "string"
+          },
+          "opening_cents": {
+            "title": "Opening Cents",
+            "type": "integer"
+          },
+          "transactions": {
+            "items": {
+              "$ref": "#/components/schemas/BankTxnOut"
+            },
+            "title": "Transactions",
+            "type": "array"
+          }
+        },
+        "required": [
+          "account_id",
+          "month",
+          "opening_cents",
+          "closing_cents",
+          "transactions"
+        ],
+        "title": "StatementOut",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "description": "Self-built simulator with scoped tokens, idempotency and hash-chained operation logs. Synthetic data only.",
+    "title": "LoanReady Sandbox",
+    "version": "1"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/admin/clock": {
+      "get": {
+        "operationId": "admin_get_clock_admin_clock_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClockOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Client Error"
+          }
+        },
+        "summary": "Admin Get Clock",
+        "tags": [
+          "admin"
+        ]
+      },
+      "post": {
+        "description": "Moves forward only, then settles due payments (SHOULD).",
+        "operationId": "admin_set_clock_admin_clock_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClockIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClockOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Client Error"
+          }
+        },
+        "summary": "Admin Set Clock",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/admin/limits/{account_id}": {
+      "put": {
+        "operationId": "admin_set_limits_admin_limits__account_id__put",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "account_id",
+            "required": true,
+            "schema": {
+              "title": "Account Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LimitsIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Admin Set Limits Admin Limits  Account Id  Put",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Client Error"
+          }
+        },
+        "summary": "Admin Set Limits",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/admin/opslog.csv": {
+      "get": {
+        "operationId": "admin_opslog_csv_admin_opslog_csv_get",
+        "responses": {
+          "200": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "4XX": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Client Error"
+          }
+        },
+        "summary": "Admin Opslog Csv",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/admin/opslog/verify": {
+      "get": {
+        "operationId": "admin_opslog_verify_admin_opslog_verify_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "anyOf": [
+                      {
+                        "type": "integer"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "title": "Response Admin Opslog Verify Admin Opslog Verify Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Client Error"
+          }
+        },
+        "summary": "Admin Opslog Verify",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/admin/payees": {
+      "post": {
+        "operationId": "admin_add_payee_admin_payees_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdminPayeeIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayeeOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Client Error"
+          }
+        },
+        "summary": "Admin Add Payee",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/admin/payees/{payee_id}/close": {
+      "post": {
+        "operationId": "admin_close_payee_admin_payees__payee_id__close_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "payee_id",
+            "required": true,
+            "schema": {
+              "title": "Payee Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayeeOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Client Error"
+          }
+        },
+        "summary": "Admin Close Payee",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/admin/payments/{sbx_ref}/return": {
+      "post": {
+        "operationId": "admin_return_payment_admin_payments__sbx_ref__return_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "sbx_ref",
+            "required": true,
+            "schema": {
+              "title": "Sbx Ref",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Client Error"
+          }
+        },
+        "summary": "Admin Return Payment",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/admin/reset": {
+      "post": {
+        "operationId": "admin_reset_admin_reset_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SeedBundle"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "integer"
+                  },
+                  "title": "Response Admin Reset Admin Reset Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Client Error"
+          }
+        },
+        "summary": "Admin Reset",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/bank/accounts": {
+      "get": {
+        "operationId": "list_accounts_bank_accounts_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/BankAccountOut"
+                  },
+                  "title": "Response List Accounts Bank Accounts Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Client Error"
+          }
+        },
+        "summary": "List Accounts",
+        "tags": [
+          "bank"
+        ]
+      }
+    },
+    "/bank/accounts/{account_id}/balance": {
+      "get": {
+        "operationId": "get_balance_bank_accounts__account_id__balance_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "account_id",
+            "required": true,
+            "schema": {
+              "title": "Account Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BalanceOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Client Error"
+          }
+        },
+        "summary": "Get Balance",
+        "tags": [
+          "bank"
+        ]
+      }
+    },
+    "/bank/accounts/{account_id}/statement": {
+      "get": {
+        "operationId": "get_statement_bank_accounts__account_id__statement_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "account_id",
+            "required": true,
+            "schema": {
+              "title": "Account Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "month",
+            "required": true,
+            "schema": {
+              "pattern": "^\\d{4}-\\d{2}$",
+              "title": "Month",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatementOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Client Error"
+          }
+        },
+        "summary": "Get Statement",
+        "tags": [
+          "bank"
+        ]
+      }
+    },
+    "/bank/accounts/{account_id}/transactions": {
+      "get": {
+        "operationId": "list_transactions_bank_accounts__account_id__transactions_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "account_id",
+            "required": true,
+            "schema": {
+              "title": "Account Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "start",
+            "required": true,
+            "schema": {
+              "format": "date",
+              "title": "Start",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "end",
+            "required": true,
+            "schema": {
+              "format": "date",
+              "title": "End",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 500,
+              "maximum": 1000,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cursor"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/BankTxnOut"
+                  },
+                  "title": "Response List Transactions Bank Accounts  Account Id  Transactions Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Client Error"
+          }
+        },
+        "summary": "List Transactions",
+        "tags": [
+          "bank"
+        ]
+      }
+    },
+    "/bank/payees": {
+      "get": {
+        "operationId": "list_payees_bank_payees_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/PayeeOut"
+                  },
+                  "title": "Response List Payees Bank Payees Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Client Error"
+          }
+        },
+        "summary": "List Payees",
+        "tags": [
+          "bank"
+        ]
+      }
+    },
+    "/bank/payments": {
+      "get": {
+        "operationId": "list_payments_bank_payments_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Status"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/PaymentOut"
+                  },
+                  "title": "Response List Payments Bank Payments Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Client Error"
+          }
+        },
+        "summary": "List Payments",
+        "tags": [
+          "bank"
+        ]
+      }
+    },
+    "/bank/payments/schedule": {
+      "post": {
+        "operationId": "schedule_payment_bank_payments_schedule_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PaymentScheduleIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Client Error"
+          }
+        },
+        "summary": "Schedule Payment",
+        "tags": [
+          "bank"
+        ]
+      }
+    },
+    "/bank/payments/{sbx_ref}": {
+      "get": {
+        "operationId": "get_payment_bank_payments__sbx_ref__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "sbx_ref",
+            "required": true,
+            "schema": {
+              "title": "Sbx Ref",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Client Error"
+          }
+        },
+        "summary": "Get Payment",
+        "tags": [
+          "bank"
+        ]
+      }
+    },
+    "/bank/payments/{sbx_ref}/cancel": {
+      "post": {
+        "operationId": "cancel_payment_bank_payments__sbx_ref__cancel_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "sbx_ref",
+            "required": true,
+            "schema": {
+              "title": "Sbx Ref",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Client Error"
+          }
+        },
+        "summary": "Cancel Payment",
+        "tags": [
+          "bank"
+        ]
+      }
+    },
+    "/health": {
+      "get": {
+        "operationId": "health_health_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Health Health Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Health",
+        "tags": [
+          "health"
+        ]
+      }
+    },
+    "/lender/applications": {
+      "post": {
+        "operationId": "submit_application_lender_applications_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LenderApplicationIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LenderReceiptOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Client Error"
+          }
+        },
+        "summary": "Submit Application",
+        "tags": [
+          "lender"
+        ]
+      }
+    },
+    "/lender/applications/{receipt_id}": {
+      "get": {
+        "operationId": "get_application_lender_applications__receipt_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "receipt_id",
+            "required": true,
+            "schema": {
+              "title": "Receipt Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LenderReceiptOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Client Error"
+          }
+        },
+        "summary": "Get Application",
+        "tags": [
+          "lender"
+        ]
+      }
+    },
+    "/messaging/messages": {
+      "get": {
+        "operationId": "list_messages_messaging_messages_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/MessageOut"
+                  },
+                  "title": "Response List Messages Messaging Messages Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Client Error"
+          }
+        },
+        "summary": "List Messages",
+        "tags": [
+          "messaging"
+        ]
+      }
+    },
+    "/messaging/send": {
+      "post": {
+        "operationId": "send_messaging_send_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MessageSendIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Client Error"
+          }
+        },
+        "summary": "Send",
+        "tags": [
+          "messaging"
+        ]
+      }
+    },
+    "/pos/sales": {
+      "get": {
+        "operationId": "list_sales_pos_sales_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "start",
+            "required": true,
+            "schema": {
+              "format": "date",
+              "title": "Start",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "end",
+            "required": true,
+            "schema": {
+              "format": "date",
+              "title": "End",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 500,
+              "maximum": 1000,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cursor"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/PosSaleOut"
+                  },
+                  "title": "Response List Sales Pos Sales Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "4XX": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorOut"
+                }
+              }
+            },
+            "description": "Client Error"
+          }
+        },
+        "summary": "List Sales",
+        "tags": [
+          "pos"
+        ]
+      }
+    }
+  }
+}

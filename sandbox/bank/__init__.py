@@ -1,0 +1,1 @@
+"""Sandbox bank sub-app."""
