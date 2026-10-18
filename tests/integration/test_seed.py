@@ -6,9 +6,9 @@ from typing import Any
 
 import pytest
 
-from contracts.canonical import params_hash
 from contracts.enums import Decision
 from contracts.registry import OPERATING_ACCOUNT_ID
+from orchestrator.seed import bundle_sha256
 from tests.integration._support import tiny_with
 
 pytestmark = [pytest.mark.integration]
@@ -25,7 +25,7 @@ def test_seed_loads_sandbox_and_logs(make_app: Any) -> None:
     assert app.books.bill("bil_tiny_1") is not None
     rows = [r for r in app.audit_rows() if r.action_type == "SEED_LOADED"]
     assert len(rows) == 1 and rows[0].decision == Decision.EVENT
-    assert rows[0].params_masked["bundle_sha256"] == params_hash(bundle)
+    assert rows[0].params_masked["bundle_sha256"] == bundle_sha256(bundle)
     assert app.verify_chain() is None
 
 

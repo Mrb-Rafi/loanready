@@ -20,7 +20,7 @@ from pathlib import Path
 from typing import Any
 
 from contracts.actions import SYSTEM
-from contracts.canonical import params_hash
+from contracts.canonical import canonical_json, sha256_hex
 from contracts.enums import EventType
 from contracts.money import fmt
 from contracts.seed import SeedBundle
@@ -62,6 +62,11 @@ def reset_app_db() -> None:
         p = base.with_name(base.name + suffix)
         if p.exists():
             p.unlink()
+
+
+def bundle_sha256(bundle: SeedBundle) -> str:
+    """Same definition as datagen's printed hash: sha256 of the canonical JSON dump."""
+    return sha256_hex(canonical_json(bundle.model_dump(mode="json")))
 
 
 def receipt_path(image: str) -> Path | None:
@@ -111,7 +116,7 @@ def seed_app(app: Any, bundle: SeedBundle) -> dict[str, Any]:
         "pos_sales": len(bundle.pos_sales),
         "receipts": len(receipts),
     }
-    bundle_hash = params_hash(bundle)
+    bundle_hash = bundle_sha256(bundle)
     app.sink.log(
         EventType.SEED_LOADED,
         {"counts": counts, "bundle_sha256": bundle_hash, "seed": bundle.seed},

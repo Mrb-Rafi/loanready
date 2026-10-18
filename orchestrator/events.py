@@ -40,6 +40,16 @@ class EventSink:
         self.audit = audit
         self.principal = principal
         self._seen: set[tuple[str, str, str]] = set()
+        # events already in the log count as seen, so a restarted app does not re-log them
+        for row in audit.rows():
+            if row.action_type in {e.value for e in _ONCE_PER_REF}:
+                self._seen.add(
+                    (
+                        row.action_type,
+                        str(row.params_masked.get("source", "")),
+                        str(row.params_masked.get("source_ref", "")),
+                    )
+                )
 
     def __call__(self, event: EventType, details: dict[str, Any]) -> None:
         self.log(event, details)
