@@ -1,5 +1,6 @@
-"""Orchestrator: composition root, AppFacade, executors, seeding (PRD/11)
+"""Orchestrator (WP9, PRD/11): composition root, AppFacade, executors, seeding.
 
-Skeleton created by WP0; WP9 replaces this package."""
+The only package where work packages meet. Entry point: ``orchestrator.container.build_app``.
+"""
 
 REQUIRES_CONTRACTS = "1"
