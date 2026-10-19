@@ -1,0 +1,12 @@
+{
+  "as_of": "2026-10-14",
+  "ecl_provision_matrix": {"current": "0.01", "1-30": "0.03", "31-60": "0.10", "61-90": "0.25", "90+": "0.50"},
+  "high_cost_flag_apr": "0.36",
+  "china_private_lending_cap": {
+    "multiple_of_lpr": "4",
+    "lpr_1y": "PLACEHOLDER_UPDATE_BEFORE_SUBMISSION",
+    "note": "Supreme People's Court private-lending interest cap = 4 x 1-year LPR at contract date"
+  },
+  "dscr_comfort": "1.25",
+  "disclosure_regimes": ["REG-LND-01", "REG-LND-02", "REG-LND-03", "REG-LND-04"]
+}

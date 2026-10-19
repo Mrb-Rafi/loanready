@@ -1,7 +1,7 @@
 """Scenarios S1-S8 and S10, produced exactly as PRD/10 §4 lists them.
 
-S9 (impaired receivable INV-0998) is a SHOULD module and is not built yet; its invoice
-number stays reserved in ``documents.INVOICE_ANCHORS``. Bank rows carry a ``tag`` such as
+S9 (impaired receivable INV-0998, a SHOULD module) is built: Cafe Lumen 600.00 due
+2026-07-31, still open at AS_OF (75 days overdue). Bank rows carry a ``tag`` such as
 ``"S1"``; ``generate.py`` maps tags to the final transaction ids for ``scenario_ids``.
 """
 
@@ -49,6 +49,7 @@ BILL_S10 = 2190
 BILL_S2 = 2207
 BILL_S6 = 2211
 BILL_S4 = 2215
+INV_S9 = (998, "cpt_lumen", D(2026, 7, 1), 60000)  # terms 30 -> due 2026-07-31
 INV_S3 = (
     (1043, "cpt_bright", D(2026, 9, 20), 175000),
     (1051, "cpt_harbor", D(2026, 9, 23), 140000),
@@ -86,6 +87,11 @@ def build() -> ScenarioData:
     for number, cpt, issue, cents in INV_S3:
         sc.invoices.append(InvoiceSpec(cpt, issue, cents, None, number))
     sc.invoice_numbers["S3"] = [n for n, *_ in INV_S3]
+
+    # S9: impaired receivable, 75 days overdue at AS_OF (61-90 bucket, ECL 25% = 150.00)
+    number, cpt, issue, cents = INV_S9
+    sc.invoices.append(InvoiceSpec(cpt, issue, cents, None, number))
+    sc.invoice_numbers["S9"] = [number]
 
     # S10: regular flour bill, payable to the known payee
     s10 = make_bill(

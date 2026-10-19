@@ -75,7 +75,7 @@
     "bill_id": "bil_rina_2215",
     "cheapest_kind": "SUPPLIER_CREDIT",
     "most_expensive_id": "mca_swiftadvance",
-    "gap_after_collect_cents": 100000,
+    "gap_after_collect_cents": 110000,
     "gap_after_delay_cents": 40000
   },
   "S5": {
@@ -101,6 +101,12 @@
     "receipt": "receipt_blurry.png",
     "status": "NEEDS_CONFIRMATION"
   },
+  "S9": {
+    "invoice_id": "inv_rina_0998",
+    "bucket": "61-90",
+    "days_overdue": 75,
+    "ecl_cents": 15000
+  },
   "S10": {
     "bill_id": "bil_rina_2190",
     "amount_cents": 90000
@@ -109,25 +115,25 @@
   "closing_till_cents": 30000,
   "forecast_check": {
     "base_closings_cents": [
-      268022,
-      231544,
-      -414830,
-      -76601,
-      87421,
-      71748,
-      148575,
-      92597,
-      314027,
-      289457,
-      510887,
-      334909,
-      498931
+      267762,
+      231024,
+      -415649,
+      -77759,
+      86003,
+      70017,
+      146531,
+      90293,
+      311372,
+      286451,
+      507530,
+      331292,
+      495054
     ],
     "first_negative_week_base": 3,
     "gap_cents": 420000,
-    "gap_after_collect_cents": 100000,
+    "gap_after_collect_cents": 110000,
     "gap_after_delay_cents": 40000,
-    "cogs_ratio": "0.3069",
+    "cogs_ratio": "0.3080",
     "s2_ok": true,
     "s4_ok": true,
     "direction": 0
@@ -150,7 +156,7 @@
       {
         "pos_base_scale": "0.96",
         "s2_ok": true,
-        "s4_ok": false,
+        "s4_ok": true,
         "direction": -1
       },
       {

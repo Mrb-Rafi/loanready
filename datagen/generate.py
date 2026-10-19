@@ -161,6 +161,7 @@ def build(params: ScenarioParams = DEFAULT_PARAMS) -> SeedBundle:
             sc.bill_ids["S6"][0],
         ],
         "S8": [receipt_ids["receipt_blurry"]],
+        "S9": invoice_ids["S9"],
         "S10": sc.bill_ids["S10"],
     }
     opening_lines = [

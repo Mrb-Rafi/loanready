@@ -1,0 +1,84 @@
+{
+  "as_of": "2026-10-14",
+  "source": "Illustrative example products created for the LoanReady prototype. Not real offers.",
+  "currency": "USD",
+  "products": [
+    {
+      "product_id": "sup_goldenmills_net30",
+      "kind": "SUPPLIER_CREDIT",
+      "name": "Golden Mills 30-day trade credit",
+      "provider": "Golden Mills (supplier)",
+      "params": {"net_days": "30", "discount_rate": "0", "discount_days": "0"},
+      "min_amount_cents": 10000,
+      "max_amount_cents": 800000,
+      "min_term_days": 1,
+      "max_term_days": 30
+    },
+    {
+      "product_id": "sup_goldenmills_2_10_net30",
+      "kind": "SUPPLIER_CREDIT",
+      "name": "Golden Mills 2/10 net 30 (forgo discount)",
+      "provider": "Golden Mills (supplier)",
+      "params": {"net_days": "30", "discount_rate": "0.02", "discount_days": "10"},
+      "min_amount_cents": 10000,
+      "max_amount_cents": 800000,
+      "min_term_days": 1,
+      "max_term_days": 30
+    },
+    {
+      "product_id": "od_harbour",
+      "kind": "OVERDRAFT",
+      "name": "Business overdraft",
+      "provider": "Harbour Community Bank (fictional)",
+      "params": {"apr": "0.18", "fee_cents": "0", "limit_cents": "500000"},
+      "min_amount_cents": 10000,
+      "max_amount_cents": 500000,
+      "min_term_days": 1,
+      "max_term_days": 365
+    },
+    {
+      "product_id": "loan_harbour_wc12",
+      "kind": "BANK_LOAN",
+      "name": "Working-capital term loan, 12 months",
+      "provider": "Harbour Community Bank (fictional)",
+      "params": {"apr": "0.12", "months": "12", "origination_fee_rate": "0.01"},
+      "min_amount_cents": 200000,
+      "max_amount_cents": 5000000,
+      "min_term_days": 360,
+      "max_term_days": 360
+    },
+    {
+      "product_id": "if_flowcap",
+      "kind": "INVOICE_FINANCING",
+      "name": "Invoice advance",
+      "provider": "FlowCap Finance (fictional)",
+      "params": {"advance_rate": "0.85", "fee_rate_per_30d": "0.02", "flat_fee_cents": "2500"},
+      "min_amount_cents": 50000,
+      "max_amount_cents": 2000000,
+      "min_term_days": 7,
+      "max_term_days": 120
+    },
+    {
+      "product_id": "micro_quickfund30",
+      "kind": "MICRO_LOAN",
+      "name": "App micro-loan, 30 days",
+      "provider": "QuickFund (fictional)",
+      "params": {"flat_fee_rate": "0.05", "term_days": "30"},
+      "min_amount_cents": 10000,
+      "max_amount_cents": 300000,
+      "min_term_days": 30,
+      "max_term_days": 30
+    },
+    {
+      "product_id": "mca_swiftadvance",
+      "kind": "MERCHANT_CASH_ADVANCE",
+      "name": "Merchant cash advance",
+      "provider": "SwiftAdvance (fictional)",
+      "params": {"factor": "1.20", "holdback_rate": "0.15"},
+      "min_amount_cents": 50000,
+      "max_amount_cents": 5000000,
+      "min_term_days": 1,
+      "max_term_days": 540
+    }
+  ]
+}

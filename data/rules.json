@@ -1,0 +1,17 @@
+{
+  "version": "1",
+  "rules": [
+    {"id": "R-RENT", "pattern": "\\bRENT\\b|LANDLORD", "label": "6000", "confidence": "0.99"},
+    {"id": "R-WAGES", "pattern": "PAYROLL|WAGES|SALARY", "label": "6100", "confidence": "0.99"},
+    {"id": "R-UTIL", "pattern": "ELECTRIC|POWER CO|WATER BOARD|GAS UTILITY|INTERNET", "label": "6200", "confidence": "0.95"},
+    {"id": "R-EQUIP", "pattern": "RESTAURANT SUPPLY|KITCHEN EQUIPMENT", "label": "1500", "confidence": "0.95"},
+    {"id": "R-FLOUR", "pattern": "MILLS|FLOUR|GRAIN", "label": "5000", "confidence": "0.95"},
+    {"id": "R-PACK", "pattern": "PACKAGING|BOXES|PAPER GOODS", "label": "5000", "confidence": "0.92"},
+    {"id": "R-FEES", "pattern": "BANK FEE|SERVICE CHARGE|CARD FEE", "label": "6400", "confidence": "0.98"},
+    {"id": "R-ADS", "pattern": "ADS|PROMO|PRINT SHOP", "label": "6300", "confidence": "0.85"},
+    {"id": "R-CAPITAL", "pattern": "OWNER CAPITAL", "label": "3000", "confidence": "0.95"},
+    {"id": "R-PERS-SUPER", "pattern": "FRESHMART|HYPERMART|GROCERY", "label": "PERSONAL", "confidence": "0.70"},
+    {"id": "R-PERS-CINEMA", "pattern": "CINEPLEX|CINEMA|STREAMING", "label": "PERSONAL", "confidence": "0.75"},
+    {"id": "R-PERS-TOPUP", "pattern": "TOPUP|TOP-UP|MOBILE RECHARGE", "label": "PERSONAL", "confidence": "0.72"}
+  ]
+}

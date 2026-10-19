@@ -1,7 +1,4 @@
-"""T-DGN-03: S1-S8 and S10 data present with the exact PRD/10 §4 values.
-
-S9 (impaired receivable) is a SHOULD module and is not generated yet.
-"""
+"""T-DGN-03: S1-S10 data present with the exact PRD/10 §4 values."""
 
 from __future__ import annotations
 
@@ -55,14 +52,14 @@ def test_s2_festival_bill_and_events(bundle: Any) -> None:
 
 def test_s3_exactly_two_overdue_invoices(bundle: Any) -> None:
     """T-DGN-03 S3: INV-1043 1,750.00 due 10-04 and INV-1051 1,400.00 due 10-07 are the
-    only open invoices overdue at AS_OF."""
+    only open invoices overdue at AS_OF by at most 60 days (S9 is older)."""
     a, b = _invoice(bundle, "INV-1043"), _invoice(bundle, "INV-1051")
     assert (a.customer_id, a.amount_cents, a.due_date) == ("cpt_bright", 175000, date(2026, 10, 4))
     assert (b.customer_id, b.amount_cents, b.due_date) == ("cpt_harbor", 140000, date(2026, 10, 7))
     overdue = [
         i.id
         for i in bundle.invoices
-        if i.status == InvoiceStatus.OPEN and i.due_date < bundle.as_of
+        if i.status == InvoiceStatus.OPEN and 0 < (bundle.as_of - i.due_date).days <= 60
     ]
     assert overdue == bundle.scenario_ids["S3"] == [a.id, b.id]
 
@@ -146,6 +143,18 @@ def test_s8_blurry_receipt_listed(bundle: Any) -> None:
     assert row["expected_status"] == "NEEDS_CONFIRMATION"
 
 
+def test_s9_impaired_receivable(bundle: Any) -> None:
+    """T-DGN-03 S9: INV-0998 Cafe Lumen 600.00 due 2026-07-31, open, 75 days overdue."""
+    inv = _invoice(bundle, "INV-0998")
+    assert bundle.scenario_ids["S9"] == [inv.id]
+    assert (inv.customer_id, inv.amount_cents, inv.due_date) == (
+        "cpt_lumen",
+        60000,
+        date(2026, 7, 31),
+    )
+    assert inv.status == InvoiceStatus.OPEN and (bundle.as_of - inv.due_date).days == 75
+
+
 def test_s10_legit_bill(bundle: Any) -> None:
     """T-DGN-03 S10: BILL-2190 Golden Mills 900.00 due 10-16 to pye_golden, no claim."""
     b = _bill(bundle, "BILL-2190")
@@ -188,6 +197,12 @@ def test_expected_json_matches_bundle(generated: Any, written: dict[str, Any]) -
     assert exp["S6"] == {"bill_id": sid["S6"][0], "expected_reason": "ACCOUNT_CHANGED"}
     assert exp["S7"] == {"injection_refs": sid["S7"], "min_flags": 4}
     assert exp["S8"] == {"receipt": "receipt_blurry.png", "status": "NEEDS_CONFIRMATION"}
+    assert exp["S9"] == {
+        "invoice_id": sid["S9"][0],
+        "bucket": "61-90",
+        "days_overdue": 75,
+        "ecl_cents": 15000,
+    }
     assert exp["S10"] == {"bill_id": sid["S10"][0], "amount_cents": 90000}
     assert exp["closing_bank_cents"] == 190000 and exp["closing_till_cents"] == 30000
     assert exp["params"]["pos_base_scale"] == str(generated.params.pos_base_scale)

@@ -7,7 +7,8 @@ blurry receipt the date line is replaced by ``"1?/0?/2O2?"`` (unreadable).
 
 Every receipt is a GRAIN DEPOT purchase that also appears in the bank feed (same amount,
 same date), so WP3 links it to the bank line as evidence (BKS-14) instead of posting a
-second expense from the till. The rotated receipt is a SHOULD module and is not built yet.
+second expense from the till. The rotated receipt (SHOULD) is turned 7 degrees with a white
+fill; its sidecar has mean_conf 80, so WP3 scores it about 0.80 (AUTO).
 """
 
 from __future__ import annotations
@@ -43,6 +44,7 @@ class ReceiptSpec:
     expected_status: ReceiptStatus
     blur: bool = False
     injected: bool = False
+    rotate_deg: int = 0
 
     @property
     def id(self) -> str:
@@ -86,6 +88,15 @@ RECEIPTS: tuple[ReceiptSpec, ...] = (
         ReceiptStatus.AUTO,
         injected=True,
     ),
+    ReceiptSpec(
+        "receipt_rotated",
+        date(2026, 10, 8),
+        (("Rye flour 10kg", "21.40"), ("Butter 1kg", "9.45")),
+        "30.85",
+        80,
+        ReceiptStatus.AUTO,
+        rotate_deg=7,
+    ),
 )
 
 
@@ -119,11 +130,15 @@ def render(spec: ReceiptSpec) -> Image.Image:
     font = _font()
     y = 16
     for line in drawn_lines(spec):
-        draw.text((12, y), line, fill=0, font=font)
+        draw.text((40 if spec.rotate_deg else 12, y), line, fill=0, font=font)
         y += 14
     img = small.resize((WIDTH, HEIGHT), Image.Resampling.NEAREST).convert("RGB")
     if spec.blur:
         img = img.filter(ImageFilter.GaussianBlur(3))
+    if spec.rotate_deg:
+        img = img.rotate(
+            spec.rotate_deg, resample=Image.Resampling.BICUBIC, fillcolor=(255, 255, 255)
+        )
     return img
 
 

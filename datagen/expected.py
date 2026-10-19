@@ -235,11 +235,11 @@ def forecast_check(bundle: SeedBundle, margin_cents: int = 0) -> dict[str, Any]:
 def expected_values(
     bundle: SeedBundle, params_json: dict[str, Any], tuning: dict[str, Any]
 ) -> dict[str, Any]:
-    """Contents of data/expected.json (PRD/10 §7). S9 is omitted until its SHOULD module
-    is built."""
+    """Contents of data/expected.json (PRD/10 §7)."""
     sid = bundle.scenario_ids
     by_id = {t.id: t for t in bundle.bank_transactions}
     bills = {b.id: b for b in bundle.bills}
+    invoices = {i.id: i for i in bundle.invoices}
     check = forecast_check(bundle)
     return {
         "seed": bundle.seed,
@@ -265,6 +265,14 @@ def expected_values(
         "S6": {"bill_id": sid["S6"][0], "expected_reason": "ACCOUNT_CHANGED"},
         "S7": {"injection_refs": sid["S7"], "min_flags": 4},
         "S8": {"receipt": "receipt_blurry.png", "status": "NEEDS_CONFIRMATION"},
+        "S9": {
+            "invoice_id": sid["S9"][0],
+            "bucket": "61-90",
+            "days_overdue": (bundle.as_of - invoices[sid["S9"][0]].due_date).days,
+            "ecl_cents": to_cents(
+                from_cents(invoices[sid["S9"][0]].outstanding_cents) * Decimal("0.25")
+            ),
+        },
         "S10": {"bill_id": sid["S10"][0], "amount_cents": bills[sid["S10"][0]].amount_cents},
         "closing_bank_cents": sum(a.balance_cents for a in bundle.bank_accounts),
         "closing_till_cents": till_closing_cents(bundle),

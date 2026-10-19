@@ -1,5 +1,7 @@
-"""Agent: LLM layer, data-class policy, masking, prompts, router (PRD/09)
+"""Agent: LLM layer, data-class policy, masking, prompts (PRD/09).
 
-Skeleton created by WP0; WP7 replaces this package."""
+Public API: ``agent.llm.LLM`` (LLMClient), ``agent.service.Agent`` (AgentService),
+``agent.classifier.LLMClassifier``, ``agent.wording.LLMWording``, ``agent.prompts.data_block``.
+"""
 
 REQUIRES_CONTRACTS = "1"

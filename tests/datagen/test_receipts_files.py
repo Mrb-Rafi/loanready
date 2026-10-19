@@ -16,8 +16,8 @@ def _sidecar(written: dict[str, Path], name: str) -> dict[str, Any]:
 
 
 def test_files_exist_with_size(written: dict[str, Path]) -> None:
-    """T-DGN-06: clean, blurry and injected PNGs (600x900) and their sidecars."""
-    for name in ("receipt_clean", "receipt_blurry", "receipt_injected"):
+    """T-DGN-06: clean, blurry, injected and rotated PNGs (600x900) and their sidecars."""
+    for name in ("receipt_clean", "receipt_blurry", "receipt_injected", "receipt_rotated"):
         png = written["receipts"] / f"{name}.png"
         assert png.is_file() and (written["receipts"] / f"{name}.ocr.json").is_file()
         with Image.open(png) as img:
@@ -74,3 +74,16 @@ def test_receipts_have_matching_bank_lines(bundle: Any) -> None:
     lines = {(t.date, t.amount_cents) for t in bundle.bank_transactions}
     for spec in RECEIPTS:
         assert (spec.day, -spec.total_cents) in lines, spec.name
+
+
+def test_rotated_receipt(written: dict[str, Path], bundle: Any) -> None:
+    """T-DGN-06 (SHOULD): rotated 7 degrees on white, mean_conf 80, total and date
+    readable, items add up; expected AUTO."""
+    data = _sidecar(written, "receipt_rotated")
+    assert data["mean_conf"] == 80
+    assert "TOTAL 30.85" in data["text"] and "2026-10-08" in data["text"]
+    with Image.open(written["receipts"] / "receipt_rotated.png") as img:
+        assert img.getpixel((0, 0)) == (255, 255, 255)
+        assert img.getpixel((599, 899)) == (255, 255, 255)
+    row = next(r for r in bundle.receipts if r["image"].endswith("receipt_rotated.png"))
+    assert row["expected_status"] == "AUTO"
