@@ -1,0 +1,9 @@
+$ python -m pytest -q -m not slow and not optional -p no:randomly
+exit code: 0
+
+=========================== short test summary info ============================
+SKIPPED [1] tests/integration/test_chat.py:118: agent/router.py (WP7 SHOULD) not built yet
+SKIPPED [1] tests/integration/test_seed.py:73: a generated bundle exists in this var dir
+SKIPPED [1] tests/integration/test_wiring.py:74: every package present
+SKIPPED [1] tests/ui/test_state.py:23: orchestrator.container is present on this tree
+692 passed, 4 skipped, 14 deselected in 119.21s (0:01:59)

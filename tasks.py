@@ -186,7 +186,12 @@ def evidence(args: list[str]) -> int:
 
 def docs(_: list[str]) -> int:
     rc = 0
-    for module in ("scripts.dump_tiers", "scripts.dump_controls", "scripts.trace"):
+    for module in (
+        "scripts.dump_tiers",
+        "scripts.dump_controls",
+        "scripts.licenses",
+        "scripts.trace",
+    ):
         if _module_available(module):
             rc |= _py("-m", module)
         else:

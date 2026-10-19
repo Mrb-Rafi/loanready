@@ -1,5 +1,3 @@
-"""Headless demo, evidence export, generated docs (PRD/13)
-
-Skeleton created by WP0; WP11 replaces this package."""
+"""WP11: headless demo, evidence export and generated documents (PRD/13)."""
 
 REQUIRES_CONTRACTS = "1"

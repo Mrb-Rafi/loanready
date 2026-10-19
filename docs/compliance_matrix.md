@@ -1,0 +1,120 @@
+# Compliance matrix
+
+LoanReady is a prototype on synthetic data. This matrix shows how its controls are
+**designed around** the regulations and standards listed in PRD/14: each control names the
+code that implements it, the automated tests that check it and how many rows of the demo's
+action log carry its id. It is an alignment map, **not** a certification or a legal opinion:
+LoanReady is not "compliant" with, "certified" under or "approved" by any of these regimes.
+
+Evidence rows are counted from `evidence/action_log.csv` (run `python tasks.py demo`).
+
+## By regulation
+
+| Regulation | Name (PRD/14 §2) | Controls | Evidence rows |
+|---|---|---|---|
+| REG-ACC-01 | IFRS for SMEs Accounting Standard | CTL-FR-08 | 0 |
+| REG-ACC-02 | US GAAP | CTL-FR-08 | 0 |
+| REG-ACC-03 | IFRS for SMEs Section 2 | CTL-FR-01 | 0 |
+| REG-ACC-04 | Revenue: IFRS for SMEs Section 23 | CTL-FR-08 | 0 |
+| REG-ACC-05 | Impairment of trade receivables: IFRS for SMEs Section 11 | CTL-FR-09 | 0 |
+| REG-ACC-06 | Statement of cash flows: IFRS for SMEs Section 7 | CTL-FR-07 | 0 |
+| REG-ACC-07 | Going concern: IFRS for SMEs Section 3 | CTL-FR-10 | 0 |
+| REG-ACC-08 | Errors and corrections: IFRS for SMEs Section 10 | CTL-FR-02, CTL-FR-03 | 2 |
+| REG-ACC-09 | Inventories: IFRS for SMEs Section 13 | CTL-FR-08 | 0 |
+| REG-ACC-10 | Presentation: IFRS for SMEs Sections 3–5 | CTL-FR-07 | 0 |
+| REG-ACC-12 | Notes / accounting policies disclosure: IFRS for SMEs Section 8 | CTL-FR-08 | 0 |
+| REG-AI-01 | EU AI Act | CTL-AI-08 | 0 |
+| REG-AI-02 | NIST AI RMF 1.0 | CTL-AC-01, CTL-AC-07, CTL-PAY-05, CTL-FR-06, CTL-DQ-01 | 40 |
+| REG-AI-03 | OWASP Top 10 for LLM Applications (2025) | CTL-AC-01, CTL-AC-02, CTL-AC-03, CTL-AC-06, CTL-LIM-01, CTL-LIM-02, CTL-LIM-03, CTL-LIM-06, CTL-AI-01, CTL-AI-02, CTL-AI-04, CTL-AI-05, CTL-AI-07 | 59 |
+| REG-AI-04 | Measures for Labeling AI-Generated Synthetic Content | CTL-AI-06 | 6 |
+| REG-AI-05 | NIST AI RMF "valid and reliable", "explainable" characteristics | CTL-AI-09 | 0 |
+| REG-AI-06 | EU AI Act Art | CTL-AI-06 | 6 |
+| REG-COM-01 | Fair debt-collection practice | CTL-LIM-04, CTL-LIM-05 | 10 |
+| REG-DP-01 | GDPR | CTL-LOG-04, CTL-AI-02, CTL-AI-03 | 0 |
+| REG-DP-02 | China PIPL | CTL-AI-02, CTL-AI-03 | 0 |
+| REG-DP-03 | Cross-border transfer rules: GDPR Chapter V | CTL-AI-02 | 0 |
+| REG-DP-04 | Transparency to the data subject | CTL-AI-02 | 0 |
+| REG-DP-05 | Use of real personal data in a prototype | CTL-DQ-02 | 0 |
+| REG-IC-01 | Sarbanes-Oxley Act 2002 | CTL-AC-01, CTL-PAY-03, CTL-FR-05 | 38 |
+| REG-IC-02 | SOX s | CTL-LOG-01, CTL-LOG-02, CTL-LOG-03, CTL-LOG-05, CTL-FR-02 | 73 |
+| REG-IC-04 | Period close and cut-off | CTL-FR-03 | 2 |
+| REG-IC-05 | PCAOB AS 2201 | CTL-AC-05, CTL-CHG-01, CTL-CHG-02, CTL-CHG-03, CTL-OPS-01 | 0 |
+| REG-IC-06 | Segregation of duties / maker-checker | CTL-AC-04, CTL-SD-01 | 10 |
+| REG-IC-07 | Bank reconciliation as a key financial control | CTL-FR-04 | 0 |
+| REG-LND-01 | California commercial financing disclosures | CTL-FIN-02 | 0 |
+| REG-LND-02 | New York Commercial Finance Disclosure Law | CTL-FIN-02 | 0 |
+| REG-LND-03 | EU Consumer Credit Directive | CTL-FIN-02 | 0 |
+| REG-LND-04 | People's Bank of China Announcement [2021] No. 3 | CTL-FIN-02 | 0 |
+| REG-LND-05 | Credit intermediation / brokerage licensing | CTL-AC-02, CTL-FIN-03, CTL-FIN-04 | 4 |
+| REG-LND-06 | Financial advice rules | CTL-FIN-01, CTL-FIN-03 | 0 |
+| REG-LND-07 | China Supreme People's Court Provisions on Private Lending | CTL-FIN-02 | 0 |
+| REG-PAY-01 | PSD2 RTS on Strong Customer Authentication | CTL-AU-01, CTL-AU-02 | 20 |
+| REG-PAY-02 | Verification/Confirmation of Payee | CTL-PAY-01, CTL-PAY-02 | 5 |
+| REG-PAY-03 | Authorised push payment / business email compromise fraud guidance | CTL-PAY-02 | 3 |
+| REG-PAY-04 | FATF Recommendations | CTL-PAY-06 | 0 |
+| REG-REC-01 | Record retention: tax and accounting record rules | CTL-LOG-01 | 36 |
+| REG-SEC-01 | Least privilege | CTL-AC-05 | 0 |
+| REG-SEC-02 | Secrets management | CTL-SEC-01 | 0 |
+| REG-SEC-03 | Idempotency and replay protection for payment APIs | CTL-LIM-06, CTL-PAY-04 | 1 |
+
+## By control
+
+| Control | Title | Regulations | Implemented in | Tests | Evidence rows |
+|---|---|---|---|---|---|
+| CTL-AC-01 | Tier enforcement in plain code outside the model (COSO CA) | REG-AI-02, REG-AI-03, REG-IC-01 | `governance.gate.Gate.evaluate` | `tests/governance/test_gate_pipeline.py` | 35 |
+| CTL-AC-02 | Hard-coded blocked action set; unknown types fail closed (COSO CA) | REG-AI-03, REG-LND-05 | `governance.tiers.BLOCKED_TYPES` | `tests/governance/test_tiers.py` | 1 |
+| CTL-AC-03 | Untrusted origin/provenance cannot initiate or shape actions (COSO CA) | REG-AI-03 | `governance.gate.Gate.evaluate` | `tests/governance/test_gate_pipeline.py`, `tests/integration/test_injection_integration.py` | 0 |
+| CTL-AC-04 | Role rules per operation (COSO CA) | REG-IC-06 | `governance.tiers.ROLE_RULES` | `tests/governance/test_gate_pipeline.py` | 0 |
+| CTL-AC-05 | Scoped sandbox tokens (read/write/admin); write token isolated (COSO CA) | REG-SEC-01, REG-IC-05 | `sandbox.auth`, `adapters._secrets` | `tests/sandbox/test_auth_ratelimit.py`, `tests/adapters/test_isolation_static.py` | 0 |
+| CTL-AC-06 | Execution ticket required for every sandbox write (COSO CA) | REG-AI-03 | `governance.tickets`, `adapters` | `tests/governance/test_tickets.py`, `tests/adapters/test_ports.py`, `tests/governance/test_tickets.py` | 5 |
+| CTL-AC-07 | Kill switch (COSO CA) | REG-AI-02 | `governance.gate.Gate`, `governance.settings_store` | `tests/governance/test_kill_switch.py` | 0 |
+| CTL-SD-01 | Maker-checker; no self-approval; bookkeeper cannot approve payments (COSO CA) | REG-IC-06 | `governance.approvals.check_approver` | `tests/governance/test_approvals.py` | 10 |
+| CTL-AU-01 | Approval bound to exact parameters (dynamic linking) (COSO CA) | REG-PAY-01 | `governance.approvals`, `governance.gate.Gate.execute` | `tests/governance/test_approvals.py` | 10 |
+| CTL-AU-02 | Approval single use and 15-minute expiry (COSO CA) | REG-PAY-01 | `governance.approvals.verify` | `tests/governance/test_approvals.py` | 10 |
+| CTL-LIM-01 | Per-action amount cap (COSO CA) | REG-AI-03 | `governance.caps.check_caps` | `tests/governance/test_caps.py` | 2 |
+| CTL-LIM-02 | Per-day total cap (COSO CA) | REG-AI-03 | `governance.caps.check_caps` | `tests/governance/test_caps.py` | 2 |
+| CTL-LIM-03 | Per-payee weekly cap (COSO CA) | REG-AI-03 | `governance.caps.check_caps` | `tests/governance/test_caps.py` | 2 |
+| CTL-LIM-04 | Messages per customer per week (COSO CA) | REG-COM-01 | `governance.caps.check_caps` | `tests/governance/test_caps.py` | 6 |
+| CTL-LIM-05 | One reminder per invoice per 7 days (COSO CA) | REG-COM-01 | `governance.caps.check_caps` | `tests/governance/test_caps.py` | 4 |
+| CTL-LIM-06 | Bank-side per-payment and daily outgoing limits and write rate limit, independent of the app (COSO CA) | REG-AI-03, REG-SEC-03 | `sandbox.bank.limits`, `sandbox.ratelimit` | `tests/sandbox/test_bank.py`, `tests/sandbox/test_auth_ratelimit.py` | 0 |
+| CTL-PAY-01 | Pay known payees only; new payees blocked (COSO CA) | REG-PAY-02 | `governance.checks.check_payment` | `tests/integration/test_fraud_invoice.py`, `tests/governance/test_gate_pipeline.py` | 2 |
+| CTL-PAY-02 | Stored account must match; changed bank details blocked (app and MockBank) (COSO CA) | REG-PAY-02, REG-PAY-03 | `governance.checks.check_payment`, `sandbox.bank.service` | `tests/integration/test_fraud_invoice.py`, `tests/sandbox/test_bank.py` | 3 |
+| CTL-PAY-03 | Amount <= outstanding bill (COSO CA) | REG-IC-01 | `governance.checks.check_payment` | `tests/governance/test_gate_pipeline.py` | 2 |
+| CTL-PAY-04 | Idempotent writes (no double payment) (COSO CA) | REG-SEC-03 | `sandbox.idempotency` | `tests/sandbox/test_idempotency_opslog.py` | 1 |
+| CTL-PAY-05 | Undo window (cancel before value date) (COSO CA) | REG-AI-02 | `sandbox.bank`, `governance.checks.check_cancel` | `tests/sandbox/test_bank.py::test_cancel_and_return`, `tests/governance/test_gate_pipeline.py::test_cancel_payment`, `tests/governance/test_gate_pipeline.py` | 0 |
+| CTL-PAY-06 | Watchlist screening before first payment (P2, not built) (COSO CA) | REG-PAY-04 | `governance.checks` | none (not built) | 0 |
+| CTL-LOG-01 | Hash-chained, append-only audit log (COSO IC) | REG-IC-02, REG-REC-01 | `governance.audit.AuditLog` | `tests/governance/test_audit_log.py` | 36 |
+| CTL-LOG-02 | Every decision logged, including blocked attempts and events (COSO IC) | REG-IC-02 | `governance.gate.Gate`, `governance.audit.AuditLog` | `tests/governance/test_gate_pipeline.py` | 35 |
+| CTL-LOG-03 | Chain verification and CSV export (COSO MO) | REG-IC-02 | `governance.audit.AuditLog.verify_chain` | `tests/governance/test_audit_log.py`, `tests/governance/test_audit_log.py` | 2 |
+| CTL-LOG-04 | Masking of identifiers and untrusted text in logs (COSO CA) | REG-DP-01 | `contracts.actions.mask_params` | `tests/governance/test_audit_log.py` | 0 |
+| CTL-LOG-05 | Independent hash-chained sandbox operation log (COSO MO) | REG-IC-02 | `sandbox.opslog` | `tests/sandbox/test_idempotency_opslog.py` | 0 |
+| CTL-FR-01 | Balanced double-entry postings enforced (COSO CA) | REG-ACC-03 | `books.posting.validate` | `tests/books/test_posting.py` | 0 |
+| CTL-FR-02 | Journal immutability; corrections by reversal (COSO CA) | REG-ACC-08, REG-IC-02 | `books.posting` | `tests/books/test_immutability_static.py` | 0 |
+| CTL-FR-03 | Period close and lock (P1; lock check only, period close not built yet) (COSO CA) | REG-IC-04, REG-ACC-08 | `books.service.Books.period_is_closed`, `governance.checks.check_payment` | `tests/governance/test_gate_pipeline.py::test_payment_closed_period` | 2 |
+| CTL-FR-04 | Bank reconciliation with itemised differences (COSO CA) | REG-IC-07 | `books.reconcile` | `tests/books/test_reconcile.py` | 0 |
+| CTL-FR-05 | Duplicate detection (COSO CA) | REG-IC-01 | `books.duplicates` | `tests/books/test_duplicates.py` | 1 |
+| CTL-FR-06 | Owner confirmation for low-confidence or personal items (COSO CA) | REG-AI-02 | `books.categorise`, `books.confirm` | `tests/books/test_categorise.py`, `tests/books/test_personal.py` | 5 |
+| CTL-FR-07 | Statement identities checked (COSO MO) | REG-ACC-06, REG-ACC-10 | `books.statements` | `tests/books/test_identities.py` | 0 |
+| CTL-FR-08 | Framework-specific presentation and policy disclosure (COSO IC) | REG-ACC-01, REG-ACC-02, REG-ACC-04, REG-ACC-09, REG-ACC-12 | `books.policies`, `outputs.loanpack.sections` | `tests/books/test_cashflow_classification.py`, `tests/outputs/test_loanpack.py` | 0 |
+| CTL-FR-09 | Receivable impairment (provision matrix, P1) (COSO CA) | REG-ACC-05 | `books.receivables` | `tests/books/test_ageing_ecl.py` | 0 |
+| CTL-FR-10 | Going-concern flag and disclosure (COSO IC) | REG-ACC-07 | `planning.gap`, `outputs.loanpack` | `tests/planning/test_gap.py` | 0 |
+| CTL-DQ-01 | Receipt confidence threshold (COSO CA) | REG-AI-02 | `books.receipts` | `tests/books/test_receipts.py` | 0 |
+| CTL-DQ-02 | Synthetic identifiers only (COSO CE) | REG-DP-05 | `datagen` | `tests/datagen/test_no_real_identifiers.py` | 0 |
+| CTL-AI-01 | Model never computes money; post-checks on worded numbers (COSO CA) | REG-AI-03 | `outputs.postcheck`, `agent.explain` | `tests/outputs/test_postcheck.py`, `tests/agent/test_explain_postcheck.py` | 8 |
+| CTL-AI-02 | Data-class policy for remote calls (COSO CA) | REG-DP-01, REG-DP-02, REG-DP-03, REG-DP-04, REG-AI-03 | `agent.policy` | `tests/agent/test_policy.py` | 0 |
+| CTL-AI-03 | Masking before remote calls (COSO CA) | REG-DP-01, REG-DP-02 | `agent.masking` | `tests/agent/test_masking.py` | 0 |
+| CTL-AI-04 | Untrusted text delimited; scanner logs instruction-like text (COSO CA) | REG-AI-03 | `agent.prompts.data_block`, `contracts.untrusted.scan_untrusted` | `tests/agent/test_prompts.py`, `tests/contracts/test_untrusted.py` | 4 |
+| CTL-AI-05 | Output schema validation, retry, deterministic fallback (COSO CA) | REG-AI-03 | `agent.llm` | `tests/agent/test_validation.py` | 0 |
+| CTL-AI-06 | AI-generated content labelled (COSO IC) | REG-AI-04, REG-AI-06 | `outputs.drafts`, `ui.components.badges` | `tests/outputs/test_drafts.py` | 6 |
+| CTL-AI-07 | Budget and rate guard for remote models (SHOULD; calls counted, budget not built yet) (COSO CA) | REG-AI-03 | `agent.llm.LLM.remote_calls_today` | `tests/agent/test_service.py::test_status_counts_remote_calls` | 0 |
+| CTL-AI-08 | Readiness score uses business data only; explainable; disclaimed (COSO CA) | REG-AI-01 | `financing.readiness` | `tests/financing/test_readiness.py` | 0 |
+| CTL-AI-09 | Forecast ranges and assumptions always shown (COSO IC) | REG-AI-05 | `planning.forecast` | `tests/planning/test_forecast_tiny.py` | 0 |
+| CTL-FIN-01 | Fixed, dated catalogue; unknown products refused (COSO CA) | REG-LND-06 | `financing.catalogue` | `tests/financing/test_compare.py` | 0 |
+| CTL-FIN-02 | Annualised cost disclosure (estimated APR + EAR + disclosure elements) (COSO IC) | REG-LND-01, REG-LND-02, REG-LND-03, REG-LND-04, REG-LND-07 | `financing.metrics`, `financing.disclosure` | `tests/financing/test_irr.py`, `tests/financing/test_disclosure.py` | 0 |
+| CTL-FIN-03 | Neutral ranking by cost; no sponsored ranking; not-advice notice (COSO CE) | REG-LND-05, REG-LND-06 | `financing.compare` | `tests/financing/test_compare.py` | 0 |
+| CTL-FIN-04 | Never accept a loan; submission needs approval; pack hash verified (COSO CA) | REG-LND-05 | `governance.tiers.BLOCKED_TYPES`, `governance.checks.check_submit_pack`, `sandbox.lender` | `tests/governance/test_tiers.py`, `tests/sandbox/test_pos_messaging_lender.py`, `tests/integration/test_loan_pack_flow.py` | 3 |
+| CTL-CHG-01 | Settings changes owner-only and logged with before/after (COSO CA) | REG-IC-05 | `governance.settings_store.SettingsStore` | `tests/governance/test_settings.py` | 0 |
+| CTL-CHG-02 | Change management: contracts versioning, lockfile, layering checks (COSO CA) | REG-IC-05 | `infra.versions`, `infra.integration_check` | `tests/contracts/test_layering.py` | 0 |
+| CTL-CHG-03 | Frozen contracts manifest, environment pin and verified hand-off/assembly (COSO CA) | REG-IC-05 | `infra.freeze`, `infra.handoff`, `infra.assemble` | `tests/contracts/test_manifest_doctor.py`, `tests/contracts/test_handoff_assemble.py` | 0 |
+| CTL-OPS-01 | Deterministic automated test suite gates every merge (COSO MO) | REG-IC-05 | `infra.integration_check` | `.github/workflows/ci.yml`, `tests/contracts` | 0 |
+| CTL-SEC-01 | Secrets never logged or committed (COSO CA) | REG-SEC-02 | `infra.logging_setup` | `tests/contracts/test_infra.py` | 0 |
