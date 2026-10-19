@@ -1,183 +1,242 @@
 # LoanReady
 
-FinTechathon 2026, International Track, Topic E (SME Finance Copilot).
+**An SME finance copilot that turns a small business's messy records into clean books, a
+13-week cash forecast, a cost-ordered plan to close a cash gap and a lender-ready application,
+with every action behind a permission gate written in plain code.**
 
-LoanReady turns a young small business's messy records into clean double-entry books and a
-13-week cash forecast. When a cash gap appears it closes it in order of cost: **collect**
-overdue invoices, then **delay** a penalty-free bill within its grace period, then
-**borrow** the remainder, comparing financing options by their true annualised cost. It
-then prepares a lender-ready application pack. The AI only classifies, words text from
-facts computed by code, or picks from a fixed menu. Every action passes a permission gate
-written in plain code, and every decision lands in a hash-chained audit log.
+2026 Shenzhen International FinTech Competition (FinTechathon) · International Track ·
+**Topic E: SME Finance Copilot** · Team **Korikath Nexus**
+
+---
+
+## Documentation
+
+| Document | PDF | Source |
+|---|---|---|
+| **Technical documentation**: architecture, every subsystem with its formulas, AI layer, governance, sandbox, testing, configuration, performance, limitations | [LoanReady_Technical_Documentation.pdf](docs/pdf/LoanReady_Technical_Documentation.pdf) | [docs/technical_doc.md](docs/technical_doc.md) |
+| **Usage guide**: install, start, every screen and button, the approval dialog, a click-by-click demo script, turning on AI, commands, troubleshooting, FAQ | [LoanReady_Usage_Guide.pdf](docs/pdf/LoanReady_Usage_Guide.pdf) | [docs/usage_guide.md](docs/usage_guide.md) |
+| Security self-assessment: permission tiers, known-risk list, residual risks | | [docs/security_self_assessment.md](docs/security_self_assessment.md) |
+| Compliance matrix: regulation → control → code → test → evidence (generated) | | [docs/compliance_matrix.md](docs/compliance_matrix.md) |
+| Permission tier table (generated from code) | | [docs/generated/tier_table.md](docs/generated/tier_table.md) |
+| Execution evidence: demo summary, hash-chained logs, chain checks, test report | | [evidence/](evidence/README.md) |
+| Specification the code was built from | | [PRD/](PRD/README.md) |
+
+---
+
+## Team
+
+**Korikath Nexus**
+
+| Name | Role | University | Programme |
+|---|---|---|---|
+| **M. Rafiul Bahar Rafi** | Team leader | Bangladesh Agricultural University | Bioinformatics Engineering (final year) |
+| **M. Wasiul Bahar Wasi** | Member | Bangladesh University of Professionals | Finance and Banking (second year) |
+| **Fawzia Tahsin** | Member | Bangladesh Agricultural University | Bioinformatics Engineering (final year) |
+| **Taposhi Rabeya** | Member | Bangladesh Agricultural University | Bioinformatics Engineering (final year) |
+
+**Advisor:** **Dr. Md. Rakib Hassan**, Professor, Department of Computer Science and
+Mathematics, Bangladesh Agricultural University
+([profile](https://www.bau.edu.bd/profile/CSM1007)).
+
+---
+
+## The problem
+
+Small businesses are rarely refused credit because they are bad risks; they are refused
+because they cannot prove what they earn. Their records live in cash, paper receipts, chat
+orders and one account shared between personal and business money. When a cash crunch comes,
+the fastest money on offer, such as a merchant cash advance priced as a "factor rate", is
+usually the most expensive.
+
+## What LoanReady does
+
+| Capability | How |
+|---|---|
+| **Books from messy records** | Imports till (POS) sales, the bank feed and receipts; categorises by rules first, then AI; separates personal spending; flags duplicate charges; posts balanced double-entry journals; builds P&L, cash-flow statement and balance sheet; reconciles to the bank |
+| **13-week cash forecast** | Low, base and high scenarios; the week cash first goes negative; the drivers behind it (big bills, late customers) |
+| **Cost-ordered cash plan** | Closes the gap cheapest first: **collect** overdue invoices, **delay** penalty-free bills within their grace period, **borrow** only the remainder |
+| **Honest financing comparison** | Seven example products ranked by true annualised cost (EAR, with APR beside it), full disclosures and a plain explanation of factor-rate traps |
+| **Loan readiness** | A 0-100 self-assessment from business data only, with concrete steps to improve it |
+| **Lender-ready pack** | A 13-section PDF built from the books, forecast and score, submitted to a pretend lender after approval |
+| **Safety in code, not in the AI** | The AI only classifies, words text from computed facts or picks from a fixed menu. Every payment, message and submission needs a human approval bound to the exact details; paying a new payee, changing a payee's bank account, accepting a loan or raising limits is always refused; every decision is written to a hash-chained log that cannot be edited |
 
 Everything runs on one machine with **synthetic data** (Rina's Bakery) and a self-built
-banking/POS/messaging/lender **sandbox**; no real money, bank or personal data is involved.
+banking, POS, messaging and lender **sandbox**. No real money, bank or personal data is
+involved.
 
-## What the demo shows (PRD/00 §4)
+---
 
-`python tasks.py demo` plays the whole story headlessly and checks scenarios S1-S10:
+## The demo story
 
-| Step | What happens | Checked |
+`python tasks.py demo` plays the whole story headlessly and checks scenarios S1-S10
+(business date 14 October 2026):
+
+| Step | What happens | Scenario |
 |---|---|---|
-| 1. Capture | POS and bank feed imported, receipts read; 3 personal expenses found and moved to drawings after the owner confirms; a duplicate charge flagged; a blurry receipt waits for confirmation | S1, S5, S8 |
-| 2. Books | P&L, cash-flow statement, balance sheet; ledger cash equals bank + till after the owner's confirmations | |
-| 3. Forecast | Base case goes below zero in **week 3** (festival flour order due before two catering invoices are paid) | S2 |
-| 4. Collect | Reminders drafted for the two overdue invoices, approved, sent through the messaging sandbox | S3 |
-| 5-6. Delay, borrow | A penalty-free bill moved within its grace period; for the rest, 30-day supplier credit is cheapest and the merchant cash advance most expensive | S4 |
-| 7. Pay a supplier | Regular flour supplier paid after approval; MockBank returns a reference | S10 |
-| 8. Security | A bill asking for payment to a new bank account is blocked (`ACCOUNT_CHANGED`); planted instructions in a receipt, bank memo, POS note and bill are ignored and logged; a 75-day-old invoice gets no reminder | S6, S7, S9 |
-| 9. Loan pack | Readiness score, PDF pack, submitted to the pretend lender after approval; accepting a loan stays blocked | |
-| 10. Evidence | Action log exported to CSV, chain verified | |
+| 1. Capture | POS and bank imported, receipts read; three personal expenses moved to drawings after confirmation; a duplicate charge flagged; a blurry receipt waits for the owner | S1, S5, S8 |
+| 2. Books | P&L, cash flow, balance sheet; ledger cash equals bank + till | |
+| 3. Forecast | Base case goes below zero in **week 3**: a 6,500.00 festival flour order falls due before two catering invoices are paid | S2 |
+| 4. Collect | Reminders drafted for the two overdue invoices, approved, sent | S3 |
+| 5-6. Delay, borrow | A penalty-free bill is moved within its grace period; for the remaining 1,000.00, supplier credit is cheapest (EAR 0.00%) and the merchant cash advance most expensive | S4 |
+| 7. Pay a supplier | The regular flour supplier is paid after approval | S10 |
+| 8. Security | A bill asking for payment to a new bank account is blocked (`ACCOUNT_CHANGED`); planted instructions in a bank memo, POS note, receipt and bill are ignored and logged; a 75-day-old invoice gets no reminder | S6, S7, S9 |
+| 9. Loan pack | Readiness score; pack generated and submitted after approval; accepting a loan stays blocked | |
+| 10. Evidence | Action log exported; hash chain verified | |
 
-Results: [`evidence/demo_summary.json`](evidence/demo_summary.json) and
-[`evidence/README.md`](evidence/README.md).
+Results: [`evidence/demo_summary.json`](evidence/demo_summary.json). A click-by-click version
+for the screen is in the [usage guide](docs/pdf/LoanReady_Usage_Guide.pdf) (§8).
+
+---
 
 ## Quick start
 
-Python **3.12**, a folder path without spaces (on Windows not under OneDrive).
+Requirements: **Python 3.12**, about 1 GB of disk, a folder path without spaces (on Windows,
+not inside OneDrive). No AI model, API key, OCR software or database server is needed.
 
 ```
-# Windows: py -3.12 tasks.py setup          Linux/macOS: python3.12 tasks.py setup
+git clone https://github.com/Mrb-Rafi/loanready.git
+cd loanready
+
+# Windows:  py -3.12 tasks.py setup        Linux/macOS:  python3.12 tasks.py setup
 python tasks.py setup      # creates .venv and installs requirements.lock exactly
 python tasks.py doctor     # every MUST row must be OK
 cp .env.example .env       # Windows: copy .env.example .env
-python tasks.py seed       # generate Rina's Bakery, load the sandbox and the books
-python tasks.py ui         # http://127.0.0.1:8501
+python tasks.py seed       # generate Rina's Bakery and load the sandbox and the books
+python tasks.py ui         # open http://127.0.0.1:8501
 ```
 
-After `setup`, `tasks.py` re-launches itself inside `.venv`, so plain `python` (or `py -3.12`
-on Windows) works for every target. No API key, model, OCR binary or running server is
-needed: the defaults are `LLM_BACKEND=mock`, `OCR_BACKEND=sidecar` and the in-process sandbox.
+After `setup`, `tasks.py` switches into its own environment automatically, so plain `python`
+(or `py -3.12` on Windows) works for every command.
 
-| Command | Does |
+| Command | What it does |
 |---|---|
-| `python tasks.py test` | default test suite (`--all` adds slow tests, `test books` one package) |
-| `python tasks.py lint` | ruff check, ruff format check, import-layer contracts |
-| `python tasks.py integrate` | layering, static checks (no float money, no wall clock, write paths only in adapters) and every package's tests |
-| `python tasks.py demo` | headless Rina story; exits non-zero if any S1-S10 check fails |
-| `python tasks.py evidence` | action log, sandbox ops log, chain checks, test report into `evidence/` |
-| `python tasks.py docs` | generated tier table, compliance matrix and `THIRD_PARTY.md` |
-| `python tasks.py sandbox` | the sandbox as a separate server on port 8100 (optional) |
+| `python tasks.py ui` | Start the screen (http://127.0.0.1:8501) |
+| `python tasks.py demo` | Headless story; exits non-zero if any S1-S10 check fails |
+| `python tasks.py evidence` | Action log, sandbox op log, chain checks and test report into `evidence/` |
+| `python tasks.py docs` | Regenerate the tier table, compliance matrix and `THIRD_PARTY.md` |
+| `python tasks.py test` | Default test suite (`--all` adds slow tests; `test books` runs one package) |
+| `python tasks.py lint` | ruff and the import-layer contracts |
+| `python tasks.py integrate` | Layering, static checks and every package's tests |
+| `python tasks.py sandbox` | Run the simulated bank as a separate server on port 8100 |
+| `python -m agent.health` | Show the AI mode, available models, per-task routes and OpenAI budget |
+| `python -m scripts.build_pdfs` | Rebuild the two PDFs (needs pandoc and Chromium) |
+
+Full instructions, every screen and troubleshooting: [usage guide](docs/pdf/LoanReady_Usage_Guide.pdf).
+
+---
 
 ## Architecture
 
 ```
 +---------------------------- one machine, localhost only ----------------------------+
-|  Streamlit UI (ui/, port 8501)                                                      |
-|     | in-process Python calls (AppFacade)                                           |
-|     v                                                                               |
-|  Orchestrator (orchestrator/) -- composition root, the only place packages meet     |
+|  Streamlit UI (ui/)                                                                 |
+|     | AppFacade                                                                     |
+|  Orchestrator (orchestrator/): composition root, the only place packages meet       |
 |     |            |             |            |             |            |            |
 |  agent/      governance/    books/     planning/    financing/    outputs/          |
-|  (LLM layer, (gate, tiers,  (ledger,   (forecast,   (catalogue,   (reminders,       |
-|   masking)    approvals,     stmts,     cash plan)   IRR, score)   loan pack)       |
+|  (AI layer)  (gate, tiers,  (ledger,   (forecast,   (catalogue,   (reminders,       |
+|               approvals,     stmts,     cash plan)   IRR, score)   loan pack)       |
 |               audit log)     recon)                                                 |
 |                 |  ExecutionTicket                                                  |
-|                 v                                                                   |
-|              adapters/  (bank, POS, messaging, lender ports over HTTP)              |
-|                 |  bearer token (read | write) + Idempotency-Key + ticket            |
-|                 v                                                                   |
-|  Sandbox (sandbox/): /bank /pos /messaging /lender, own SQLite files and op logs    |
-|  App database: var/app.db (SQLite)                                                  |
+|              adapters/  (the only code that calls the sandbox)                      |
+|                 |  scoped token + Idempotency-Key + ticket                          |
+|  Sandbox (sandbox/): bank, POS, messaging, lender; own databases and op logs        |
 +-------------------------------------------------------------------------------------+
 ```
 
-The rules that make this safe are enforced by code and tests, not by convention:
+Rules enforced by code and tests:
 
-- **AI proposes, code decides.** The model never computes money, checks permissions or
-  chooses a payee, amount or account. Money is `int` cents across modules and `Decimal`
-  inside calculations, rounded half-even in one place (`contracts.money`).
-- **Permission tiers** ([generated table](docs/generated/tier_table.md)): observe (T0),
-  draft (T1), execute only after a human approval bound to the exact parameters (T2), and a
-  hard-coded blocked set (paying a new payee, changing a payee's account, accepting a loan,
-  disabling the gate, editing the log, ...). Only `adapters/` may call sandbox write
-  endpoints, and only with a single-use execution ticket minted by the gate.
-- **Untrusted text** (receipts, invoices, bills, memos, POS notes) is marked as such, enters
-  prompts only inside a data block and can never start or shape an action.
-- **Audit**: every decision, including blocked attempts, is a hash-chained row with no
-  update or delete path; the sandbox keeps its own independent chain.
-- **Layering**: business packages never import each other; `lint-imports` checks it.
+- **Money is exact:** integer cents between modules, `Decimal` inside calculations, half-even
+  rounding in one place; a static check rejects floats on money.
+- **Permission tiers:** observe (T0), draft (T1), execute only after a human approval bound to
+  the exact parameters (T2), and a hard-coded blocked set
+  ([tier table](docs/generated/tier_table.md)). Only `adapters/` may call sandbox write
+  endpoints, and only with a single-use execution ticket from the gate.
+- **Untrusted text** (receipts, invoices, bills, memos, POS notes) enters AI prompts only inside
+  a data block and can never start or shape an action.
+- **Audit:** every decision, including blocked attempts, is a hash-chained, append-only row;
+  the sandbox keeps its own independent chain.
+- **Layering:** business packages never import each other (`lint-imports`).
+- **Deterministic:** fixed business date, seeded ids, canonical hashing; the demo and evidence
+  are byte-identical across runs and across Windows and Linux.
 
-Step-by-step use of every screen and command: [`docs/usage_guide.md`](docs/usage_guide.md).
-Details: [`docs/technical_doc.md`](docs/technical_doc.md),
-[`docs/security_self_assessment.md`](docs/security_self_assessment.md),
-[`docs/compliance_matrix.md`](docs/compliance_matrix.md).
+---
 
-## The sandbox
-
-`sandbox/` is a self-built simulator (FastAPI) of a bank, a POS system, a messaging
-provider and a lender, with scoped tokens (read, write, admin), idempotency keys, bank-side
-limits independent of the app, execution-ticket verification on every write and a
-hash-chained operation log per sub-app. A simulator lets the demo exercise real failure
-modes (changed bank details, replays, limits) without any real account. Tests and the demo
-run it in-process; `python tasks.py sandbox` runs it as a server.
-
-## LLM backends
+## AI, used narrowly
 
 | `LLM_BACKEND` | What answers |
 |---|---|
-| `mock` (default; always used by tests, `seed`, `demo`, `evidence` and `docs`) | Deterministic keyword classification and templates (labelled as templates, not AI); no model needed |
-| `ollama` | A local model through Ollama (default `phi3:mini`), then mock |
+| `mock` (default; always used by tests, `seed`, `demo`, `evidence` and `docs`) | Deterministic keyword classification and templates; no model needed |
+| `ollama` | A local model (default `phi3:mini`), then mock |
 | `openai` | OpenAI for the tasks the data-class policy allows, then mock |
-| `hybrid` (recommended for the live UI) | Per task: wording and explanations try OpenAI, then the local model; categorisation tries the local model, then OpenAI with the merchant name only; receipt text and intents stay local; mock is always last |
+| `hybrid` | Messages and explanations: OpenAI → local → mock; categorisation: local → OpenAI (merchant name only) → mock; receipt text and intents stay local |
 
-Whatever the mode, bank identifiers and documents never leave the machine, names are masked
-before a remote call, every answer is validated, numbers in explanations and messages are
-post-checked against the facts, and any failure falls back to the next backend. A local
-model's category label is only a suggestion the owner confirms (its confidence is capped
-below the 0.80 threshold). Answers are cached in `var/llm_cache.db`.
+Bank identifiers and documents never leave the machine; names are masked before any remote
+call; every answer is validated and its numbers checked against the facts; a local model's
+category labels are only suggestions the owner confirms. An OpenAI cost guard reserves each
+call's worst case and stops at calls-per-day, dollars-per-day and all-time dollar caps. Setup:
+[usage guide §10](docs/pdf/LoanReady_Usage_Guide.pdf).
 
-**OpenAI cost guard.** Each remote call reserves its worst-case cost first and books the
-real token usage after, against three caps: calls per day (`OPENAI_MAX_CALLS`), dollars per
-day (`OPENAI_MAX_USD`) and dollars all-time (`OPENAI_TOTAL_MAX_USD`, for prepaid credit),
-using the prices in `OPENAI_PRICE_IN_PER_MTOK` / `OPENAI_PRICE_OUT_PER_MTOK`. When a cap is
-reached, calls fall back to the local model or mock.
+---
 
-To switch on: install Ollama and `ollama pull phi3:mini`; for OpenAI put `OPENAI_API_KEY` in
-`.env`, run `python -m agent.health` to list the small models your key can use, set
-`OPENAI_MODEL` and the prices from the OpenAI pricing page, then `LLM_BACKEND=hybrid`.
-`python -m agent.health` shows the routes each task would take right now and the budget.
+## Quality and evidence
+
+- **About 720 automated tests** across 13 suites (package tests against fakes, golden values,
+  property tests, integration tests over the in-process sandbox, S1-S10 scenario tests, e2e
+  tests of the headless demo); all pass on Linux. Latest results:
+  [`evidence/test_report.txt`](evidence/test_report.txt).
+- **Security tests:** prompt-injection corpus, fraudulent invoice, approval replay, ticket
+  misuse, remote-policy refusal before any network call
+  (`tests/integration/test_injection_integration.py`, `tests/integration/test_fraud_invoice.py`,
+  `tests/governance/test_approvals.py`, `tests/agent/test_backends.py`).
+- **Evidence** ([`evidence/`](evidence/README.md)): demo summary, the hash-chained action log,
+  the sandbox's operation log and both chain verifications.
+
+---
 
 ## Repository map
 
-| Path | Work package | What |
-|---|---|---|
-| `contracts/`, `infra/`, `tasks.py` | WP0 | Frozen shared types, money/clock/ids/hash helpers, task runner, doctor, hand-off |
-| `governance/` | WP1 | Gate, tiers, approvals, tickets, caps, kill switch, audit log, controls registry |
-| `sandbox/`, `adapters/` | WP2 | Simulator service and the only code that calls it |
-| `books/` | WP3 | Ingestion, rules, posting, statements, reconciliation, receipts |
-| `planning/` | WP4 | 13-week forecast (low/base/high) and the collect-delay-borrow plan |
-| `financing/` | WP5 | Product catalogue, IRR/APR/EAR, disclosures, comparison, readiness score |
-| `outputs/` | WP6 | Reminder and delay drafts with post-checks, loan-pack PDF |
-| `agent/` | WP7 | LLM layer: policy, masking, prompts, validation, mock backend |
-| `datagen/`, `data/` | WP8 | Synthetic Rina's Bakery generator and its expected values |
-| `orchestrator/` | WP9 | Composition root, `AppFacade`, executors, seeding |
-| `ui/` | WP10 | Streamlit screens, approval dialog |
-| `scripts/`, `docs/`, `evidence/`, `tests/e2e/` | WP11 | Demo, evidence, generated documents |
-| `PRD/` | | The specification |
+| Path | What |
+|---|---|
+| `contracts/`, `infra/`, `tasks.py` | Shared types, money/clock/id/hash helpers, task runner, doctor, hand-off and assembly |
+| `governance/` | Permission gate, tiers, approvals, tickets, caps, kill switch, audit log, controls registry |
+| `sandbox/`, `adapters/` | Simulated bank, POS, messaging and lender; the only code that calls them |
+| `books/` | Ingestion, rules, posting, statements, reconciliation, receipts |
+| `planning/` | 13-week forecast and the collect-delay-borrow plan |
+| `financing/` | Product catalogue, IRR/APR/EAR, disclosures, comparison, readiness score |
+| `outputs/` | Reminder and delay drafts with post-checks, loan-pack PDF |
+| `agent/` | AI layer: policy, masking, prompts, validation, backends, routing, cache, budget |
+| `datagen/`, `data/` | Synthetic Rina's Bakery generator and its expected values |
+| `orchestrator/` | Composition root, `AppFacade`, executors, seeding |
+| `ui/` | Streamlit screens and the approval dialog |
+| `scripts/` | Headless demo, evidence export, generated documents, PDF builder |
+| `docs/` | Technical documentation, usage guide (Markdown and PDF), security self-assessment, compliance matrix |
+| `evidence/` | Execution evidence |
+| `PRD/` | The specification |
+
+---
 
 ## Limitations
 
-Honest list of what this prototype does not do (also in the security self-assessment):
+Stated honestly (details in the technical documentation, §23):
 
-- Synthetic data only; single currency (USD); single business; no real bank connection.
+- Synthetic data only; one business; one currency (USD); no real bank, POS or lender.
 - No multi-user authentication: the UI switches between an owner and a bookkeeper role.
-- Not built yet (SHOULD/OPTIONAL items of the PRD): intent router and chat; Tesseract OCR (receipts are read from OCR
-  sidecar files); expected-credit-loss provision matrix; period close; US GAAP indirect
-  cash-flow reconciliation; China private-lending cap check; supplier price-rise alerts;
-  loan-pack charts; payee watchlist screening; the UI's guided demo stepper.
-- Tier 3 (autonomous execution) is disabled.
-- The readiness score is a self-assessment from business data, not a credit score or a
-  lending decision. LoanReady does not act as a broker and never accepts a loan.
-- Regulatory statements are about design alignment only; LoanReady is not certified or
-  approved under any regime ([compliance matrix](docs/compliance_matrix.md)).
+- Not built: intent router and chat; Tesseract OCR (receipts are read from OCR sidecar files);
+  expected-credit-loss provision matrix; period close; US GAAP indirect cash-flow
+  reconciliation; China private-lending cap check; supplier price-rise alerts; loan-pack
+  charts; payee watchlist screening; the guided demo stepper; Tier 3.
+- The readiness score is a self-assessment, not a credit score or lending decision. LoanReady
+  does not act as a broker and never accepts a loan.
+- Regulatory statements describe design alignment only: LoanReady is designed around IFRS for
+  SMEs, SOX/COSO-style controls, PSD2 dynamic linking, commercial-financing disclosure rules
+  and GDPR/PIPL data minimisation; it is not certified or approved under any of them
+  ([compliance matrix](docs/compliance_matrix.md)).
+
+---
 
 ## Licences
 
-All dependencies and their licences: [`THIRD_PARTY.md`](THIRD_PARTY.md) (generated from
-`requirements.lock`). All data in this repository is synthetic and generated by our scripts.
-
-## Team
-
-Built by the LoanReady team for FinTechathon 2026 across three development PCs (Windows and
-Linux), integrated on the Linux PC.
+All dependencies and their licences: [`THIRD_PARTY.md`](THIRD_PARTY.md), generated from
+`requirements.lock`. All data in this repository is synthetic and generated by our scripts;
+the financial products are fictional.
