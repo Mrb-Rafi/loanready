@@ -122,6 +122,7 @@ After `setup`, `tasks.py` switches into its own environment automatically, so pl
 | `python tasks.py integrate` | Layering, static checks and every package's tests |
 | `python tasks.py sandbox` | Run the simulated bank as a separate server on port 8100 |
 | `python -m agent.health` | Show the AI mode, available models, per-task routes and OpenAI budget |
+| `python -m scripts.capture_screenshots` | Re-take the usage guide's screenshots from the real app (needs Chromium) |
 | `python -m scripts.build_pdfs` | Rebuild the two PDFs (needs pandoc and Chromium) |
 
 Full instructions, every screen and troubleshooting: [usage guide](docs/pdf/LoanReady_Usage_Guide.pdf).

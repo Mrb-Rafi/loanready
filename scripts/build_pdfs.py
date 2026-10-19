@@ -67,6 +67,11 @@ blockquote { margin: 8px 0; padding: 6px 10px; border-left: 4px solid #7aa7d1;
              background: #f2f7fc; color: #22313f; }
 blockquote p { margin: 2px 0; }
 hr { border: 0; border-top: 1px solid #d5dde5; margin: 16px 0; }
+img { display: block; max-width: 100%; margin: 10px auto 2px; border: 1px solid #c9d3dc;
+      border-radius: 3px; break-inside: avoid; }
+p:has(> img) { break-inside: avoid; margin: 8px 0 12px; }
+p:has(> img) > em { display: block; font-size: 8pt; color: #4a5a68; text-align: center;
+      margin-top: 3px; }
 """
 
 
@@ -106,7 +111,11 @@ def rewrite_links(markdown: str, source: str) -> str:
             url = f"{REPO_URL}/{kind}/{BRANCH}/{rel}" + (f"#{frag}" if frag else "")
         return f"[{text}]({url})"
 
-    return re.sub(r"\[([^\]]+)\]\(([^)\s]+)\)", fix, markdown)
+    def image(m: re.Match[str]) -> str:  # images: absolute local file, embedded in the PDF
+        return f"![{m.group(1)}]({(base / m.group(2)).resolve().as_uri()})"
+
+    markdown = re.sub(r"!\[([^\]]*)\]\(([^)\s:]+)\)", image, markdown)
+    return re.sub(r"(?<!!)\[([^\]]+)\]\(([^)\s]+)\)", fix, markdown)
 
 
 def build_one(source: str, pdf_name: str, title: str, out_dir: Path, work: Path) -> Path:

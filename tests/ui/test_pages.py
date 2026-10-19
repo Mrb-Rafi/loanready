@@ -68,7 +68,8 @@ def test_forecast_shows_range_and_assumptions() -> None:
     """T-UI-01 proves UI-10, REG-AI-05: low/base/high range and an assumptions expander."""
     at = _start()
     at.switch_page("views/3_Forecast.py").run()
-    assert {"Low case", "Base case", "High case"} <= {m.label for m in at.metric}
+    labels = {m.label for m in at.metric}
+    assert {f"{c} case: first week below zero" for c in ("Low", "Base", "High")} <= labels
     assert any(e.label == "Based on assumptions" for e in at.expander)
     assert "AI-generated" in _texts(at)
 

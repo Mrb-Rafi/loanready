@@ -82,12 +82,13 @@ if last and last.get("flags"):
     )
 if not flags and not (last and last.get("flags")):
     st.caption("No instructions found in documents so far.")
+SOURCE_NAMES = {"BANK": "a bank memo", "POS": "a till (POS) note", "BILL": "a bill"}
 for r in flags:
-    src = r.params_masked.get("source", "a document")
+    raw_src = str(r.params_masked.get("source", ""))
+    src = SOURCE_NAMES.get(raw_src, "a receipt" if raw_src == "RECEIPT" else "a document")
     excerpt = r.params_masked.get("excerpt", "")
     st.warning(
-        f"We found text that looks like an instruction in {md(str(src).lower())}. "
-        f"It was ignored. (log #{r.seq})"
+        f"We found text that looks like an instruction in {md(src)}. It was ignored. (log #{r.seq})"
     )
     if excerpt:
         st.code(str(excerpt), language=None)  # untrusted: never rendered as markdown

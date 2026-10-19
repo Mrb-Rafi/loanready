@@ -21,7 +21,7 @@ from contracts.services import AppFacade  # noqa: E402
 from ui import state  # noqa: E402
 from ui.components import feedback  # noqa: E402
 from ui.components.badges import chip, on_off_badge, synthetic_banner  # noqa: E402
-from ui.components.money import money  # noqa: E402
+from ui.components.money import md, money  # noqa: E402
 
 PAGES_DIR = Path(__file__).resolve().parent / "views"  # not "pages": see README
 
@@ -60,12 +60,28 @@ def _sidebar(app: AppFacade) -> None:
             st.write("Models: " + ", ".join(f"{k}={v}" for k, v in models.items()))
         budget = ai.get("remote_budget")
         calls = ai.get("remote_calls_today", 0)
-        st.write(f"Remote calls today: {calls}" + (f" of {budget}" if budget else ""))
+        if isinstance(budget, dict):
+            total_cap = budget.get("max_usd_total", "off")
+            st.write(
+                f"Remote calls today: {budget.get('calls_today', calls)} of "
+                f"{budget.get('max_calls_per_day', '?')}"
+            )
+            st.write(
+                md(
+                    f"OpenAI spend (estimate): ${budget.get('usd_today', '0')} today of "
+                    f"${budget.get('max_usd_per_day', '?')}; "
+                    f"${budget.get('usd_total', '0')} in total"
+                    + (f" of ${total_cap}" if total_cap != "off" else "")
+                )
+            )
+        else:
+            st.write(f"Remote calls today: {calls}")
         routes = ai.get("routes")
         if isinstance(routes, dict) and routes:
             st.caption("Hybrid routing (task: backend)")
             for task, backend in routes.items():
-                st.write(f"{task}: {backend}")
+                chain = " → ".join(backend) if isinstance(backend, list) else str(backend)
+                st.write(f"{task}: {chain}")
     sandbox = health.get("sandbox", {}) if isinstance(health, dict) else {}
     problem = health.get("sandbox_problem") if isinstance(health, dict) else None
     if problem or (isinstance(sandbox, dict) and sandbox.get("status", "ok") != "ok"):

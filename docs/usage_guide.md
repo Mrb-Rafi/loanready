@@ -11,6 +11,12 @@ exactly as it appears on screen, in **bold**.
 > go to a built-in simulator, never to a real bank, person or lender. You cannot lose real
 > money with it.
 
+
+> **About the screenshots.** They were taken from the real app (Rina's Bakery, AS_OF
+> 2026-10-14) with `LLM_BACKEND=hybrid` and OpenAI on, by `python -m scripts.capture_screenshots`.
+> AI-written wording differs slightly from run to run; every figure is calculated by
+> LoanReady and is the same every time.
+
 ---
 
 ## Contents
@@ -240,6 +246,9 @@ Click in the terminal and press **Ctrl + C**.
 
 The **left sidebar** is the same on every page. Click a page name at the top to open it.
 
+![The sidebar with AI status open: hybrid mode, the models in use, today's OpenAI calls and spend, and the backend each task uses](images/02_sidebar_ai_status.png)
+*The sidebar with AI status open: hybrid mode, the models in use, today's OpenAI calls and spend, and the backend each task uses*
+
 ### 5.2 The sidebar items
 
 | Item | What it means | What you can do |
@@ -276,6 +285,9 @@ The **left sidebar** is the same on every page. Click a page name at the top to 
 ### 6.1 Home (the dashboard)
 
 **What you see:** eight tiles.
+
+![The Home dashboard at the start of the demo: cash $2,400.40, negative in week 3, 6 items to confirm](images/01_home.png)
+*The Home dashboard at the start of the demo: cash $2,400.40, negative in week 3, 6 items to confirm*
 
 | Tile | Meaning | At the start of the demo |
 |---|---|---|
@@ -314,6 +326,9 @@ never as a command.
 **Confirm queue.** Each card is one question for you. The suggested answer is marked
 **(proposed)**; click the answer you want.
 
+![The confirm queue: three personal expenses, a duplicate print-shop charge and an unclear deposit, each with the proposed answer marked](images/03_capture_confirm_queue.png)
+*The confirm queue: three personal expenses, a duplicate print-shop charge and an unclear deposit, each with the proposed answer marked*
+
 | Card | Example | What the buttons do |
 |---|---|---|
 | Personal expense? | *Is 'FRESHMART SUPERSTORE' ($86.40) a personal expense?* | **PERSONAL (proposed)** files it as the owner's own spending (not a business cost); **6900** files it as a business "other expense" |
@@ -329,6 +344,9 @@ unclear deposit and one blurry receipt.
 that tried to give it orders (in a bank memo, a till note, a bill and a receipt). They were
 all ignored and logged; nothing was done because of them.
 
+![Four planted instructions found and ignored: in a till note, a bank memo, a bill and a receipt](images/04_capture_ignored_instructions.png)
+*Four planted instructions found and ignored: in a till note, a bank memo, a bill and a receipt*
+
 ### 6.3 Books
 
 Six tabs. Every tab says which accounting framework is used (IFRS for SMEs by default).
@@ -341,6 +359,12 @@ Six tabs. Every tab says which accounting framework is used (IFRS for SMEs by de
 | **Balance sheet** | What the business owns and owes at AS_OF | Total assets = total liabilities + total equity |
 | **Reconciliation** | Whether the books agree with the bank | Before you clear the confirm queue the books are $200.40 above the bank, and every difference is listed; after clearing it you see **Reconciled ✓**, 100% matched, ledger $1,900.00 = bank $1,900.00 |
 | **Receivables** | Who owes money and for how long (buckets: current, 1-30, 31-60, 61-90, 90+ days) | Cafe Lumen's $600.00 invoice sits in 61-90 days |
+
+![Reconciliation after the confirm queue is cleared: 100% of bank lines matched, ledger cash equals the bank](images/05_books_reconciliation.png)
+*Reconciliation after the confirm queue is cleared: 100% of bank lines matched, ledger cash equals the bank*
+
+![Profit and loss by month](images/06_books_pnl.png)
+*Profit and loss by month*
 
 ### 6.4 Forecast
 
@@ -362,6 +386,13 @@ Six tabs. Every tab says which accounting framework is used (IFRS for SMEs by de
    the one on file.
 8. **Weekly detail**: choose **Base**, **Low** or **High** to see all 13 weeks line by line.
 
+
+![The 13-week forecast: the base line inside the low-high band, below zero in week 3](images/07_forecast_chart.png)
+*The 13-week forecast: the base line inside the low-high band, below zero in week 3*
+
+![The AI explanation, the largest outflows, the late customer payments and the fraudulent bill excluded pending verification](images/08_forecast_why_excluded.png)
+*The AI explanation, the largest outflows, the late customer payments and the fraudulent bill excluded pending verification*
+
 > The forecast is a range, not a promise. The low and high cases show how bad or good it
 > could reasonably get.
 
@@ -377,6 +408,9 @@ This is where you act on the forecast.
 | **2. DELAY bills that allow it** | Bills with no late fee and a grace period, moved within it (free) | closes $600.00 (BoxCo BILL-2215) |
 | **3. BORROW the rest, cheapest first** | What is left goes to the Financing page | $1,000.00 |
 
+![The three levers: collect closes $3,200.00, delay closes $600.00, $1,000.00 is left to borrow](images/09_action_plan_levers.png)
+*The three levers: collect closes $3,200.00, delay closes $600.00, $1,000.00 is left to borrow*
+
 **Drafts (Tier 1: nothing is sent until you approve).**
 
 1. Click **Draft payment reminders**. One draft appears per overdue invoice. Each shows the
@@ -390,7 +424,13 @@ This is where you act on the forecast.
    request in the queue below.
 4. **Draft delay requests** works the same way for bills you can delay.
 
+![An AI-drafted reminder with its preview, labelled as drafted with AI assistance; nothing is sent yet](images/10_action_plan_drafts.png)
+*An AI-drafted reminder with its preview, labelled as drafted with AI assistance; nothing is sent yet*
+
 After sending, the draft shows **Sent. Sandbox reference: msg_…**.
+
+![After approval: executed in the messaging sandbox, with its reference and log number](images/12_reminder_sent.png)
+*After approval: executed in the messaging sandbox, with its reference and log number*
 
 **Approval queue (Tier 2).** Every request waiting for approval, with a **Review and
 approve** button that opens the [approval dialog](#7-the-approval-dialog).
@@ -412,6 +452,9 @@ approve** button that opens the [approval dialog](#7-the-approval-dialog).
 > payment to a different bank account than the one we have on file for this supplier. Call
 > the supplier on a known number to verify."*
 
+![The fraudulent bill BILL-2211 is blocked (ACCOUNT_CHANGED) and logged](images/13_blocked_fraud_payment.png)
+*The fraudulent bill BILL-2211 is blocked (ACCOUNT_CHANGED) and logged*
+
 ### 6.6 Financing
 
 A red-bordered note at the top: *LoanReady compares costs. It does not lend or arrange loans.
@@ -430,12 +473,22 @@ Not financial advice.*
    1.20 means repaying 1.20 times the amount) taken from daily card sales, which over a short
    time is extremely expensive per year.
 5. **Explanation**: a plain-language summary (AI-labelled when AI wrote it; numbers checked).
+
+![The financing comparison for $1,000.00 over 49 days, ranked by EAR: supplier credit cheapest, the merchant cash advance most expensive](images/15_financing_comparison.png)
+*The financing comparison for $1,000.00 over 49 days, ranked by EAR: supplier credit cheapest, the merchant cash advance most expensive*
+
+![The AI explanation of the comparison and the per-product disclosures](images/16_financing_explanation.png)
+*The AI explanation of the comparison and the per-product disclosures*
 6. **Disclosures**: click any product to see funding provided, finance charge, total
    repayment, APR and EAR, number and size of payments, prepayment and collateral notes.
 7. **Loan readiness**: a gauge and a score out of 100 with a band (LOW, FAIR, GOOD), a table
    of the seven parts of the score, and **How to improve**: concrete steps with the points
    each would add (for example "Collect $3,750.00 of overdue invoices: +5.6 points"). The
    score uses business data only and is not a credit score.
+
+
+![The readiness score: 86 / 100 (Good), its seven parts and how to improve it](images/17_readiness_score.png)
+*The readiness score: 86 / 100 (Good), its seven parts and how to improve it*
 
 > **EAR vs APR.** APR is the daily cost × 365. EAR also counts the effect of repaying and
 > re-borrowing ("compounding"), so it is the fairer way to compare short, expensive credit.
@@ -454,6 +507,9 @@ Not financial advice.*
 5. **Lender receipt** appears: a receipt id (`rcv_…`), the lender's status
    (*received_under_review*) and any missing sections (*none*).
 
+![The generated pack's summary and the lender receipt after an approved submission](images/18_loan_pack_receipt.png)
+*The generated pack's summary and the lender receipt after an approved submission*
+
 > If the PDF is changed after you generate it, the submission is blocked
 > (`PACK_HASH_MISMATCH`). Generate it again. LoanReady never accepts a loan; that action is
 > permanently blocked.
@@ -467,6 +523,10 @@ allowed, drafted, pending, approved, rejected, blocked, executed, failed and sec
 - **Verify chain**: recomputes every row's fingerprint. Expected: *Chain intact: every row hash
   checks out (N rows).* If anyone had edited a row, this would say where.
 - **Export CSV**, then **Download action_log.csv**: the full log as a spreadsheet file.
+
+
+![The audit log with decision counts, after Verify chain: chain intact, including the blocked ACCEPT_LOAN attempt](images/19_log_verify_chain.png)
+*The audit log with decision counts, after Verify chain: chain intact, including the blocked ACCEPT_LOAN attempt*
 
 **Limits and kill switch.**
 
@@ -483,6 +543,11 @@ allowed, drafted, pending, approved, rejected, blocked, executed, failed and sec
 without the owner's form), **PAY_NEW_PAYEE** (pay someone never seen before) and
 **DISABLE_GATE** (turn off the safety gate). Click **Try it**: each one is refused with a
 yellow message and appears in the log as BLOCKED. This proves the rules hold.
+
+
+![Limits, the kill switch and the four blocked-action tests](images/20_limits_and_blocked_actions.png)
+*Limits, the kill switch and the four blocked-action tests*
+
 
 **Tier table / Controls.** Two tabs: every action type with its tier and safeguards, and every
 security control with the rules it is designed around. Both are produced from the code.
@@ -505,6 +570,12 @@ payment, submitting the loan pack) opens this window when you click **Review and
 | **Cap usage today** and **Per-action cap** | how much of today's limit is used |
 | Warnings (yellow) | for example *First payment to this payee in 30 days* |
 | Validity (blue) | *This approval is valid for 15 minutes and only for exactly these details.* |
+
+![Approving a reminder: amount, recipient (masked), reason, target and the 15-minute validity](images/11_approval_dialog_reminder.png)
+*Approving a reminder: amount, recipient (masked), reason, target and the 15-minute validity*
+
+![Approving a supplier payment: $900.00 to Golden Mills, account masked as ****2277, with a first-payment warning](images/14_approval_dialog_payment.png)
+*Approving a supplier payment: $900.00 to Golden Mills, account masked as ****2277, with a first-payment warning*
 
 Then either:
 
@@ -767,6 +838,8 @@ Type each command in the project folder. On Windows, `py -3.12 tasks.py …` wor
 | `python tasks.py sandbox` | Run the simulator as a separate server on port 8100 | — |
 | `python tasks.py clean` | Delete runtime data in `var/` (refuses while running) | seconds |
 | `python -m agent.health` | Show AI mode, available backends, routes and OpenAI budget | seconds |
+| `python -m scripts.capture_screenshots` | Re-take this guide's screenshots from the real app on a temporary copy of the data (needs Chromium; uses OpenAI if it is on) | ~5 min |
+| `python -m scripts.build_pdfs` | Rebuild the PDF editions of this guide and the technical documentation (needs pandoc and Chromium) | ~30 s |
 
 ---
 

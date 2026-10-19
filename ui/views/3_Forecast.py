@@ -22,19 +22,16 @@ low, base, high = (fc.scenarios[s] for s in (Scenario.LOW, Scenario.BASE, Scenar
 
 
 def _neg(week: int | None) -> str:
-    return "stays above zero" if week is None else f"below zero in week {week}"
+    return "never" if week is None else f"week {week}"
 
 
 c1, c2, c3 = st.columns(3)
-c1.metric(
-    "Low case", _neg(low.first_negative_week), help=f"Lowest: {money_md(low.min_closing_cents)}"
-)
-c2.metric(
-    "Base case", _neg(base.first_negative_week), help=f"Lowest: {money_md(base.min_closing_cents)}"
-)
-c3.metric(
-    "High case", _neg(high.first_negative_week), help=f"Lowest: {money_md(high.min_closing_cents)}"
-)
+for col, name, sc in ((c1, "Low", low), (c2, "Base", base), (c3, "High", high)):
+    col.metric(
+        f"{name} case: first week below zero",
+        _neg(sc.first_negative_week),
+        help=f"Lowest closing cash: {money_md(sc.min_closing_cents)}",
+    )
 st.caption(
     f"Lowest closing cash: low {money_md(low.min_closing_cents)} (week {low.min_closing_week}), "
     f"base {money_md(base.min_closing_cents)} (week {base.min_closing_week}), "
