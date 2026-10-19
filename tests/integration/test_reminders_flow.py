@@ -48,6 +48,8 @@ def test_reminder_sent_with_draft_body(app: Any) -> None:
     assert msgs[0].to_ref == draft.to_ref
     assert msgs[0].body_sha256 == draft.body_sha256 == sha256_hex(draft.body)
     assert app.outputs.draft(draft.draft_id).status == "sent"
+    # contracts 1.1: the UI reads draft status from the facade
+    assert [d.status for d in app.drafts() if d.draft_id == draft.draft_id] == ["sent"]
 
 
 def test_second_reminder_within_seven_days_refused(app: Any) -> None:

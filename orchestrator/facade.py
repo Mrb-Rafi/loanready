@@ -21,7 +21,7 @@ from contracts.actions import (
     Proposal,
 )
 from contracts.dto_app import CapUsage, ChatReply, ControlRow, DashboardDTO, TierRow
-from contracts.dto_books import ConfirmItemDTO, ReceiptDTO, ReceivablesAgeingDTO
+from contracts.dto_books import BillDTO, ConfirmItemDTO, ReceiptDTO, ReceivablesAgeingDTO
 from contracts.dto_financing import FinancingComparisonDTO, ReadinessDTO
 from contracts.dto_outputs import LoanPackDTO, MessageDraftDTO
 from contracts.dto_planning import CashPlanDTO, ForecastDTO
@@ -338,6 +338,14 @@ class App:
             if str(pd.params.get("bill_id")) == draft.related_id and "proposed_date" in pd.params:
                 return date.fromisoformat(str(pd.params["proposed_date"]))
         raise InvalidParams("no proposed date for this delay request; redraft it")
+
+    def drafts(self) -> list[MessageDraftDTO]:
+        """Every draft, oldest first, with status draft/sent (contracts 1.1)."""
+        return self.outputs.drafts()
+
+    def open_bills(self) -> list[BillDTO]:
+        """Open bills for the payment form; the gate still checks every payment (S6)."""
+        return self.books.open_bills()
 
     def propose_send(self, draft_id: str) -> GateDecision:
         draft = self.outputs.draft(draft_id)

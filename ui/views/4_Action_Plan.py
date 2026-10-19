@@ -50,19 +50,17 @@ c1, c2 = st.columns(2)
 if c1.button("Draft payment reminders", key="lr_draft_reminders"):
     out = feedback.attempt(app.draft_reminders)
     if out is not None:
-        state.remember_drafts(out)
-        state.flash("info", f"{len(out)} reminder draft(s) created locally.")
+        state.flash("info", f"{len(out)} reminder draft(s) created.")
         st.rerun()
 if c2.button("Draft delay requests", key="lr_draft_delays"):
     out = feedback.attempt(app.draft_delay_requests)
     if out is not None:
-        state.remember_drafts(out)
-        state.flash("info", f"{len(out)} delay-request draft(s) created locally.")
+        state.flash("info", f"{len(out)} delay-request draft(s) created.")
         st.rerun()
 
-drafts = state.drafts()
+drafts = state.cached(app, "drafts")
 if not drafts:
-    st.caption("No drafts yet in this session.")
+    st.caption("No drafts yet.")
 for d in drafts:
     with st.container(border=True):
         st.markdown(
@@ -107,10 +105,7 @@ st.caption(
     "Choose an open bill and a value date. LoanReady proposes the payment to the payee and "
     "account already on file; you approve it in the queue above."
 )
-bill_ids: list[str] = []
-lister = getattr(app, "open_bills", None)  # optional; see ui/README.md "Proposed"
-if callable(lister):
-    bill_ids = [b.id for b in lister()]
+bill_ids = [b.id for b in state.cached(app, "open_bills")]
 fc = state.cached(app, "forecast")
 for item in fc.drivers.top_outflows:
     if item.ref_id not in bill_ids and item.ref_id.startswith("bil"):

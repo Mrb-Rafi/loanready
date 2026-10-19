@@ -1,8 +1,8 @@
 {
-  "contracts_version": "1.0.0",
+  "contracts_version": "1.1.0",
   "python": "3.12",
   "requirements_lock_sha256": "ce87c4c2b8dd56d4065fd7bd091358303ddc513f81d039a891b415e554a9e259",
-  "manifest_sha256": "0e69d0b83916af58559bb51ea82e520487c2a46393127fe8aad08f7eb36a17e7",
-  "frozen_at": "2026-10-19T15:09:34Z",
+  "manifest_sha256": "07fe3f1cf25d5cbc6b7f3201d65d436ef124b9d9d21e400be14a36fb8cf09ae0",
+  "frozen_at": "2026-10-19T16:09:42Z",
   "frozen_by": "pc-a"
 }

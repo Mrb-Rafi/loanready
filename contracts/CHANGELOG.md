@@ -8,6 +8,16 @@ bumps `CONTRACTS_VERSION`, runs `python tasks.py freeze` and redistributes `cont
 
 (none)
 
+## 1.1.0 (2026-10-19)
+
+Additive (WP10 CCRs 1 and 3, applied by PC A):
+
+- `AppFacade.drafts() -> list[MessageDraftDTO]`: every draft, oldest first, with status
+  `draft`/`sent`, so the UI shows real status after a send (was session-only).
+- `AppFacade.open_bills() -> list[BillDTO]`: open bills for the supplier-payment form (was
+  a typed bill id). The gate still checks every payment (S6 stays blocked).
+- `FakeAppFacade` implements both.
+
 ## 1.0.0 starter refresh (2026-10-19)
 
 Contracts unchanged (`CONTRACTS_VERSION` stays 1.0.0). Two frozen root files changed during

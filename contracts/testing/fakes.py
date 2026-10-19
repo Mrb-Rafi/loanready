@@ -2383,6 +2383,12 @@ class FakeAppFacade:
     def cash_plan(self) -> CashPlanDTO:
         return self.cashplanner.plan(self._inputs(), self.forecast(), 0)
 
+    def drafts(self) -> list[MessageDraftDTO]:
+        return self.outputs.drafts()
+
+    def open_bills(self) -> list[BillDTO]:
+        return self.books.open_bills()
+
     def draft_reminders(self) -> list[MessageDraftDTO]:
         out = []
         for inv in self.books.open_invoices():

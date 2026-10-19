@@ -57,6 +57,13 @@ def test_fakes_auto_uses_real_governance_and_adapters(make_app: Any) -> None:
     assert app.health()["sandbox"].get("status") != "down"
 
 
+def test_open_bills_listed_for_payment_form(app: Any) -> None:
+    """T-ORC-01 proves PRD/12 §2 (contracts 1.1): open_bills() lists the open bills,
+    including the S6-style fraud bill, which the gate still blocks on payment."""
+    ids = {b.id for b in app.open_bills()}
+    assert {"bil_tiny_1", "bil_tiny_fraud"} <= ids
+
+
 def test_fakes_false_names_missing_packages(settings: Any, tmp_path: Path) -> None:
     """T-ORC-01 proves ORC-01: fakes=False refuses a partly assembled tree, naming packages."""
     from infra.db import engine_for

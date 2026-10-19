@@ -32,7 +32,6 @@ ROLE_LABELS: dict[Role, str] = {Role.OWNER: "Owner", Role.BOOKKEEPER: "Bookkeepe
 _K_ROLE = "lr_role"
 _K_TOKENS = "lr_approval_tokens"
 _K_FLASH = "lr_flash"
-_K_DRAFTS = "lr_drafts"
 _K_PACK = "lr_last_pack"
 _K_RECEIPT = "lr_last_receipt"
 _K_SUBMIT = "lr_last_submission"
@@ -106,6 +105,8 @@ READ_METHODS = frozenset(
         "books_view",
         "receivables",
         "forecast",
+        "drafts",
+        "open_bills",
         "forecast_explanation",
         "cash_plan",
         "pending",
@@ -171,16 +172,6 @@ def flash(kind: str, text: str) -> None:
 
 def pop_flashes() -> list[tuple[str, str]]:
     return st.session_state.pop(_K_FLASH, [])
-
-
-def remember_drafts(drafts: list[Any]) -> None:
-    store = st.session_state.setdefault(_K_DRAFTS, {})
-    for d in drafts:
-        store[d.draft_id] = d
-
-
-def drafts() -> list[Any]:
-    return list(st.session_state.get(_K_DRAFTS, {}).values())
 
 
 def mark_proposed(draft_id: str) -> None:

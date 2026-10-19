@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from contracts import CONTRACTS_VERSION
 from infra.doctor import check_contracts_version, check_lock, check_python, parse_lock
 from infra.freeze import (
     MANIFEST_NAME,
@@ -121,6 +122,6 @@ def test_doctor_detects_python_lock_and_version_drift() -> None:
         and "missing: c" in drift.detail
         and "d" in drift.detail
     )
-    assert check_contracts_version({"contracts_version": "1.0.0"}).ok
+    assert check_contracts_version({"contracts_version": CONTRACTS_VERSION}).ok
     assert not check_contracts_version({"contracts_version": "0.9.0"}).ok
     assert not check_contracts_version(None).ok

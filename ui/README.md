@@ -73,7 +73,7 @@ reads.
 
 ## Proposed (contract change requests; not applied, local workarounds in place)
 
-1. **`AppFacade.open_bills() -> list[BillDTO]`** (who: WP10 → WP9/WP0; additive, backward
+1. **Applied in contracts 1.1.0 (PC A).** **`AppFacade.open_bills() -> list[BillDTO]`** (who: WP10 → WP9/WP0; additive, backward
    compatible). Why: the supplier-payment form needs a list of open bills; the facade has
    none. Workaround: `views/4_Action_Plan.py` calls `open_bills()` only if the facade has it
    (`getattr`), else offers bill ids from forecast drivers and cash-plan drafts plus a
@@ -82,7 +82,7 @@ reads.
    generated_by)`** or a small DTO (additive as new methods). Why: the UI cannot tell
    template text from LLM text, so it labels every explanation "AI-generated explanation of
    figures calculated by LoanReady" (REG-AI-06), which over-labels template text in mock mode.
-3. **`AppFacade.drafts() -> list[MessageDraftDTO]`** (additive). Why: drafts exist only as
+3. **Applied in contracts 1.1.0 (PC A).** **`AppFacade.drafts() -> list[MessageDraftDTO]`** (additive). Why: drafts exist only as
    return values of `draft_reminders()` / `draft_delay_requests()`, so the UI keeps them in
    `st.session_state`; their `status` does not update after sending. Workaround: the UI marks
    a draft "sending proposed" locally after `propose_send`.
