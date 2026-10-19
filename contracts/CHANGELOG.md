@@ -8,6 +8,15 @@ bumps `CONTRACTS_VERSION`, runs `python tasks.py freeze` and redistributes `cont
 
 (none)
 
+## 1.1.0 tooling fixes (2026-10-19, clean-clone check)
+
+Contracts unchanged. `infra/` only, manifest re-frozen:
+
+- `infra/doctor.py`, `infra/integration_check.py`: an entry module with no service names
+  (ui, scripts, sandbox) is found (doctor) or compiled (integrate), not imported; importing
+  `ui.app` ran the Streamlit page (about 50 warnings, and it built the app).
+- `infra/handoff.py`: the starter leaves out `.coverage*` and `htmlcov/`.
+
 ## 1.1.0 (2026-10-19)
 
 Additive (WP10 CCRs 1 and 3, applied by PC A):

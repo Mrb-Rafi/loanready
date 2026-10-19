@@ -177,6 +177,16 @@ def entry_present(module: str, names: tuple[str, ...]) -> tuple[bool, str]:
             return False, "not built"
     except ModuleNotFoundError:
         return False, "absent"
+    if not names:
+        # no exports to check (ui, scripts, sandbox): compile instead of importing, since
+        # importing ui.app runs the Streamlit page; their own tests cover import errors
+        spec = importlib.util.find_spec(module)
+        try:
+            source = Path(str(spec.origin)).read_text(encoding="utf-8") if spec else ""
+            compile(source, str(spec.origin if spec else module), "exec")
+        except (OSError, SyntaxError, ValueError) as exc:
+            return False, f"does not compile: {exc}"
+        return True, ""
     try:
         mod = importlib.import_module(module)
     except Exception as exc:

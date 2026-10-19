@@ -208,9 +208,19 @@ def test_newest_handoff_wins_and_dry_run_writes_nothing(tmp_path: Path) -> None:
 
 
 def test_starter_excludes_runtime_dirs(tmp_path: Path) -> None:
-    """T-CON-06 proves CON-26: the starter copy excludes .venv, var, handoff, .env, caches."""
+    """T-CON-06 proves CON-26: the starter copy excludes .venv, var, handoff, .env, caches
+    and coverage output."""
     root = make_repo(tmp_path)
-    for rel in (".venv/x", "var/app.db", "handoff/out/a.zip", ".env", ".git/HEAD"):
+    for rel in (
+        ".venv/x",
+        "var/app.db",
+        "handoff/out/a.zip",
+        ".env",
+        ".git/HEAD",
+        ".coverage",
+        ".coverage.host.123",
+        "htmlcov/index.html",
+    ):
         p = root / rel
         p.parent.mkdir(parents=True, exist_ok=True)
         p.write_text("x", encoding="utf-8")
@@ -218,3 +228,4 @@ def test_starter_excludes_runtime_dirs(tmp_path: Path) -> None:
     assert "governance/gate.py" in files and "contracts/__init__.py" in files
     assert not [f for f in files if f.split("/")[0] in {".venv", "var", "handoff", ".env", ".git"}]
     assert not [f for f in files if "__pycache__" in f]
+    assert not [f for f in files if f.startswith((".coverage", "htmlcov/"))]

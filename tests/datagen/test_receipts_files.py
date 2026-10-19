@@ -87,3 +87,20 @@ def test_rotated_receipt(written: dict[str, Path], bundle: Any) -> None:
         assert img.getpixel((599, 899)) == (255, 255, 255)
     row = next(r for r in bundle.receipts if r["image"].endswith("receipt_rotated.png"))
     assert row["expected_status"] == "AUTO"
+
+
+def test_identical_pixels_not_rewritten(tmp_path: Path) -> None:
+    """T-DGN-06 proves PRD-NF-02, ARC-10: regenerating leaves a PNG with identical pixels
+    byte-for-byte untouched (zlib builds differ across PCs), but replaces a changed one."""
+    from datagen.receipts import RECEIPTS, render, write_receipts
+
+    write_receipts(tmp_path)
+    first = tmp_path / f"{RECEIPTS[0].name}.png"
+    render(RECEIPTS[0]).save(first, format="PNG", compress_level=1)  # same pixels, new bytes
+    kept = first.read_bytes()
+    second = tmp_path / f"{RECEIPTS[1].name}.png"
+    Image.new("RGB", (10, 10), "white").save(second, format="PNG")  # different pixels
+    write_receipts(tmp_path)
+    assert first.read_bytes() == kept
+    with Image.open(second) as img:
+        assert img.size != (10, 10)

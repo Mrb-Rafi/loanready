@@ -170,10 +170,14 @@ def info_checks(root: Path = REPO_ROOT, ports: bool = False) -> list[Check]:
 
 
 def _is_built(module: str, names: tuple[str, ...]) -> bool:
-    """Entry module exists, imports, and exports its service names (not just a skeleton)."""
+    """Entry module exists, imports, and exports its service names (not just a skeleton).
+    With no service names (ui, scripts, sandbox) finding the module is enough: importing
+    ``ui.app`` would run the Streamlit page (warnings, and it builds the app)."""
     try:
         if importlib.util.find_spec(module) is None:
             return False
+        if not names:
+            return True
         mod = importlib.import_module(module)
     except Exception:
         return False

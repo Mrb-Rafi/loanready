@@ -2,7 +2,7 @@
   "contracts_version": "1.1.0",
   "python": "3.12",
   "requirements_lock_sha256": "ce87c4c2b8dd56d4065fd7bd091358303ddc513f81d039a891b415e554a9e259",
-  "manifest_sha256": "c3698f62a3b60f72716e063f6b0e1e8227ae08e80c3097ac8096bb824b37a1fd",
-  "frozen_at": "2026-10-19T16:24:00Z",
+  "manifest_sha256": "3112f67315817776837689419e988816501e87fc293beed88ae2b5c7ede1b608",
+  "frozen_at": "2026-10-19T17:07:50Z",
   "frozen_by": "pc-a"
 }

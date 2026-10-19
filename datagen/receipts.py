@@ -19,7 +19,7 @@ from dataclasses import dataclass
 from datetime import date
 from pathlib import Path
 
-from PIL import Image, ImageDraw, ImageFilter, ImageFont
+from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageFont
 
 from contracts.enums import ReceiptStatus
 from datagen.bank import RANK_PURCHASE, Flow
@@ -142,14 +142,31 @@ def render(spec: ReceiptSpec) -> Image.Image:
     return img
 
 
+def same_pixels(path: Path, img: Image.Image) -> bool:
+    """True if ``path`` is an image with exactly ``img``'s size and RGB pixels."""
+    if not path.is_file():
+        return False
+    try:
+        with Image.open(path) as old:
+            if old.size != img.size:
+                return False
+            return ImageChops.difference(old.convert("RGB"), img.convert("RGB")).getbbox() is None
+    except OSError:
+        return False
+
+
 def write_receipts(out_dir: Path) -> list[Path]:
-    """Write every PNG and its sidecar into ``out_dir``; return the written paths."""
+    """Write every PNG and its sidecar into ``out_dir``; return the paths. A PNG whose
+    pixels are already identical is left alone: zlib versions compress the same pixels to
+    different bytes, and rewriting would show committed files as modified on every PC."""
     out_dir.mkdir(parents=True, exist_ok=True)
     written = []
     for spec in RECEIPTS:
         image = out_dir / f"{spec.name}.png"
         sidecar = out_dir / f"{spec.name}.ocr.json"
-        render(spec).save(image, format="PNG")
+        img = render(spec)
+        if not same_pixels(image, img):
+            img.save(image, format="PNG")
         payload = {"text": sidecar_text(spec), "mean_conf": spec.mean_conf}
         sidecar.write_text(
             json.dumps(payload, ensure_ascii=False, indent=2) + "\n",

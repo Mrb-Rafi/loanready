@@ -24,7 +24,9 @@ from contracts.registry import OWNERSHIP, is_ignored, owner_of
 from infra.freeze import load_environment
 from infra.paths import HANDOFF_DIR, REPO_ROOT
 
-STARTER_EXCLUDE_TOP = {".venv", "var", "handoff", ".git", ".env", "evidence"}
+STARTER_EXCLUDE_TOP = {".venv", "var", "handoff", ".git", ".env", "evidence", "htmlcov"}
+# coverage data files at the top (.coverage, .coverage.<host>.<pid>): git-ignored test output
+STARTER_EXCLUDE_PREFIX = (".coverage",)
 _SUMMARY = re.compile(r"(\d+) (passed|failed|skipped|errors?|xfailed|xpassed|deselected)")
 
 
@@ -172,7 +174,13 @@ def starter_files(root: Path = REPO_ROOT) -> list[str]:
     out = []
     for p in root.rglob("*"):
         rel = p.relative_to(root).as_posix()
-        if p.is_file() and rel.split("/")[0] not in STARTER_EXCLUDE_TOP and not is_ignored(rel):
+        top = rel.split("/")[0]
+        if (
+            p.is_file()
+            and top not in STARTER_EXCLUDE_TOP
+            and not top.startswith(STARTER_EXCLUDE_PREFIX)
+            and not is_ignored(rel)
+        ):
             out.append(rel)
     return sorted(out)
 
