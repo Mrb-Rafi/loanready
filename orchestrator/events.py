@@ -76,10 +76,11 @@ class EventSink:
         return self.audit.log_event(event, details, principal or self.principal, ctl)
 
     def flags(self, flags: Sequence[ScanFlag], source: str, source_ref: str) -> int:
-        """Log ``UNTRUSTED_INSTRUCTION_IGNORED`` for one flagged text; returns 1 if logged."""
+        """Log ``UNTRUSTED_INSTRUCTION_IGNORED`` for one flagged text; returns 1 if it was
+        flagged. ``agent.scan`` may already have logged the same event (then this is a repeat)."""
         if not flags:
             return 0
-        seq = self.log(
+        self.log(
             EventType.UNTRUSTED_INSTRUCTION_IGNORED,
             {
                 "source": source,
@@ -88,4 +89,4 @@ class EventSink:
             },
             SYSTEM,
         )
-        return 0 if seq is None else 1
+        return 1

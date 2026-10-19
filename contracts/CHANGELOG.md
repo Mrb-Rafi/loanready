@@ -8,6 +8,20 @@ bumps `CONTRACTS_VERSION`, runs `python tasks.py freeze` and redistributes `cont
 
 (none)
 
+## 1.0.0 starter refresh (2026-10-19)
+
+Contracts unchanged (`CONTRACTS_VERSION` stays 1.0.0). Two frozen root files changed during
+the PC B / PC C assembly, so the manifest was re-frozen and a new starter issued:
+
+- `.importlinter`: `ui-facade-only` sets `allow_indirect_imports = True`. ARC-06 limits the
+  UI's direct imports; with the real orchestrator assembled, `ui.state ->
+  orchestrator.container -> infra` was reported as a violation.
+- `pyproject.toml`: `[tool.ruff.format] exclude = ["*.md"]`. ruff 0.17 formats Python
+  snippets inside Markdown, which failed `lint` on the WP3/WP4/WP6 `HANDOFF_NOTES.md`.
+
+PCs B and C must copy `contracts/`, `infra/` and the root files from the new starter before
+any further hand-off; zips built on the old starter are refused (manifest mismatch).
+
 ## 1.0.0 (2026-10-18)
 
 Initial frozen contracts, built from PRD/02_contracts.md. Additions beyond the PRD text,

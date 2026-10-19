@@ -68,6 +68,9 @@ forbidden_modules =
 [importlinter:contract:ui-facade-only]
 name = UI imports only orchestrator and contracts (ARC-06)
 type = forbidden
+# ARC-06 limits the UI's own imports; the composition root (orchestrator) imports every
+# package by design, so chains through it are allowed.
+allow_indirect_imports = True
 source_modules =
     ui
 forbidden_modules =

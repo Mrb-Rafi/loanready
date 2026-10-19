@@ -56,10 +56,11 @@ def scan_bills(agent: AgentService, sink: EventSink, books: BooksService) -> int
     """Bill descriptions and claimed accounts come from documents (S6, S7 d)."""
     n = 0
     for bill in books.open_bills():
+        flags = []
         for value in (bill.description, bill.claimed_bank_account_ref):
             if value:
-                text = as_untrusted(str(value), SourceKind.BILL, bill.id)
-                n += sink.flags(agent.scan(text), SourceKind.BILL.value, bill.id)
+                flags += agent.scan(as_untrusted(str(value), SourceKind.BILL, bill.id))
+        n += sink.flags(flags, SourceKind.BILL.value, bill.id)  # one flagged document
     return n
 
 
@@ -94,7 +95,11 @@ def pull_and_ingest(
     txns = ports.bank.list_transactions(OPERATING_ACCOUNT_ID, start, today)
     sales = ports.pos.list_sales(start, today)
     res.bank, res.pos = len(txns), len(sales)
-    raws = [*books.ingest_bank(txns), *books.ingest_pos(sales)]
+    # The sandbox's "opening" line is the starting balance, which seeding already posts as
+    # the OPENING entry (load_opening_balances); ingesting it would queue it for confirmation.
+    txns = [t for t in txns if t.kind != "opening"]
+    # WP3 order (books/HANDOFF_NOTES.md): POS first, so card settlements find their sales.
+    raws = [*books.ingest_pos(sales), *books.ingest_bank(txns)]
     res.ingested = len(raws)
     res.raw_ids = [r.id for r in raws]
     for raw in raws:

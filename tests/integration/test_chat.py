@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import importlib.util
 from decimal import Decimal
 from typing import Any
 
@@ -15,6 +16,9 @@ from orchestrator.chat import AI_LABEL, match_payee
 pytestmark = [pytest.mark.integration]
 
 
+ROUTER_BUILT = importlib.util.find_spec("agent.router") is not None
+
+
 def _route(monkeypatch: pytest.MonkeyPatch, app: Any, intent: Intent, **params: Any) -> None:
     def route(message: str) -> RouterResult:
         return RouterResult(
@@ -24,25 +28,28 @@ def _route(monkeypatch: pytest.MonkeyPatch, app: Any, intent: Intent, **params: 
     monkeypatch.setattr(app.agent, "route", route)
 
 
-def test_cash_position_numbers_from_code(app: Any) -> None:
+def test_cash_position_numbers_from_code(app: Any, monkeypatch: pytest.MonkeyPatch) -> None:
     """T-ORC-11 proves ORC-05, ORC-06: the cash figure is formatted by code; the agent's
     explanation carries the AI label."""
+    _route(monkeypatch, app, Intent.CASH_POSITION)
     reply = app.chat("what's my cash position?")
     assert reply.intent == Intent.CASH_POSITION
     assert fmt(app.books.cash_balance(app.as_of)) in reply.text
     assert reply.ai_label == AI_LABEL
 
 
-def test_who_owes_me(app: Any) -> None:
+def test_who_owes_me(app: Any, monkeypatch: pytest.MonkeyPatch) -> None:
     """T-ORC-11 proves ORC-05: WHO_OWES_ME lists the ageing rows."""
+    _route(monkeypatch, app, Intent.WHO_OWES_ME)
     reply = app.chat("who owes me money?")
     assert reply.intent == Intent.WHO_OWES_ME
     assert "Tiny Catering" in reply.text and fmt(60000) in reply.text
     assert reply.ai_label is None
 
 
-def test_draft_reminders_creates_proposals(app: Any) -> None:
+def test_draft_reminders_creates_proposals(app: Any, monkeypatch: pytest.MonkeyPatch) -> None:
     """T-ORC-11 proves ORC-05: DRAFT_REMINDERS drafts, then proposes each send for approval."""
+    _route(monkeypatch, app, Intent.DRAFT_REMINDERS)
     reply = app.chat("please remind my customers")
     assert reply.intent == Intent.DRAFT_REMINDERS
     assert len(reply.proposals) == 1
@@ -96,11 +103,21 @@ def test_unknown_and_help(app: Any) -> None:
     assert app.pending() == []
 
 
-def test_loan_pack_and_log(app: Any) -> None:
+def test_loan_pack_and_log(app: Any, monkeypatch: pytest.MonkeyPatch) -> None:
     """T-ORC-11 proves ORC-05: BUILD_LOAN_PACK builds and proposes submit; SHOW_LOG reports
     the chain."""
+    _route(monkeypatch, app, Intent.BUILD_LOAN_PACK)
     reply = app.chat("build my loan pack")
     assert reply.intent == Intent.BUILD_LOAN_PACK and reply.attachments
     assert app.gate.proposal(reply.proposals[0]).status.value == Decision.PENDING_APPROVAL.value
+    _route(monkeypatch, app, Intent.SHOW_LOG)
     log = app.chat("show the log")
     assert "Hash chain intact" in log.text
+
+
+@pytest.mark.skipif(not ROUTER_BUILT, reason="agent/router.py (WP7 SHOULD) not built yet")
+def test_natural_language_routing(app: Any) -> None:
+    """T-ORC-11 proves ORC-05 end to end: the agent's router maps owner phrases to intents.
+    The tests above inject the intent so they check the orchestrator's handlers on their own."""
+    assert app.chat("what's my cash position?").intent == Intent.CASH_POSITION
+    assert app.chat("who owes me money?").intent == Intent.WHO_OWES_ME

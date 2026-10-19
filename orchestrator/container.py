@@ -13,7 +13,7 @@ Real constructors follow PRD/11 §2:
     build_governance(engine, clock, ids, lookup, executor, settings)
     build_ports(settings, gate.ticket_verifier(), transport)
     LLM(settings, events=sink)  Agent(llm, events=sink)
-    Planner()  Financing(catalogue_path)  Readiness()
+    Planner()  Financing(catalogue_path, regparams_path)  Readiness()
 """
 
 from __future__ import annotations
@@ -147,7 +147,8 @@ def _outputs(
     mode: str, engine: Engine, clock: Clock, ids: IdFactory, settings: Settings, name: str
 ) -> Any:
     if mode == "real":
-        return _module("outputs.service").Outputs(engine, clock, ids, settings)
+        # D4 (PC B): Settings has no business name, so pass the seeded one.
+        return _module("outputs.service").Outputs(engine, clock, ids, settings, business_name=name)
     from contracts.testing.fakes import FakeOutputs
 
     return FakeOutputs(var_dir() / "packs", name)
@@ -207,7 +208,10 @@ def _planning(mode: str) -> tuple[Any, Any]:
 def _financing(mode: str) -> tuple[Any, Any]:
     if mode == "real":
         mod = _module("financing.service")
-        return mod.Financing(DATA_DIR / "products.json"), mod.Readiness()
+        return (
+            mod.Financing(DATA_DIR / "products.json", DATA_DIR / "regulatory_params.json"),
+            mod.Readiness(),
+        )
     from contracts.testing.fakes import FakeFinancing, FakeReadiness
 
     return FakeFinancing(), FakeReadiness()

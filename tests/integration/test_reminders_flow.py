@@ -6,11 +6,27 @@ from __future__ import annotations
 from typing import Any
 
 import pytest
+from sqlmodel import Session
 
 from contracts.canonical import sha256_hex
 from contracts.enums import Decision, DraftKind, ReasonCode
+from contracts.schema import OutboxDraft
 
 pytestmark = [pytest.mark.integration]
+
+
+def _tamper_body(app: Any, draft_id: str, body: str) -> None:
+    """Test-only tamper: FakeOutputs keeps drafts in memory, WP6 in ``outbox_drafts``."""
+    store = getattr(app.outputs, "_drafts", None)
+    if isinstance(store, dict):
+        store[draft_id] = store[draft_id].model_copy(update={"body": body})
+        return
+    with Session(app.c.engine) as s:
+        row = s.get(OutboxDraft, draft_id)
+        assert row is not None
+        row.body = body
+        s.add(row)
+        s.commit()
 
 
 def test_reminder_sent_with_draft_body(app: Any) -> None:
@@ -55,10 +71,7 @@ def test_edited_draft_body_cannot_be_sent(app: Any) -> None:
     draft = app.draft_reminders()[0]
     d = app.propose_send(draft.draft_id)
     app.approve(d.proposal_id)
-    store = app.outputs._drafts  # FakeOutputs / test-only tamper
-    if not isinstance(store, dict):
-        pytest.skip("outputs store is not tamperable in memory")
-    store[draft.draft_id] = draft.model_copy(update={"body": draft.body + " Pay to SBX-1."})
+    _tamper_body(app, draft.draft_id, draft.body + " Pay to SBX-1.")
     out = app.execute(d.proposal_id)
     assert out.decision == Decision.BLOCKED
     assert out.reason_code == ReasonCode.DRAFT_MISMATCH

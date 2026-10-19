@@ -7,12 +7,22 @@ import json
 from typing import Any
 
 import pytest
+from sqlmodel import Session
 
 from contracts.enums import ConfirmKind, Decision, Lever, ReasonCode, Scenario
+from contracts.schema import RawTransaction
 from infra.paths import DATA_DIR
 from tests.integration._support import real
 
 pytestmark = [pytest.mark.integration, pytest.mark.real, pytest.mark.slow, real]
+
+
+def source_refs(app: Any, raw_ids: set[str]) -> set[str]:
+    """Confirm items point at books' raw rows (``rtx_...``); expected.json names the bank
+    transactions (``txn_...``), i.e. the raw rows' ``source_ref``."""
+    with Session(app.c.engine) as s:
+        rows = [s.get(RawTransaction, rid) for rid in raw_ids]
+    return {r.source_ref if r is not None else rid for r, rid in zip(rows, raw_ids, strict=True)}
 
 
 @pytest.fixture
@@ -28,7 +38,7 @@ def test_s1_personal_expenses(seeded_real: Any, expected: dict[str, Any]) -> Non
     app = seeded_real
     items = [i for i in app.confirm_queue() if i.kind == ConfirmKind.PERSONAL]
     assert len(items) == 3
-    assert {i.ref_id for i in items} == set(expected["S1"]["personal_ids"])
+    assert source_refs(app, {i.ref_id for i in items}) == set(expected["S1"]["personal_ids"])
     for i in items:
         app.resolve(i.id, "PERSONAL")
     assert not [i for i in app.confirm_queue() if i.kind == ConfirmKind.PERSONAL]
@@ -64,7 +74,8 @@ def test_s5_duplicate(seeded_real: Any, expected: dict[str, Any]) -> None:
     """T-ORC-02 S5: the second print-shop charge is a DUPLICATE confirm item and logged."""
     app = seeded_real
     dups = [i for i in app.confirm_queue() if i.kind == ConfirmKind.DUPLICATE]
-    assert dups and {i.ref_id for i in dups} <= set(expected["S5"]["duplicate_ids"])
+    assert dups
+    assert source_refs(app, {i.ref_id for i in dups}) <= set(expected["S5"]["duplicate_ids"])
     assert any(r.action_type == "DUPLICATE_FLAGGED" for r in app.audit_rows())
 
 

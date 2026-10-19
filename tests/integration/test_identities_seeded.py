@@ -6,6 +6,7 @@ from typing import Any
 
 import pytest
 
+from contracts.enums import ConfirmKind
 from contracts.registry import OPERATING_ACCOUNT_ID
 from tests.integration._support import real
 
@@ -28,7 +29,9 @@ def test_ledger_reconciles_with_mockbank(seeded_real: Any) -> None:
 
 
 def test_closing_balances_match_expected(seeded_real: Any) -> None:
-    """T-ORC-10 proves PRD/10 §5 targets through the whole stack: bank 1,900.00, till 300.00."""
+    """T-ORC-10 proves PRD/10 §5 targets through the whole stack: bank 1,900.00, till 300.00.
+    Bank lines waiting for the owner are not posted yet (WP3), so the ledger equals the bank
+    once the owner has resolved them; receipts are resolved separately (S8)."""
     import json
 
     from infra.paths import DATA_DIR
@@ -36,6 +39,9 @@ def test_closing_balances_match_expected(seeded_real: Any) -> None:
     expected = json.loads((DATA_DIR / "expected.json").read_text(encoding="utf-8"))
     app = seeded_real
     assert app.ports.bank.get_balance(OPERATING_ACCOUNT_ID) == expected["closing_bank_cents"]
+    for item in app.confirm_queue():
+        if item.kind != ConfirmKind.RECEIPT:
+            app.resolve(item.id, item.proposed)
     assert app.books.cash_balance(app.as_of) == (
         expected["closing_bank_cents"] + expected["closing_till_cents"]
     )

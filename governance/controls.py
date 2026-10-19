@@ -236,7 +236,7 @@ _ROWS: tuple[tuple[str, str, str, tuple[str, ...], str, tuple[str, ...]], ...] =
         "Balanced double-entry postings enforced",
         "CA",
         ("REG-ACC-03",),
-        "books.posting.post_entry",
+        "books.posting.validate",
         ("tests/books/test_posting.py",),
     ),
     (
@@ -249,10 +249,10 @@ _ROWS: tuple[tuple[str, str, str, tuple[str, ...], str, tuple[str, ...]], ...] =
     ),
     (
         "CTL-FR-03",
-        "Period close and lock (P1)",
+        "Period close and lock (P1; lock check only, period close not built yet)",
         "CA",
         ("REG-IC-04", "REG-ACC-08"),
-        "books.periods, governance.checks.check_payment",
+        "books.service.Books.period_is_closed, governance.checks.check_payment",
         ("tests/books/test_periods.py",),
     ),
     (
@@ -377,10 +377,10 @@ _ROWS: tuple[tuple[str, str, str, tuple[str, ...], str, tuple[str, ...]], ...] =
     ),
     (
         "CTL-AI-07",
-        "Budget and rate guard for remote models",
+        "Budget and rate guard for remote models (SHOULD; calls counted, budget not built yet)",
         "CA",
         ("REG-AI-03",),
-        "agent.budget",
+        "agent.llm.LLM.remote_calls_today",
         ("tests/agent/test_budget.py",),
     ),
     (
