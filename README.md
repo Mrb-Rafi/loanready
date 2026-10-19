@@ -163,5 +163,4 @@ All dependencies and their licences: [`THIRD_PARTY.md`](THIRD_PARTY.md) (generat
 ## Team
 
 Built by the LoanReady team for FinTechathon 2026 across three development PCs (Windows and
-Linux), integrated on the Linux PC. How AI coding assistants were used is described in the
-deck and video materials.
+Linux), integrated on the Linux PC.
