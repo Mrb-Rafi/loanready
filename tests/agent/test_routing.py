@@ -60,7 +60,7 @@ def test_forbidden_remote_removed_even_when_overridden(tmp_path: Path) -> None:
 def test_override_file_validated(tmp_path: Path) -> None:
     """T-AGT-11 proves AGT-19: unknown task or backend names in LLM_ROUTES_FILE are refused."""
     f = tmp_path / "routes.json"
-    f.write_text(json.dumps({"DRAFT_REMINDER": ["CLAUDE"]}), encoding="utf-8")
+    f.write_text(json.dumps({"DRAFT_REMINDER": ["NOT_A_BACKEND"]}), encoding="utf-8")
     with pytest.raises(ValueError):
         routing.load_overrides(f)
     f.write_text(json.dumps({"NOT_A_TASK": ["OLLAMA"]}), encoding="utf-8")
