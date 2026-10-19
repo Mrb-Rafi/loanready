@@ -107,6 +107,7 @@ READ_METHODS = frozenset(
         "forecast",
         "drafts",
         "open_bills",
+        "excluded_bills",
         "forecast_explanation",
         "cash_plan",
         "pending",

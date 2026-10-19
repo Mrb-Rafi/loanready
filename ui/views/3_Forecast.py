@@ -79,18 +79,15 @@ with st.expander("Based on assumptions", expanded=False):
             st.write(f"- {a}")
     st.caption(f"Inputs hash: {fc.inputs_hash[:16]}…")
 
-excluded = sorted(
-    {
-        a
-        for sc in (low, base, high)
-        for a in sc.assumptions
-        if "exclud" in a.lower() or "verification" in a.lower()
-    }
-)
+excluded = state.cached(app, "excluded_bills")
 st.markdown("**Excluded pending verification**")
 if excluded:
-    for a in excluded:
-        st.write(f"- {a}")
+    for b in excluded:
+        st.write(
+            f"- {b.number}: {money_md(b.outstanding_cents)} due {b.due_date.isoformat()}. "
+            "The bill asks for payment to a bank account that differs from the one on file, "
+            "so it is left out of the forecast until the supplier is verified."
+        )
 else:
     st.caption("Nothing is excluded.")
 

@@ -110,5 +110,7 @@ with g2:
 st.dataframe(readiness_df(ready.components), hide_index=True, width="stretch")
 st.markdown("**How to improve**")
 for imp in ready.improvements:
-    st.write(f"- {imp.text} (+{imp.points_gain} points)")
+    # the readiness text already ends with the gain ("...: +7.5"); add the unit only
+    tip = f"{imp.text} points" if "+" in imp.text else f"{imp.text} (+{imp.points_gain} points)"
+    st.write(f"- {tip}")
 st.caption(ready.disclaimer)

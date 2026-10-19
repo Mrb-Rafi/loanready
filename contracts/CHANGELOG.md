@@ -8,6 +8,13 @@ bumps `CONTRACTS_VERSION`, runs `python tasks.py freeze` and redistributes `cont
 
 (none)
 
+## 1.2.0 (2026-10-20)
+
+Additive: `AppFacade.excluded_bills() -> list[BillDTO]`, the open bills left out of the
+forecast as suspected fraud (claimed bank account differs from the stored payee's). The
+Forecast page lists them under "Excluded pending verification" (it guessed from assumption
+text before and showed nothing). `FakeAppFacade` implements it.
+
 ## 1.1.0 LLM settings (2026-10-19)
 
 Contracts unchanged. `infra/settings.py` and `.env.example`: new optional setting

@@ -105,7 +105,12 @@ st.caption(
     "Choose an open bill and a value date. LoanReady proposes the payment to the payee and "
     "account already on file; you approve it in the queue above."
 )
-bill_ids = [b.id for b in state.cached(app, "open_bills")]
+open_bills = state.cached(app, "open_bills")
+bill_ids = [b.id for b in open_bills]
+bill_labels = {
+    b.id: f"{b.number}, {money(b.outstanding_cents)} due {b.due_date.isoformat()}"
+    for b in open_bills
+}
 fc = state.cached(app, "forecast")
 for item in fc.drivers.top_outflows:
     if item.ref_id not in bill_ids and item.ref_id.startswith("bil"):
@@ -116,7 +121,12 @@ for draft in plan.drafts:
         bill_ids.append(bid)
 with st.form("lr_pay_form"):
     other = "Type a bill id"
-    choice = st.selectbox("Open bill", [*bill_ids, other], key="lr_pay_bill")
+    choice = st.selectbox(
+        "Open bill",
+        [*bill_ids, other],
+        key="lr_pay_bill",
+        format_func=lambda i: bill_labels.get(i, i),
+    )
     typed = st.text_input("Bill id (if not in the list)", key="lr_pay_bill_typed")
     value_date = st.date_input("Value date", value=fc.as_of, min_value=fc.as_of)
     submitted = st.form_submit_button("Propose payment")

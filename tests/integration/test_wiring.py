@@ -173,3 +173,25 @@ def test_fakes_false_with_every_package(settings: Any, tmp_path: Path) -> None:
         assert app.as_of == date(2026, 10, 14)
     finally:
         app.close()
+
+
+def test_forecast_labels_readable_and_facts_name_free(make_app: Any) -> None:
+    """T-ORC-07 proves ORC-07, CTL-AI-02: driver labels show document numbers and names,
+    while the explanation facts (C1, may go to a remote model) carry no counterparty name."""
+    from contracts.testing.builders import make_bill
+    from tests.integration._support import tiny_with
+
+    big = make_bill(
+        id="bil_tiny_2", number="BILL-2", amount_cents=500000, due_date=date(2026, 10, 28)
+    )
+    app = make_app(tiny_with([big]))
+    f = app.forecast()
+    labels = [i.label for i in [*f.drivers.top_outflows, *f.drivers.delayed_inflows]]
+    assert not any("bil_" in x or "inv_" in x or "cpt_" in x for x in labels)
+    names = {cp.name for cp in app.books.counterparties()}
+    assert f.drivers.top_outflows, "the 5,000.00 bill makes the base case cross zero"
+    assert any(x.startswith("BILL-2 (") for x in labels)
+    assert f.drivers.facts["main_outflow"] == "BILL-2"
+    for value in f.drivers.facts.values():
+        assert not any(n and n in value for n in names), value
+    assert not any("cpt_" in v for v in f.drivers.facts.values())

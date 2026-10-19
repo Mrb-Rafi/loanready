@@ -276,3 +276,35 @@ def pack_path(path: str) -> Path:
 
     p = Path(path)
     return p if p.is_absolute() else REPO_ROOT / p
+
+
+def readable_drivers(forecast: ForecastDTO, books: BooksService) -> ForecastDTO:
+    """Driver labels with document numbers and names instead of internal ids (WP4 labels
+    carry ids only: "bill bil_rina_2207 from cpt_golden" -> "BILL-2207 (Golden Mills)").
+    Amounts, weeks and dates are untouched. The explanation fact ``main_outflow`` gets the
+    document number only ("BILL-2207"): explanations are aggregate data (C1) and may go to a
+    remote model, so counterparty names (C2) must never enter their facts."""
+
+    def name(cp_id: str) -> str:
+        cp = books.counterparty(cp_id)
+        return cp.name if cp else cp_id
+
+    def label(kind: str, ref_id: str, old: str) -> str:
+        if kind == "outflow" and (bill := books.bill(ref_id)) is not None:
+            return f"{bill.number} ({name(bill.supplier_id)})"
+        if kind == "delayed_inflow" and (inv := books.invoice(ref_id)) is not None:
+            return f"{inv.number} ({name(inv.customer_id)})"
+        return old
+
+    d = forecast.drivers
+    top = [i.model_copy(update={"label": label(i.kind, i.ref_id, i.label)}) for i in d.top_outflows]
+    late = [
+        i.model_copy(update={"label": label(i.kind, i.ref_id, i.label)}) for i in d.delayed_inflows
+    ]
+    facts = dict(d.facts)
+    first = d.top_outflows[0] if d.top_outflows else None
+    if first is not None and facts.get("main_outflow") == first.label:
+        bill = books.bill(first.ref_id) if first.kind == "outflow" else None
+        facts["main_outflow"] = bill.number if bill is not None else first.label
+    drivers = d.model_copy(update={"top_outflows": top, "delayed_inflows": late, "facts": facts})
+    return forecast.model_copy(update={"drivers": drivers})

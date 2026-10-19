@@ -4,5 +4,5 @@ Frozen after WP0. Change only through a contract change request (PRD/01 §7.3):
 additive changes bump the minor version, breaking changes the major version.
 """
 
-CONTRACTS_VERSION = "1.1.0"
+CONTRACTS_VERSION = "1.2.0"
 CONTRACTS_MAJOR = CONTRACTS_VERSION.split(".")[0]

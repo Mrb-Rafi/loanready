@@ -2389,6 +2389,16 @@ class FakeAppFacade:
     def open_bills(self) -> list[BillDTO]:
         return self.books.open_bills()
 
+    def excluded_bills(self) -> list[BillDTO]:
+        """Open bills whose claimed account differs from the stored payee's (suspected fraud)."""
+        out = []
+        for b in self.books.open_bills():
+            payee = self.books.payee(b.payee_id) if b.payee_id else None
+            claimed = b.claimed_bank_account_ref
+            if claimed and (payee is None or str(claimed) != payee.bank_account_ref):
+                out.append(b)
+        return out
+
     def draft_reminders(self) -> list[MessageDraftDTO]:
         out = []
         for inv in self.books.open_invoices():

@@ -234,9 +234,10 @@ class App:
         )
 
     def _forecast(self) -> ForecastDTO:
-        return self.c.forecaster.forecast(self._assembly().inputs)
+        raw = self.c.forecaster.forecast(self._assembly().inputs)
+        return assemble.readable_drivers(raw, self.books)
 
-    def excluded_bills(self) -> list[Any]:
+    def excluded_bills(self) -> list[BillDTO]:
         """Bills left out of the forecast as suspected fraud ("excluded pending verification")."""
         return self._assembly().excluded_bills
 

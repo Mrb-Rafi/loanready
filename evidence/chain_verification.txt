@@ -1,6 +1,6 @@
 action log rows exported: 47
 chain: OK
-final row_hash: 51e0c003027cb2cf8b423a90b54567bd6536dc404162291b4cb9e8fd560a7bc9
+final row_hash: f8aafd6a019e81b6481213e11d93c87a1d70141fdbee4c2fbc51cec476abdd2a
 ALLOWED: 14
 DRAFTED: 4
 PENDING_APPROVAL: 5

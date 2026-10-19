@@ -270,6 +270,7 @@ class AppFacade(Protocol):
     def draft_delay_requests(self) -> list[MessageDraftDTO]: ...
     def drafts(self) -> list[MessageDraftDTO]: ...  # 1.1: every draft, oldest first
     def open_bills(self) -> list[BillDTO]: ...  # 1.1: open/partial bills for the pay form
+    def excluded_bills(self) -> list[BillDTO]: ...  # 1.2: left out of the forecast (fraud)
     def propose_send(self, draft_id: str) -> GateDecision: ...
     def propose_supplier_payment(
         self, bill_id: str, value_date: date | None = None
