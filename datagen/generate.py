@@ -209,7 +209,7 @@ def tune(params: ScenarioParams = DEFAULT_PARAMS) -> Generated:
     for _ in range(params.tuning_max_iter + 1):
         current = params.with_scale(scale)
         bundle = build(current)
-        chk = forecast_check(bundle, params.tuning_margin_cents)
+        chk = forecast_check(bundle, params.tuning_margin_cents, params.s4_min_borrow_cents)
         steps.append(
             {
                 "pos_base_scale": str(scale),

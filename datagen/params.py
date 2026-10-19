@@ -70,6 +70,10 @@ class ScenarioParams:
 
     # Tuning loop (§5)
     tuning_margin_cents: int = 20000
+    # S4 also needs "MCA most expensive" (PRD/07 FIN-04), so the BORROW need after DELAY must
+    # reach the MCA minimum (500.00, data/products.json) even before the owner confirms the
+    # S1/S5/S7 bank lines (they leave the ledger ~200.40 above the bank): 500.00 + 200.00.
+    s4_min_borrow_cents: int = 70000
     tuning_step: Decimal = Decimal("0.02")
     tuning_max_iter: int = 20
 

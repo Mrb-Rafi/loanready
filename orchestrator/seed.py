@@ -26,7 +26,7 @@ from contracts.money import fmt
 from contracts.seed import SeedBundle
 from contracts.testing.builders import load_tiny_bundle
 from infra.db import db_path, dispose_all
-from infra.paths import DATA_DIR, REPO_ROOT, ensure_dirs
+from infra.paths import DATA_DIR, REPO_ROOT, ensure_dirs, var_dir
 from infra.settings import get_settings
 from orchestrator.container import build_app, bundle_path, load_bundle_file, package_present
 
@@ -46,6 +46,10 @@ def load_or_generate_bundle(generate: bool = True) -> tuple[SeedBundle, str]:
             str(s.seed),
             "--as-of",
             s.as_of.isoformat(),
+            # only the bundle is needed: keep the committed data/ files (expected.json,
+            # receipt PNGs) untouched; datagen's copies go under var/ (ARC: data/ is WP8's)
+            "--data-dir",
+            str(var_dir() / "seed" / "data"),
         ]
         subprocess.run(cmd, cwd=REPO_ROOT, check=True)
         generated = load_bundle_file()

@@ -58,14 +58,15 @@ SHOULD items, built after WP3/WP4/WP6 on the team lead's go: S9 (INV-0998 Cafe L
    bakery is cash-generative, so the derived opening is negative. Choice: one-off
    equipment purchases `RIVERTON RESTAURANT SUPPLY - <ITEM>` (counterparty "Riverton
    Restaurant Supply") are inserted the day after each low point, sized to floor + 1,500
-   rounded up to 500. With the defaults this gives 3 purchases, 6,500.00 in total; the
-   opening bank balance is 3,547.70 and the lowest running balance 374.82. No capital
+   rounded up to 500. With the defaults (after PC A's S4 retune, item 7) this gives 1
+   purchase (deck oven, 2,000.00 on 2026-10-03); the opening bank balance is 3,205.63 and
+   the lowest running balance 401.82. No capital
    injection is ever needed. **WP3 needs a rule mapping this text to 1500 Equipment**
-   (investing cash flow, BKS-17); without it the three rows land in the CATEGORY confirm
+   (investing cash flow, BKS-17); without it the rows land in the CATEGORY confirm
    queue (they never create PERSONAL items, so S1 stays at exactly 3).
 2. **Cash COGS ratio.** §3 says "about 15% of the previous 3-4 days' sales each
    (overall about 0.30)"; 15% twice a week gives 0.15 overall. Choice: 30% of the covered
-   days, so the overall ratio is about 0.30 (0.3080 over the last 12 weeks).
+   days, so the overall ratio is about 0.30 (0.3085 over the last 12 weeks).
 3. **Payroll dates.** Every 14 days from 2026-04-23 gives 2026-10-22 and 2026-11-05, not
    10-23 and 11-06 as §3 says; both still fall in W2 and W4, so S2 is unaffected.
 4. **Invoice history.** The counterparty lateness histories define the paid invoices: one
@@ -82,10 +83,16 @@ SHOULD items, built after WP3/WP4/WP6 on the team lead's go: S9 (INV-0998 Cafe L
    `closing_till_cents` is the generated till before any receipt postings. Every receipt
    is also a GRAIN DEPOT card purchase in the bank feed (same date and amount), so WP3
    links it as evidence (BKS-14) and the till is not touched.
-7. **Tuning.** The loop needs `pos_base_scale` 0.90 (6 iterations) to leave a gap after
-   DELAY with a 200.00 margin; base weekly sales are therefore about 10% below the §3
-   weekday bases. BASE closings W1-W5: 2,677.62 / 2,310.24 / -4,156.49 / -777.59 /
-   860.03; gaps 4,200 / after collect 1,100 / after delay 400.
+7. **Tuning (PC A, 2026-10-19).** S4 also requires "MCA most expensive" (PRD/07 FIN-04),
+   and the MCA's minimum amount is 500.00, so the BORROW need after DELAY must reach
+   `s4_min_borrow_cents` (700.00: the minimum plus ~200.40 of S1/S5/S7 bank lines the owner
+   has not confirmed yet) plus the 200.00 margin. The loop needs `pos_base_scale` 0.76 (13
+   iterations); base weekly sales are therefore about 24% below the §3 weekday bases. BASE
+   closings W1-W5: 2,495.52 / 1,966.04 / -4,710.11 / -1,502.93 / -47.41; gaps 4,800 /
+   after collect 1,600 / after delay 1,000 (bank basis; 800 in the app before the owner
+   confirms the pending lines). PC B's original tuning stopped at 0.90 with 400 left, below
+   the MCA minimum. `forecast_check` now rounds the 8-week median HALF_EVEN through
+   `contracts.money` (it truncated), exactly like WP4.
 8. Median lateness is floored to whole days when converted to a date (as
    `FakeForecast` does). With the defaults no result depends on it.
 9. Injected receipt expected status is AUTO (confidence 0.90 by BKS-25); the injection is

@@ -133,7 +133,9 @@ def base_closings(
     (DELAY what-if)."""
     as_of = bundle.as_of
     weekly = weekly_pos_totals(bundle, 8)
-    base_sales = from_cents(int(percentile([Decimal(w) for w in weekly], 50)))
+    # HALF_EVEN to whole cents through contracts.money, exactly like WP4 (an 8-week median
+    # can end in .5 cent; int() would truncate it)
+    base_sales = from_cents(to_cents(percentile([Decimal(w) for w in weekly], 50) / 100))
     ratio = cash_cogs_ratio(bundle)
     overrides = bill_due_override or {}
     collections: dict[int, int] = {}
@@ -202,9 +204,13 @@ def delay_overrides(bundle: SeedBundle) -> dict[str, date]:
     return out
 
 
-def forecast_check(bundle: SeedBundle, margin_cents: int = 0) -> dict[str, Any]:
-    """S2 (W1, W2 >= 0, W3 < 0) and S4 (gap after collect > 0, gap after delay > 0).
-    ``direction`` tells the tuning loop which way to move POS sales (-1 lower, +1 higher)."""
+def forecast_check(
+    bundle: SeedBundle, margin_cents: int = 0, min_borrow_cents: int = 0
+) -> dict[str, Any]:
+    """S2 (W1, W2 >= 0, W3 < 0) and S4 (gap after collect > 0, gap after delay > 0, and
+    the remaining BORROW need at least ``min_borrow_cents`` + margin, so the MCA is
+    eligible). ``direction`` tells the tuning loop which way to move POS sales (-1 lower,
+    +1 higher)."""
     base = base_closings(bundle)
     collect_on = bundle.as_of + timedelta(days=5)
     after_collect = base_closings(bundle, collect_overdue_on=collect_on)
@@ -215,8 +221,8 @@ def forecast_check(bundle: SeedBundle, margin_cents: int = 0) -> dict[str, Any]:
     s2 = base[0] >= 0 and base[1] >= 0 and base[2] < 0
     s4 = _gap(after_collect) > 0 and _gap(after_delay) > 0
     direction = 0
-    if min(after_delay) > -margin_cents:
-        direction = -1  # too much cash: the delay would close the whole gap
+    if min(after_delay) > -(margin_cents + min_borrow_cents):
+        direction = -1  # too much cash: the delay leaves too small a BORROW need
     elif min(base[0], base[1]) < margin_cents:
         direction = 1  # too little cash before week 3
     return {

@@ -33,8 +33,10 @@ python tasks.py test planning    # 28 tests, coverage 97%; Rina tests skip if da
 - Seeded bakery (WP8 bundle, inputs built as in ORC-07): BASE closings equal WP8's
   independent `expected.forecast_check` week by week; first negative week 3 (S2); the
   festival bill is the top outflow; plan = COLLECT (INV-1043, INV-1051) -> DELAY
-  (BILL-2215 to 2026-11-14) -> BORROW with a positive remainder (S3, S4): gap 4,200.00
-  -> 1,100.00 after COLLECT -> 400.00 after DELAY, which goes to BORROW. INV-0998 (S9,
+  (BILL-2215 to 2026-11-14) -> BORROW with a positive remainder (S3, S4): gap 4,800.00
+  -> 1,600.00 after COLLECT -> 1,000.00 after DELAY, which goes to BORROW (PC A retuned
+  WP8 on 2026-10-19 so the MCA is eligible; in the seeded app before the owner confirms the
+  pending lines it is 4,600 -> 1,400 -> 800). INV-0998 (S9,
   75 days overdue) is excluded from BASE and LOW collections and from COLLECT.
 - LOW <= BASE <= HIGH every week over 100 hypothesis cases (COGS ratio clamped to
   0..0.95, PLN-01); same inputs give an identical DTO and `inputs_hash`.
@@ -46,7 +48,7 @@ python tasks.py test planning    # 28 tests, coverage 97%; Rina tests skip if da
    "invoice inv_rina_1043". The UI/agent may map ids to names; facts carry the amounts.
 2. **Delayed inflows follow PRD/06 §4 literally:** every invoice due by the end of the
    crossing week but expected later. On the bakery that is the two S3 invoices plus two
-   cafe invoices (INV-1052, INV-1054), so `delayed_count` is 4 (total $3,785.00, not the
+   cafe invoices (INV-1052, INV-1054), so `delayed_count` is 4 (total $3,775.00 after the retune, not the
    $3,150.00 of the S3 pair). Tell me if the story wants only overdue invoices.
 3. **Lateness** percentiles are floored to whole days.
 4. **Supplier credit flag:** `ForecastInputs` has no supplier payment terms, so
