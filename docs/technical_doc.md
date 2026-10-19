@@ -1,6 +1,7 @@
 # LoanReady: Technical Documentation
 
 **FinTechathon 2026 · International Track · Topic E (SME Finance Copilot)**
+
 Version of the code: contracts 1.2.0 · Business date of the demo data (AS_OF): 2026-10-14
 
 LoanReady turns a young small business's mixed records into double-entry books, a 13-week
