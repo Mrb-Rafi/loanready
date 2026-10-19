@@ -69,4 +69,3 @@ Contract change request (WP4, PC B), optional: add `payment_terms_days: int | No
 to `BillForecastItem` so `supplier_terms_available` can follow PRD/06 §6 exactly ("a
 supplier whose counterparty has payment_terms_days >= 30"). Backward compatible: yes.
 
-**PC A: read `HANDOFF_NOTES.md` in this folder first** (integration steps, decisions, changes).

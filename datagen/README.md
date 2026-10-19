@@ -102,4 +102,3 @@ SHOULD items, built after WP3/WP4/WP6 on the team lead's go: S9 (INV-0998 Cafe L
 
 None.
 
-**PC A: read `HANDOFF_NOTES.md` in this folder first** (integration steps, decisions, changes).

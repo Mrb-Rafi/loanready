@@ -19,7 +19,6 @@ with every action behind a permission gate written in plain code.**
 | Compliance matrix: regulation → control → code → test → evidence (generated) | | [docs/compliance_matrix.md](docs/compliance_matrix.md) |
 | Permission tier table (generated from code) | | [docs/generated/tier_table.md](docs/generated/tier_table.md) |
 | Execution evidence: demo summary, hash-chained logs, chain checks, test report | | [evidence/](evidence/README.md) |
-| Specification the code was built from | | [PRD/](PRD/README.md) |
 
 ---
 
@@ -59,6 +58,10 @@ usually the most expensive.
 | **Loan readiness** | A 0-100 self-assessment from business data only, with concrete steps to improve it |
 | **Lender-ready pack** | A 13-section PDF built from the books, forecast and score, submitted to a pretend lender after approval |
 | **Safety in code, not in the AI** | The AI only classifies, words text from computed facts or picks from a fixed menu. Every payment, message and submission needs a human approval bound to the exact details; paying a new payee, changing a payee's bank account, accepting a loan or raising limits is always refused; every decision is written to a hash-chained log that cannot be edited |
+
+Section references such as "PRD/10 §5" or ids such as "BKS-19" and "T-FIN-03" in the code
+and documents point to the team's internal product specification, which is not published in
+this repository.
 
 Everything runs on one machine with **synthetic data** (Rina's Bakery) and a self-built
 banking, POS, messaging and lender **sandbox**. No real money, bank or personal data is
@@ -212,7 +215,6 @@ call's worst case and stops at calls-per-day, dollars-per-day and all-time dolla
 | `scripts/` | Headless demo, evidence export, generated documents, PDF builder |
 | `docs/` | Technical documentation, usage guide (Markdown and PDF), security self-assessment, compliance matrix |
 | `evidence/` | Execution evidence |
-| `PRD/` | The specification |
 
 ---
 

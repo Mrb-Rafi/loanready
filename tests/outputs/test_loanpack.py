@@ -83,8 +83,8 @@ def test_default_packs_dir_is_var(app_db: Any, clock: Any, ids: Any, settings: A
 
 
 def test_stored_pack_path_is_repo_relative() -> None:
-    """T-OUT-06 proves OUT-04, OUT-06, PC_GUIDE §5 rule 2: a pack inside the repo is stored as a
-    repo-relative POSIX path and resolves back to the same file; outside the repo
+    """T-OUT-06 proves OUT-04, OUT-06, cross-platform path rule: a pack inside the repo is
+    stored as a repo-relative POSIX path and resolves back to the same file; outside the repo
     (test temp folders) it stays absolute."""
     from infra.paths import REPO_ROOT
     from outputs.service import pack_file, stored_path

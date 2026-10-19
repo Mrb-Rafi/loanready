@@ -59,7 +59,7 @@ First start of Streamlit asks for an e-mail on the console; set
 `ui` may not import `infra`, so `ui/state.py` reads exactly one variable itself:
 `LOANREADY_UI_FAKE`. If it is `"1"`, or `orchestrator.container.build_app` cannot be
 imported, the UI uses `contracts.testing.fakes.FakeAppFacade()`; otherwise `build_app()`.
-Nothing else in `ui/` reads the environment (PC_GUIDE §4, WP10 note).
+Nothing else in `ui/` reads the environment (the agreed UI exception).
 
 ## Tests (`tests/ui/`, 31 tests)
 

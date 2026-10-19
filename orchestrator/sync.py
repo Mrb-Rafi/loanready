@@ -2,7 +2,7 @@
 
 Untrusted text (bank memos, POS notes, bill descriptions, OCR) is scanned for visibility
 only: each flagged text logs one ``UNTRUSTED_INSTRUCTION_IGNORED`` event. Nothing in this
-module builds an Action, so no text can start or shape one (CLAUDE.md rule 4).
+module builds an Action, so no text can start or shape one (project rule 4).
 """
 
 from __future__ import annotations

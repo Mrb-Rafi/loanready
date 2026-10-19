@@ -23,3 +23,10 @@ htmlcov/
 *.swp
 .DS_Store
 Thumbs.db
+
+# internal specification and build instructions: kept locally, never published
+PRD/
+CLAUDE.md
+PC_GUIDE.md
+.claude/
+*/HANDOFF_NOTES.md

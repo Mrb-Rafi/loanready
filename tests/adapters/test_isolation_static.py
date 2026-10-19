@@ -28,7 +28,7 @@ def test_write_paths_only_in_adapters_and_sandbox() -> None:
 
 
 def test_write_token_read_only_in_secrets() -> None:
-    """T-ADP-05 proves CLAUDE.md rule 3: only adapters/_secrets.py touches the write token."""
+    """T-ADP-05 proves project rule 3: only adapters/_secrets.py touches the write token."""
     users = [
         f.relative_to(REPO_ROOT).as_posix()
         for f in (REPO_ROOT / "adapters").rglob("*.py")

@@ -20,7 +20,6 @@ and engineers. Companion documents:
 | [Compliance matrix](compliance_matrix.md) | Regulation → control → code → test → evidence (generated) |
 | [Tier table](generated/tier_table.md) | Every action type and its tier (generated from code) |
 | [Evidence](../evidence/README.md) | Demo summary, hash-chained logs, chain checks, test report |
-| [`PRD/`](../PRD/README.md) | The full specification the code was built from |
 
 Figures quoted here are either golden values asserted by the named tests or values measured
 on the integration PC. The generated tables are produced from the code by
@@ -97,8 +96,8 @@ statements, so the business cannot borrow on better terms.
 
 ## 2. Design principles
 
-These rules are enforced by code, static checks and tests, not by convention
-([`CLAUDE.md`](../CLAUDE.md) is the binding list):
+These rules are enforced by code, static checks and tests, not by convention. They are the
+project's binding rules ("project rule N" in code comments refers to this list):
 
 1. **AI proposes, code decides.** The model may only (a) classify into a fixed label list,
    (b) word text from facts computed by code, or (c) pick one item from a fixed menu. It never
@@ -1065,7 +1064,8 @@ the 379 tracked files are 2.4 MB (39,715 lines of Python, 11,418 of them tests).
 
 ## 22. How the project was built and integrated
 
-The specification (`PRD/`) divides the system into twelve work packages that code only
+The team's internal specification (not published; section references such as "PRD/10 §5"
+point to it) divides the system into twelve work packages that code only
 against the frozen `contracts/` and use fakes for everything else, so they could be built in
 parallel on three PCs (two Windows 11, one Linux). Each PC handed its work package to the
 Linux integration PC as a zip (`tasks.py handoff`) carrying file hashes, test counts and the

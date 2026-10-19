@@ -15,7 +15,7 @@ def test_fake_when_flag_set() -> None:
 
 
 def test_fake_when_orchestrator_missing(monkeypatch: pytest.MonkeyPatch) -> None:
-    """T-UI-01 proves PC_GUIDE §4 WP10: no orchestrator.container -> FakeAppFacade."""
+    """T-UI-01 proves the UI facade rule: no orchestrator.container -> FakeAppFacade."""
     monkeypatch.setenv("LOANREADY_UI_FAKE", "0")
     import importlib.util
 

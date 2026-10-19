@@ -8,6 +8,14 @@ bumps `CONTRACTS_VERSION`, runs `python tasks.py freeze` and redistributes `cont
 
 (none)
 
+## 1.2.1 (2026-10-20)
+
+Publication clean-up, no interface change: the internal specification, the build
+instructions for the development sessions and the PC-to-PC hand-off notes are no longer part
+of the repository. The two instruction files left `FROZEN_ROOT_FILES` and WP0's owned paths
+(they are unowned local files now), so a clean clone passes `doctor` without them. The compliance matrix reads regulation names from
+`scripts/regulations.json` instead of the specification.
+
 ## 1.2.0 (2026-10-20)
 
 Additive: `AppFacade.excluded_bills() -> list[BillDTO]`, the open bills left out of the
@@ -49,7 +57,7 @@ the PC B / PC C assembly, so the manifest was re-frozen and a new starter issued
   UI's direct imports; with the real orchestrator assembled, `ui.state ->
   orchestrator.container -> infra` was reported as a violation.
 - `pyproject.toml`: `[tool.ruff.format] exclude = ["*.md"]`. ruff 0.17 formats Python
-  snippets inside Markdown, which failed `lint` on the WP3/WP4/WP6 `HANDOFF_NOTES.md`.
+  snippets inside Markdown, which failed `lint` on the WP3/WP4/WP6 hand-off notes.
 
 PCs B and C must copy `contracts/`, `infra/` and the root files from the new starter before
 any further hand-off; zips built on the old starter are refused (manifest mismatch).
@@ -88,5 +96,5 @@ made up front so no WP needs a CCR for them:
   `"MockBank POST /bank/payments/schedule"` (PRD/03 §7) is allowed in governance.
 - `FakeForecast` / `FakeCashPlan` are simplified engines that reproduce the PRD/15 §3.1
   tiny-fixture golden tables (normal and crunch); WP4 builds the real ones.
-- `PC_GUIDE.md` (WP0, frozen): onboarding for Claude Code on the development PCs (roles,
-  setup, what WP0 provides, Windows-to-Linux rules, hand-off). `CLAUDE.md` points to it.
+- An onboarding guide for the development PCs (roles, setup, what WP0 provides,
+  Windows-to-Linux rules, hand-off); internal, not published.

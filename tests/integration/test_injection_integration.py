@@ -76,7 +76,7 @@ def _flagged_refs(app: Any) -> set[str]:
 
 
 def test_corpus_through_real_sync(make_app: Any, injection_corpus: list[dict[str, Any]]) -> None:
-    """T-ORC-06 proves CLAUDE.md rule 4, CTL-AI-04, CTL-AC-03: no payload creates an action."""
+    """T-ORC-06 proves project rule 4, CTL-AI-04, CTL-AC-03: no payload creates an action."""
     bundle, refs = _carriers(injection_corpus)
     app = make_app(bundle)
     before = balance(app)

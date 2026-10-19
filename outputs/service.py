@@ -133,7 +133,7 @@ class Outputs:
     # --- loan pack -----------------------------------------------------------------------
     def build_loan_pack(self, content: LoanPackContent) -> LoanPackDTO:
         """Render the PDF under ``packs_dir`` and store its file hash (OUT-04). ``path`` is
-        repo-relative POSIX (PC_GUIDE §5 rule 2, so a moved or fresh clone still resolves
+        repo-relative POSIX (cross-platform path rule, so a moved or fresh clone still resolves
         it); absolute only when ``packs_dir`` lies outside the repo (test temp folders).
         Readers resolve it with ``pack_file()`` (the gate: ``REPO_ROOT / path``)."""
         pack_id = self.ids.new("pck")

@@ -182,7 +182,7 @@ class LLM:
         self.mode: str = mode
         self.events: EventSink = events or _no_events
         self.mock = MockBackend()
-        # Tests never reach a real model (CLAUDE.md rule 8): in test mode real backends are
+        # Tests never reach a real model (project rule 8): in test mode real backends are
         # only ever injected; optional live tests build them explicitly.
         if backends is None and mode != "mock" and getattr(settings, "env", "") != "test":
             built, built_health = build_backends(settings)

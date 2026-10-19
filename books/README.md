@@ -96,4 +96,3 @@ and BKS-02 says ingest returns flags, but the protocol's `ingest_bank` returns o
 rows. Backward compatible: yes (additive). Until then the orchestrator can call these
 methods on the concrete `Books` class.
 
-**PC A: read `HANDOFF_NOTES.md` in this folder first** (integration steps, decisions, changes).

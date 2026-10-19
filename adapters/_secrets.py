@@ -1,4 +1,4 @@
-"""The only reader of the sandbox write token (CLAUDE.md rule 3; CTL-AC-05, REG-SEC-01).
+"""The only reader of the sandbox write token (project rule 3; CTL-AC-05, REG-SEC-01).
 
 Used only by ``WriteClient`` after a ticket has been verified."""
 

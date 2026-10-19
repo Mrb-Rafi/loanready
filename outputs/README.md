@@ -30,7 +30,7 @@ content hash. PRD/08.
   post-check replaced an LLM wording with the template (log `LLM_FALLBACK_USED`);
   `outputs.last_problems` lists why.
 - Loan packs: `var/packs/loan_pack_{as_of}_{pack_id}.pdf` plus a `.sections.json` sidecar.
-  `LoanPackDTO.path` is **repo-relative** POSIX (PC A change, PC_GUIDE §5 rule 2; absolute
+  `LoanPackDTO.path` is **repo-relative** POSIX (PC A change: paths are stored repo-relative; absolute
   only outside the repo); resolve it with `outputs.service.pack_file()`.
   `metadata` holds business, as_of, amount, term, framework, sections, `content_hash`,
   `sha256`, `pack_id`. `verify_pack` re-hashes the file.
@@ -67,4 +67,3 @@ Sending delay requests (the drafts exist; sending is the orchestrator's Tier 2 p
 
 None. (A `business_name` setting would remove the default above; optional.)
 
-**PC A: read `HANDOFF_NOTES.md` in this folder first** (integration steps, decisions, changes).

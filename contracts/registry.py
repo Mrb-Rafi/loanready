@@ -42,8 +42,6 @@ FROZEN_ROOT_FILES: tuple[str, ...] = (
     ".env.example",
     ".gitattributes",
     "tests/conftest.py",
-    "CLAUDE.md",
-    "PC_GUIDE.md",
 )
 
 # WP -> owned paths (directories end with "/"). The most specific path wins, so
@@ -64,8 +62,6 @@ OWNERSHIP: dict[str, tuple[str, ...]] = {
         ".gitignore",
         ".gitattributes",
         ".editorconfig",
-        "CLAUDE.md",
-        "PC_GUIDE.md",
     ),
     "WP1": ("governance/", "tests/governance/"),
     "WP2": ("sandbox/", "adapters/", "tests/sandbox/", "tests/adapters/"),
@@ -87,7 +83,9 @@ OWNERSHIP: dict[str, tuple[str, ...]] = {
 
 # Never owned by a WP and never handed off.
 UNOWNED_PATHS: tuple[str, ...] = (
-    "PRD/",
+    "PRD/",  # internal specification and build instructions: kept locally, not published
+    "CLAUDE.md",
+    "PC_GUIDE.md",
     ".git/",
     ".venv/",
     "var/",

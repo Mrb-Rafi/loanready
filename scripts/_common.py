@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import re
+import json
 from collections.abc import Iterable, Sequence
 from pathlib import Path
 from typing import Any
@@ -41,22 +41,13 @@ def write_md(path: Path, text: str) -> Path:
     return path
 
 
-_REG_ROW = re.compile(r"^\| (REG-[A-Z]+-\d+) \| (.+?) \|")
+REGULATIONS = Path(__file__).resolve().parent / "regulations.json"
 
 
-def regulation_names(prd14: Path | None = None) -> dict[str, str]:
-    """``{"REG-ACC-01": "IFRS for SMEs Accounting Standard", ...}`` from PRD/14 §2: the
-    bold name in the Source column (or its first clause)."""
-    path = prd14 or REPO_ROOT / "PRD" / "14_regulatory.md"
-    if not path.exists():
+def regulation_names(path: Path | None = None) -> dict[str, str]:
+    """``{"REG-ACC-01": "IFRS for SMEs Accounting Standard", ...}``: the short name of each
+    regulation the controls are designed around (``scripts/regulations.json``)."""
+    p = path or REGULATIONS
+    if not p.exists():
         return {}
-    names = {}
-    for line in path.read_text(encoding="utf-8").splitlines():
-        m = _REG_ROW.match(line)
-        if not m:
-            continue
-        source = m.group(2)
-        bold = re.search(r"\*\*(.+?)\*\*", source)
-        name = bold.group(1) if bold else re.split(r"[(;.]", source)[0]
-        names[m.group(1)] = name.strip()[:90]
-    return names
+    return dict(json.loads(p.read_text(encoding="utf-8")))
