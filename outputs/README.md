@@ -30,7 +30,8 @@ content hash. PRD/08.
   post-check replaced an LLM wording with the template (log `LLM_FALLBACK_USED`);
   `outputs.last_problems` lists why.
 - Loan packs: `var/packs/loan_pack_{as_of}_{pack_id}.pdf` plus a `.sections.json` sidecar.
-  `LoanPackDTO.path` is the **absolute** POSIX path, so the gate can re-hash the file.
+  `LoanPackDTO.path` is **repo-relative** POSIX (PC A change, PC_GUIDE §5 rule 2; absolute
+  only outside the repo); resolve it with `outputs.service.pack_file()`.
   `metadata` holds business, as_of, amount, term, framework, sections, `content_hash`,
   `sha256`, `pack_id`. `verify_pack` re-hashes the file.
 - Set the business name once after seeding (it is not in settings):

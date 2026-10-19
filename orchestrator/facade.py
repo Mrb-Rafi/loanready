@@ -542,12 +542,8 @@ class App:
         return self.audit.verify_chain()
 
     def export_csv(self, path: Path) -> Path:
+        # the audit log records EXPORT_CREATED itself, right after writing (GOV-16)
         out = self.audit.export_csv(Path(path))
-        self.sink.log(
-            EventType.EXPORT_CREATED,
-            {"file": Path(out).name, "chain_ok": self._chain_ok()},
-            self.session.current(),
-        )
         self._bump()
         return out
 

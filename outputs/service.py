@@ -38,6 +38,25 @@ from outputs.templates import TemplateWording
 DEFAULT_BUSINESS = "Rina's Bakery"
 
 
+def stored_path(path: Path) -> str:
+    """Repo-relative POSIX path when ``path`` is inside the repo, else absolute POSIX."""
+    from infra.paths import REPO_ROOT
+
+    resolved = path.resolve()
+    try:
+        return resolved.relative_to(REPO_ROOT.resolve()).as_posix()
+    except ValueError:
+        return resolved.as_posix()
+
+
+def pack_file(stored: str) -> Path:
+    """The file a stored pack path points at (relative paths are from the repo root)."""
+    from infra.paths import REPO_ROOT
+
+    p = Path(stored)
+    return p if p.is_absolute() else REPO_ROOT / p
+
+
 class Outputs:
     def __init__(
         self,
@@ -114,12 +133,14 @@ class Outputs:
     # --- loan pack -----------------------------------------------------------------------
     def build_loan_pack(self, content: LoanPackContent) -> LoanPackDTO:
         """Render the PDF under ``packs_dir`` and store its file hash (OUT-04). ``path`` is
-        absolute (POSIX) so the gate and lender adapter can re-hash the file."""
+        repo-relative POSIX (PC_GUIDE §5 rule 2, so a moved or fresh clone still resolves
+        it); absolute only when ``packs_dir`` lies outside the repo (test temp folders).
+        Readers resolve it with ``pack_file()`` (the gate: ``REPO_ROOT / path``)."""
         pack_id = self.ids.new("pck")
         built = build_pdf(content, pack_id, self.packs_dir)
         dto = LoanPackDTO(
             pack_id=pack_id,
-            path=built.path.resolve().as_posix(),
+            path=stored_path(built.path),
             sha256=built.sha256,
             sections=built.sections,
             created_at=self.clock.now(),
@@ -134,9 +155,9 @@ class Outputs:
     def verify_pack(self, pack_id: str) -> bool:
         """OUT-06: the file still exists and its SHA-256 equals the stored one."""
         pack = self.repo.pack(pack_id)
-        if pack is None or not Path(pack.path).is_file():
+        if pack is None or not pack_file(pack.path).is_file():
             return False
-        return file_sha256(Path(pack.path)) == pack.sha256
+        return file_sha256(pack_file(pack.path)) == pack.sha256
 
     def record_submission(self, pack_id: str, lender_id: str, receipt_id: str) -> None:
         """OUT-07: one lender_submissions row per successful submission."""

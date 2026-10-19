@@ -80,3 +80,18 @@ def test_default_packs_dir_is_var(app_db: Any, clock: Any, ids: Any, settings: A
     from outputs.service import Outputs
 
     assert Outputs(app_db, clock, ids, settings).packs_dir == var_dir() / "packs"
+
+
+def test_stored_pack_path_is_repo_relative() -> None:
+    """T-OUT-06 proves OUT-04, OUT-06, PC_GUIDE §5 rule 2: a pack inside the repo is stored as a
+    repo-relative POSIX path and resolves back to the same file; outside the repo
+    (test temp folders) it stays absolute."""
+    from infra.paths import REPO_ROOT
+    from outputs.service import pack_file, stored_path
+
+    inside = REPO_ROOT / "var" / "packs" / "loan_pack_x.pdf"
+    assert stored_path(inside) == "var/packs/loan_pack_x.pdf"
+    assert pack_file(stored_path(inside)) == REPO_ROOT / "var/packs/loan_pack_x.pdf"
+    outside = Path("/nonexistent-root/packs/p.pdf")
+    assert stored_path(outside) == outside.resolve().as_posix()
+    assert pack_file(stored_path(outside)) == outside.resolve()

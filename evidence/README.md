@@ -12,4 +12,4 @@ is synthetic (Rina's Bakery, seed 20261014); money moves only inside the self-bu
 | `sandbox_chain_verification.txt` | Each sandbox sub-app chain re-verified, with its final `row_hash` |
 | `test_report.txt` | Summary of the automated test suite at export time (CTL-OPS-01) |
 
-Decision counts in the action log: ALLOWED 14, DRAFTED 4, PENDING_APPROVAL 5, APPROVED 5, REJECTED 0, BLOCKED 2, EXECUTED 5, FAILED 0, EVENT 15.
+Decision counts in the action log: ALLOWED 14, DRAFTED 4, PENDING_APPROVAL 5, APPROVED 5, REJECTED 0, BLOCKED 2, EXECUTED 5, FAILED 0, EVENT 13.

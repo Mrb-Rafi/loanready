@@ -36,7 +36,7 @@ Evidence rows are counted from `evidence/action_log.csv` (run `python tasks.py d
 | REG-DP-04 | Transparency to the data subject | CTL-AI-02 | 0 |
 | REG-DP-05 | Use of real personal data in a prototype | CTL-DQ-02 | 0 |
 | REG-IC-01 | Sarbanes-Oxley Act 2002 | CTL-AC-01, CTL-PAY-03, CTL-FR-05 | 38 |
-| REG-IC-02 | SOX s | CTL-LOG-01, CTL-LOG-02, CTL-LOG-03, CTL-LOG-05, CTL-FR-02 | 73 |
+| REG-IC-02 | SOX s | CTL-LOG-01, CTL-LOG-02, CTL-LOG-03, CTL-LOG-05, CTL-FR-02 | 72 |
 | REG-IC-04 | Period close and cut-off | CTL-FR-03 | 2 |
 | REG-IC-05 | PCAOB AS 2201 | CTL-AC-05, CTL-CHG-01, CTL-CHG-02, CTL-CHG-03, CTL-OPS-01 | 0 |
 | REG-IC-06 | Segregation of duties / maker-checker | CTL-AC-04, CTL-SD-01 | 10 |
@@ -85,7 +85,7 @@ Evidence rows are counted from `evidence/action_log.csv` (run `python tasks.py d
 | CTL-PAY-06 | Watchlist screening before first payment (P2, not built) (COSO CA) | REG-PAY-04 | `governance.checks` | none (not built) | 0 |
 | CTL-LOG-01 | Hash-chained, append-only audit log (COSO IC) | REG-IC-02, REG-REC-01 | `governance.audit.AuditLog` | `tests/governance/test_audit_log.py` | 36 |
 | CTL-LOG-02 | Every decision logged, including blocked attempts and events (COSO IC) | REG-IC-02 | `governance.gate.Gate`, `governance.audit.AuditLog` | `tests/governance/test_gate_pipeline.py` | 35 |
-| CTL-LOG-03 | Chain verification and CSV export (COSO MO) | REG-IC-02 | `governance.audit.AuditLog.verify_chain` | `tests/governance/test_audit_log.py`, `tests/governance/test_audit_log.py` | 2 |
+| CTL-LOG-03 | Chain verification and CSV export (COSO MO) | REG-IC-02 | `governance.audit.AuditLog.verify_chain` | `tests/governance/test_audit_log.py`, `tests/governance/test_audit_log.py` | 1 |
 | CTL-LOG-04 | Masking of identifiers and untrusted text in logs (COSO CA) | REG-DP-01 | `contracts.actions.mask_params` | `tests/governance/test_audit_log.py` | 0 |
 | CTL-LOG-05 | Independent hash-chained sandbox operation log (COSO MO) | REG-IC-02 | `sandbox.opslog` | `tests/sandbox/test_idempotency_opslog.py` | 0 |
 | CTL-FR-01 | Balanced double-entry postings enforced (COSO CA) | REG-ACC-03 | `books.posting.validate` | `tests/books/test_posting.py` | 0 |

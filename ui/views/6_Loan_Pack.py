@@ -68,6 +68,7 @@ st.caption(
     f"created {pack.created_at:%Y-%m-%d %H:%M UTC}"
 )
 path = Path(pack.path)
+path = path if path.is_absolute() else state.REPO_ROOT / path  # stored repo-relative
 if path.exists():
     st.download_button(
         "Download loan pack PDF",
