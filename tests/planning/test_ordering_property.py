@@ -79,6 +79,39 @@ def test_low_base_high_ordering(i: ForecastInputs) -> None:
         assert lo.closing_cents <= ba.closing_cents <= hi.closing_cents, lo.week
 
 
+def test_invoice_due_today_counts_in_week_one() -> None:
+    """T-PLN-03 proves PLN-01 (regression found by the property test on PC A): an invoice
+    due on AS_OF with no history is collected in HIGH week 1, so HIGH never drops it."""
+    i = ForecastInputs(
+        as_of=AS_OF,
+        opening_cash_cents=0,
+        weekly_sales=[
+            WeeklySales(
+                week_start=AS_OF - timedelta(days=1),
+                cash_cents=0,
+                card_sales_cents=0,
+                total_cents=0,
+            )
+        ],
+        cogs_ratio=Decimal(0),
+        open_invoices=[
+            InvoiceForecastItem(
+                invoice_id="i0",
+                customer_id="c",
+                due_date=AS_OF,
+                outstanding_cents=1,
+                lateness_history_days=[],
+            )
+        ],
+        open_bills=[],
+        recurring=[],
+        events=[],
+    )
+    f = Planner().forecast(i)
+    assert f.scenarios[Scenario.HIGH].weeks[0].closing_cents == 1
+    test_low_base_high_ordering.hypothesis.inner_test(i)
+
+
 def test_determinism() -> None:
     """T-PLN-09: two runs give equal DTOs and the same inputs_hash; the hash moves with
     the inputs."""

@@ -46,13 +46,34 @@ def _resolve(path: str) -> bool:
 
 def test_registry_complete_and_unique() -> None:
     """T-GOV-24 proves GOV-19, PRD-31: every CTL id of PRD/14 §3 is present exactly once,
-    with a COSO component, regulations and tests."""
+    with a COSO component, regulations and tests (a control marked "not built" cites none)."""
     ids = [c.control_id for c in Controls().controls()]
     assert len(ids) == len(set(ids))
     assert set(ids) == set(CONTROL_IDS)
     assert set(COSO.values()) <= {"CE", "RA", "CA", "IC", "MO"}
     for c in CONTROLS:
-        assert c.regulation_refs and c.tests and c.implemented_in, c.control_id
+        assert c.regulation_refs and c.implemented_in, c.control_id
+        assert c.tests or "not built" in c.title, c.control_id
+
+
+def test_cited_tests_exist() -> None:
+    """T-GOV-24 proves GOV-19, GOV-20: every test a control cites exists (file, and test
+    function when given as ``file::name``), so the compliance matrix never cites missing
+    evidence. Tests of packages not assembled yet are skipped like implemented_in."""
+    missing = []
+    for c in CONTROLS:
+        for ref in c.tests:
+            rel, _, name = ref.partition("::")
+            path = REPO_ROOT / rel
+            top = rel.split("/")[1] if rel.startswith("tests/") else ""
+            if top in EXPECTED_PACKAGES and not _built(top):
+                continue
+            found = path.exists() and (
+                not name or re.search(rf"def {re.escape(name)}\b", path.read_text("utf-8"))
+            )
+            if not found:
+                missing.append(f"{c.control_id}: {ref}")
+    assert missing == []
 
 
 def test_implemented_in_importable_when_present() -> None:

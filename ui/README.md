@@ -88,7 +88,7 @@ reads.
    a draft "sending proposed" locally after `propose_send`.
 4. **Paths from the facade** (`export_path()`, `uploads_dir()`) or `capture_receipt(bytes,
    name)`. Why: `ui` cannot use `infra.paths`. Workaround: the real app writes
-   `<repo>/evidence/action_log.csv` and `<repo>/var/uploads/` (computed from `__file__`);
+   `<repo>/var/exports/action_log.csv` (PC A moved it out of WP11's `evidence/`) and `<repo>/var/uploads/` (computed from `__file__`);
    fake mode writes under the system temp folder so tests never touch the repo.
 5. **`health()` keys for UI-16/UI-17**: `sandbox_problem` (str | None) for the
    SANDBOX_MODE/port mismatch, and in `ai`: `remote_budget`, `routes` (task → backend). The

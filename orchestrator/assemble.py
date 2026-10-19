@@ -186,7 +186,11 @@ def financing_request(
         as_of=as_of,
         avg_daily_card_sales_cents=avg_daily_card_cents,
         eligible_invoices=eligible,
-        supplier_terms_available=any(not b.late_penalty for b in books.open_bills()),
+        # same rule as WP4's cash plan (D3): any open bill the forecast keeps (not suspected fraud)
+        supplier_terms_available=any(
+            not suspected_fraud(b, books.payee(b.payee_id) if b.payee_id else None)
+            for b in books.open_bills()
+        ),
     )
 
 

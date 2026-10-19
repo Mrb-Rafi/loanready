@@ -52,7 +52,7 @@ _ROWS: tuple[tuple[str, str, str, tuple[str, ...], str, tuple[str, ...]], ...] =
         "CA",
         ("REG-SEC-01", "REG-IC-05"),
         "sandbox.auth, adapters._secrets",
-        ("tests/sandbox/test_auth.py", "tests/adapters/test_isolation_static.py"),
+        ("tests/sandbox/test_auth_ratelimit.py", "tests/adapters/test_isolation_static.py"),
     ),
     (
         "CTL-AC-06",
@@ -60,7 +60,11 @@ _ROWS: tuple[tuple[str, str, str, tuple[str, ...], str, tuple[str, ...]], ...] =
         "CA",
         ("REG-AI-03",),
         "governance.tickets, adapters",
-        ("tests/governance/test_tickets.py", "tests/adapters/test_ticket_enforcement.py"),
+        (
+            "tests/governance/test_tickets.py",
+            "tests/adapters/test_ports.py",
+            "tests/governance/test_tickets.py",
+        ),
     ),
     (
         "CTL-AC-07",
@@ -141,7 +145,7 @@ _ROWS: tuple[tuple[str, str, str, tuple[str, ...], str, tuple[str, ...]], ...] =
         "CA",
         ("REG-AI-03", "REG-SEC-03"),
         "sandbox.bank.limits, sandbox.ratelimit",
-        ("tests/sandbox/test_limits.py", "tests/sandbox/test_ratelimit.py"),
+        ("tests/sandbox/test_bank.py", "tests/sandbox/test_auth_ratelimit.py"),
     ),
     (
         "CTL-PAY-01",
@@ -157,7 +161,7 @@ _ROWS: tuple[tuple[str, str, str, tuple[str, ...], str, tuple[str, ...]], ...] =
         "CA",
         ("REG-PAY-02", "REG-PAY-03"),
         "governance.checks.check_payment, sandbox.bank.service",
-        ("tests/integration/test_fraud_invoice.py", "tests/sandbox/test_schedule_rules.py"),
+        ("tests/integration/test_fraud_invoice.py", "tests/sandbox/test_bank.py"),
     ),
     (
         "CTL-PAY-03",
@@ -173,7 +177,7 @@ _ROWS: tuple[tuple[str, str, str, tuple[str, ...], str, tuple[str, ...]], ...] =
         "CA",
         ("REG-SEC-03",),
         "sandbox.idempotency",
-        ("tests/sandbox/test_idempotency.py",),
+        ("tests/sandbox/test_idempotency_opslog.py",),
     ),
     (
         "CTL-PAY-05",
@@ -181,7 +185,11 @@ _ROWS: tuple[tuple[str, str, str, tuple[str, ...], str, tuple[str, ...]], ...] =
         "CA",
         ("REG-AI-02",),
         "sandbox.bank, governance.checks.check_cancel",
-        ("tests/sandbox/test_bank_reads.py", "tests/governance/test_gate_pipeline.py"),
+        (
+            "tests/sandbox/test_bank.py::test_cancel_and_return",
+            "tests/governance/test_gate_pipeline.py::test_cancel_payment",
+            "tests/governance/test_gate_pipeline.py",
+        ),
     ),
     (
         "CTL-PAY-06",
@@ -189,7 +197,7 @@ _ROWS: tuple[tuple[str, str, str, tuple[str, ...], str, tuple[str, ...]], ...] =
         "CA",
         ("REG-PAY-04",),
         "governance.checks",
-        ("tests/governance/test_gate_pipeline.py::test_watchlist",),
+        (),  # not built: no test to cite
     ),
     (
         "CTL-LOG-01",
@@ -213,7 +221,7 @@ _ROWS: tuple[tuple[str, str, str, tuple[str, ...], str, tuple[str, ...]], ...] =
         "MO",
         ("REG-IC-02",),
         "governance.audit.AuditLog.verify_chain",
-        ("tests/governance/test_audit_log.py", "tests/e2e/test_demo_e2e.py"),
+        ("tests/governance/test_audit_log.py", "tests/governance/test_audit_log.py"),
     ),
     (
         "CTL-LOG-04",
@@ -229,7 +237,7 @@ _ROWS: tuple[tuple[str, str, str, tuple[str, ...], str, tuple[str, ...]], ...] =
         "MO",
         ("REG-IC-02",),
         "sandbox.opslog",
-        ("tests/sandbox/test_opslog.py",),
+        ("tests/sandbox/test_idempotency_opslog.py",),
     ),
     (
         "CTL-FR-01",
@@ -253,7 +261,7 @@ _ROWS: tuple[tuple[str, str, str, tuple[str, ...], str, tuple[str, ...]], ...] =
         "CA",
         ("REG-IC-04", "REG-ACC-08"),
         "books.service.Books.period_is_closed, governance.checks.check_payment",
-        ("tests/books/test_periods.py",),
+        ("tests/governance/test_gate_pipeline.py::test_payment_closed_period",),
     ),
     (
         "CTL-FR-04",
@@ -373,7 +381,7 @@ _ROWS: tuple[tuple[str, str, str, tuple[str, ...], str, tuple[str, ...]], ...] =
         "IC",
         ("REG-AI-04", "REG-AI-06"),
         "outputs.drafts, ui.components.badges",
-        ("tests/outputs/test_ai_label.py",),
+        ("tests/outputs/test_drafts.py",),
     ),
     (
         "CTL-AI-07",
@@ -381,7 +389,7 @@ _ROWS: tuple[tuple[str, str, str, tuple[str, ...], str, tuple[str, ...]], ...] =
         "CA",
         ("REG-AI-03",),
         "agent.llm.LLM.remote_calls_today",
-        ("tests/agent/test_budget.py",),
+        ("tests/agent/test_service.py::test_status_counts_remote_calls",),
     ),
     (
         "CTL-AI-08",
@@ -429,7 +437,11 @@ _ROWS: tuple[tuple[str, str, str, tuple[str, ...], str, tuple[str, ...]], ...] =
         "CA",
         ("REG-LND-05",),
         "governance.tiers.BLOCKED_TYPES, governance.checks.check_submit_pack, sandbox.lender",
-        ("tests/governance/test_tiers.py", "tests/sandbox/test_lender.py"),
+        (
+            "tests/governance/test_tiers.py",
+            "tests/sandbox/test_pos_messaging_lender.py",
+            "tests/integration/test_loan_pack_flow.py",
+        ),
     ),
     (
         "CTL-CHG-01",
@@ -461,7 +473,7 @@ _ROWS: tuple[tuple[str, str, str, tuple[str, ...], str, tuple[str, ...]], ...] =
         "MO",
         ("REG-IC-05",),
         "infra.integration_check",
-        ("CI run", "tests/contracts"),
+        (".github/workflows/ci.yml", "tests/contracts"),
     ),
     (
         "CTL-SEC-01",

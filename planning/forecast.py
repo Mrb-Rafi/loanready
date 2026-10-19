@@ -64,6 +64,12 @@ def bill_week(due: date, as_of: date) -> int | None:
     return 1 if due <= as_of else week_of(due, as_of)
 
 
+def collection_week(when: date, as_of: date) -> int | None:
+    """An open invoice expected on or before AS_OF (due today, HIGH lateness 0) is still
+    unpaid, so it lands in week 1 rather than outside the horizon (keeps LOW <= BASE <= HIGH)."""
+    return 1 if when <= as_of else week_of(when, as_of)
+
+
 @dataclass(frozen=True)
 class Occurrence:
     """One dated outflow item, used by the drivers."""
@@ -106,7 +112,7 @@ def run_scenario(inputs: ForecastInputs, scenario: Scenario) -> ScenarioForecast
     ]
     for inv in sorted(inputs.open_invoices, key=lambda i: i.invoice_id):
         when = collection_date(inv, scenario, as_of)
-        k = week_of(when, as_of) if when is not None else None
+        k = collection_week(when, as_of) if when is not None else None
         if when is None:
             assumptions.append(f"Invoice {inv.invoice_id} assumed not collected (over 60 days)")
         else:
