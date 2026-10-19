@@ -68,6 +68,8 @@ class Settings(BaseSettings):
     openai_model: str = _f("OPENAI_MODEL", "")  # type: ignore[assignment]
     openai_max_calls: int = _f("OPENAI_MAX_CALLS", 300)  # type: ignore[assignment]
     openai_max_usd: Decimal = _f("OPENAI_MAX_USD", Decimal("8.00"))  # type: ignore[assignment]
+    # all-time cap across days (prepaid credit); 0 = no all-time cap (daily caps still apply)
+    openai_total_max_usd: Decimal = _f("OPENAI_TOTAL_MAX_USD", Decimal("0"))  # type: ignore[assignment]
     openai_price_in_per_mtok: Decimal = _f("OPENAI_PRICE_IN_PER_MTOK", Decimal("0"))  # type: ignore[assignment]
     openai_price_out_per_mtok: Decimal = _f("OPENAI_PRICE_OUT_PER_MTOK", Decimal("0"))  # type: ignore[assignment]
 

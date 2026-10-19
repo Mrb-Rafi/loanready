@@ -27,6 +27,7 @@ from contracts.enums import Decision
 from contracts.ids import IdFactory, set_id_factory
 from infra.paths import REPO_ROOT, ensure_dirs
 from orchestrator.container import build_app
+from scripts._common import mock_settings
 
 EVIDENCE_DIR = REPO_ROOT / "evidence"
 PYTEST_ARGS = ["-m", "pytest", "-q", "-m", "not slow and not optional", "-p", "no:randomly"]
@@ -112,7 +113,7 @@ def main(argv: list[str] | None = None) -> int:
     # A separate process: random ids for the one EXPORT_CREATED row, so a seeded factory
     # cannot repeat an id the demo already used.
     set_id_factory(IdFactory(None))
-    app = build_app(fakes=False)
+    app = build_app(mock_settings(), fakes=False)
     try:
         if not app.audit_rows():
             print("the action log is empty: run `python tasks.py demo` first")

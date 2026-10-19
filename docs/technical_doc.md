@@ -259,6 +259,26 @@ patterns: each hit is logged as `UNTRUSTED_INSTRUCTION_IGNORED`. No code path tu
 text into an action parameter. In the demo four planted instructions (bank memo, POS note,
 receipt, bill) are logged and nothing moves.
 
+### 3.8 Model backends, routing and the cost guard (`agent/`)
+
+`LLM_BACKEND` selects mock, ollama, openai or hybrid. `agent.routing` resolves each call's
+backend list: the mode's route (hybrid: wording and explanations OpenAI → local; categorisation
+local → OpenAI with the digit-masked merchant name only; receipt text and intents local only),
+minus every remote backend the data-class policy forbids for the task and class, minus
+unavailable backends (`agent.health`: Ollama answers `/api/tags` within 2 s with the model
+listed; OpenAI has a key, a model and budget left; cached 60 s; three failures in a row
+switch a backend off for 5 minutes), always ending in mock. The OpenAI backend re-checks the
+policy itself before any network call. `agent.budget` reserves each remote call's worst
+case (estimated prompt tokens + the task's output allowance) against calls per day, USD per
+day and USD all-time, and books the real usage reported by the API, in integer
+micro-dollars (`usd = in·p_in/10⁶ + out·p_out/10⁶`, rounded up). Answers are cached by
+`sha256(backend|model|task|messages|schema)` in `var/llm_cache.db`. Measured on the Linux
+integration PC (Ryzen 5 3500U, 2 GB GPU) with `phi3:mini`: about 3.5 tokens/s, ~10 s per
+category label, ~25 s per explanation, ~70 s per reminder. Its labels were often confidently
+wrong, so a local label's confidence is capped at 0.75 (below the 0.80 threshold): the owner
+confirms it. Seeding, the demo, evidence and docs always run on mock, so the baseline books
+and every evidence file stay deterministic.
+
 ## 4. Sandbox
 
 `sandbox/` simulates a bank (accounts, payees, scheduled payments with value dates and
@@ -281,8 +301,7 @@ oversight principle of the EU AI Act. This is alignment, not certification: see 
 
 ## 6. Limitations and future work
 
-- Not built (PRD SHOULD/OPTIONAL): Ollama and OpenAI backends, hybrid routing, LLM cache and
-  remote budget guard, intent router and chat; Tesseract OCR (receipts use OCR sidecars);
+- Not built (PRD SHOULD/OPTIONAL): intent router and chat; Tesseract OCR (receipts use OCR sidecars);
   ECL provision matrix; period close; US GAAP indirect cash-flow reconciliation; China
   private-lending cap check; supplier price-rise alert; loan-pack charts; payee watchlist;
   the UI demo stepper; Tier 3.

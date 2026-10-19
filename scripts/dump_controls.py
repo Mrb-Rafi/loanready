@@ -20,6 +20,7 @@ from scripts._common import (
     DOCS_DIR,
     GENERATED_DIR,
     GENERATED_NOTE,
+    mock_settings,
     regulation_names,
     table,
     write_md,
@@ -93,7 +94,7 @@ def render(controls: list[Any], names: dict[str, str], counts: Counter[str], csv
 
 
 def main(argv: list[str] | None = None) -> int:
-    app = build_app()
+    app = build_app(mock_settings())
     try:
         controls = app.controls_table()
     finally:

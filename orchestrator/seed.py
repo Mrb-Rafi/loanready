@@ -168,7 +168,10 @@ def main(argv: list[str] | None = None) -> int:
     bundle, source = load_or_generate_bundle(generate=not args.no_generate)
     reset_app_db()
     # fakes="auto": a package not assembled yet is replaced by its fake (ORC-01)
-    app = build_app(inprocess_sandbox=not args.external_sandbox, fakes="auto")
+    # The seeded baseline is always categorised by rules + mock, so every seed gives the same
+    # books whatever LLM_BACKEND is; live models are used afterwards (UI, later syncs).
+    settings = get_settings().model_copy(update={"llm_backend": "mock"})
+    app = build_app(settings, inprocess_sandbox=not args.external_sandbox, fakes="auto")
     try:
         summary = seed_app(app, bundle)
         print_summary(summary, source)

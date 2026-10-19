@@ -8,7 +8,7 @@ from typing import Any
 
 from contracts.enums import Tier
 from orchestrator.container import build_app
-from scripts._common import GENERATED_DIR, GENERATED_NOTE, table, write_md
+from scripts._common import GENERATED_DIR, GENERATED_NOTE, mock_settings, table, write_md
 
 TIER_HELP = {
     "T0_OBSERVE": "Tier 0: observe and compute only; runs at once",
@@ -41,7 +41,7 @@ def render(rows: list[Any]) -> str:
 
 
 def main(argv: list[str] | None = None) -> int:
-    app = build_app()
+    app = build_app(mock_settings())
     try:
         rows = app.tier_table()
     finally:

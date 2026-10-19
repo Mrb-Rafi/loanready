@@ -27,7 +27,9 @@ DATA_MAX_CHARS = 500
 TASK_INSTRUCTIONS: dict[LLMTask, str] = {
     LLMTask.CATEGORISE_TXN: (
         "Task: pick the ledger account code for the bank transaction described in the data "
-        "block. Choose exactly one label from the schema enum and give a confidence from 0 to 1."
+        "block. The facts give what each label means (label_meanings). Choose exactly one "
+        "label from the schema enum and give a confidence from 0 to 1; use a low confidence "
+        "when the merchant does not clearly fit one label."
     ),
     LLMTask.PERSONAL_VS_BUSINESS: (
         "Task: decide whether the transaction in the data block is personal or business. "

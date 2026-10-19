@@ -113,12 +113,29 @@ run it in-process; `python tasks.py sandbox` runs it as a server.
 
 ## LLM backends
 
-`LLM_BACKEND=mock` (default) is deterministic and needs no model: it classifies by keywords
-and words messages from templates, which are labelled as templates, not AI. The data-class
-policy (bank identifiers and documents never leave the machine), masking, prompt building,
-output validation and fallback are built for real backends, but **the Ollama and OpenAI
-backends are not built in this version**: `ollama`, `openai` and `hybrid` currently answer
-from the mock (PRD/09 allows this degradation). See Limitations.
+| `LLM_BACKEND` | What answers |
+|---|---|
+| `mock` (default; always used by tests, `seed`, `demo`, `evidence` and `docs`) | Deterministic keyword classification and templates (labelled as templates, not AI); no model needed |
+| `ollama` | A local model through Ollama (default `phi3:mini`), then mock |
+| `openai` | OpenAI for the tasks the data-class policy allows, then mock |
+| `hybrid` (recommended for the live UI) | Per task: wording and explanations try OpenAI, then the local model; categorisation tries the local model, then OpenAI with the merchant name only; receipt text and intents stay local; mock is always last |
+
+Whatever the mode, bank identifiers and documents never leave the machine, names are masked
+before a remote call, every answer is validated, numbers in explanations and messages are
+post-checked against the facts, and any failure falls back to the next backend. A local
+model's category label is only a suggestion the owner confirms (its confidence is capped
+below the 0.80 threshold). Answers are cached in `var/llm_cache.db`.
+
+**OpenAI cost guard.** Each remote call reserves its worst-case cost first and books the
+real token usage after, against three caps: calls per day (`OPENAI_MAX_CALLS`), dollars per
+day (`OPENAI_MAX_USD`) and dollars all-time (`OPENAI_TOTAL_MAX_USD`, for prepaid credit),
+using the prices in `OPENAI_PRICE_IN_PER_MTOK` / `OPENAI_PRICE_OUT_PER_MTOK`. When a cap is
+reached, calls fall back to the local model or mock.
+
+To switch on: install Ollama and `ollama pull phi3:mini`; for OpenAI put `OPENAI_API_KEY` in
+`.env`, run `python -m agent.health` to list the small models your key can use, set
+`OPENAI_MODEL` and the prices from the OpenAI pricing page, then `LLM_BACKEND=hybrid`.
+`python -m agent.health` shows the routes each task would take right now and the budget.
 
 ## Repository map
 
@@ -144,8 +161,7 @@ Honest list of what this prototype does not do (also in the security self-assess
 
 - Synthetic data only; single currency (USD); single business; no real bank connection.
 - No multi-user authentication: the UI switches between an owner and a bookkeeper role.
-- Not built yet (SHOULD/OPTIONAL items of the PRD): Ollama/OpenAI backends, intent router
-  and chat, LLM cache and remote budget guard; Tesseract OCR (receipts are read from OCR
+- Not built yet (SHOULD/OPTIONAL items of the PRD): intent router and chat; Tesseract OCR (receipts are read from OCR
   sidecar files); expected-credit-loss provision matrix; period close; US GAAP indirect
   cash-flow reconciliation; China private-lending cap check; supplier price-rise alerts;
   loan-pack charts; payee watchlist screening; the UI's guided demo stepper.

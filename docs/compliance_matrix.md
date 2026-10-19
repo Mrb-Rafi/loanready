@@ -106,7 +106,7 @@ Evidence rows are counted from `evidence/action_log.csv` (run `python tasks.py d
 | CTL-AI-04 | Untrusted text delimited; scanner logs instruction-like text (COSO CA) | REG-AI-03 | `agent.prompts.data_block`, `contracts.untrusted.scan_untrusted` | `tests/agent/test_prompts.py`, `tests/contracts/test_untrusted.py` | 4 |
 | CTL-AI-05 | Output schema validation, retry, deterministic fallback (COSO CA) | REG-AI-03 | `agent.llm` | `tests/agent/test_validation.py` | 0 |
 | CTL-AI-06 | AI-generated content labelled (COSO IC) | REG-AI-04, REG-AI-06 | `outputs.drafts`, `ui.components.badges` | `tests/outputs/test_drafts.py` | 6 |
-| CTL-AI-07 | Budget and rate guard for remote models (SHOULD; calls counted, budget not built yet) (COSO CA) | REG-AI-03 | `agent.llm.LLM.remote_calls_today` | `tests/agent/test_service.py::test_status_counts_remote_calls` | 0 |
+| CTL-AI-07 | Budget and rate guard for remote models (COSO CA) | REG-AI-03 | `agent.budget.Budget`, `agent.backends.openai_backend.OpenAIBackend.generate` | `tests/agent/test_budget.py`, `tests/agent/test_backends.py` | 0 |
 | CTL-AI-08 | Readiness score uses business data only; explainable; disclaimed (COSO CA) | REG-AI-01 | `financing.readiness` | `tests/financing/test_readiness.py` | 0 |
 | CTL-AI-09 | Forecast ranges and assumptions always shown (COSO IC) | REG-AI-05 | `planning.forecast` | `tests/planning/test_forecast_tiny.py` | 0 |
 | CTL-FIN-01 | Fixed, dated catalogue; unknown products refused (COSO CA) | REG-LND-06 | `financing.catalogue` | `tests/financing/test_compare.py` | 0 |

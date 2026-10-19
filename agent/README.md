@@ -4,8 +4,23 @@ LLM layer for LoanReady (spec: `PRD/09_wp7_agent.md`). The model may only (a) pi
 from a fixed list, (b) word text from facts computed by code, (c) pick an intent from a fixed
 menu. It never computes money, checks permissions or chooses a payee, amount or account.
 
-Status: every **MUST** module is built and tested with `LLM_BACKEND=mock`. No SHOULD or
-OPTIONAL module is built (router, ollama, routing/health, cache, budget, openai).
+Status: every **MUST** module is built and tested with `LLM_BACKEND=mock`. PC A added the
+backends on 2026-10-19: `backends/ollama_backend.py`, `routing.py`, `health.py`, `cache.py`,
+`budget.py` (SHOULD) and `backends/openai_backend.py` (OPTIONAL). Not built: `router.py`.
+
+| File (PC A) | What it does |
+|---|---|
+| `backends/__init__.py` | `BackendError`, per-task output allowance, `strict_schema` for structured outputs |
+| `backends/ollama_backend.py` | local model: JSON-schema format, temperature 0, seed 42, 2,048 context, 10-minute keep-alive |
+| `backends/openai_backend.py` | structured outputs (strict), own policy check before any network call, budget reserve/record, drops parameters a model rejects |
+| `routing.py` | `DEFAULT_ROUTES`, `LLM_ROUTES_FILE` overrides (validated), `resolve()` (forbidden remote removed, mock last) |
+| `health.py` | availability (Ollama `/api/tags`, OpenAI key/model/budget), 60 s cache, circuit breaker; `python -m agent.health` |
+| `cache.py` | `var/llm_cache.db`, key includes backend and model |
+| `budget.py` | calls/day, USD/day, USD all-time (`OPENAI_TOTAL_MAX_USD`), worst-case reservation, micro-dollars |
+
+Classifier change: candidate labels go to the model with their chart-of-accounts names, and a
+local model's confidence is capped at 0.75 (below the 0.80 threshold) because `phi3:mini`
+was confidently wrong in live tests on PC A.
 
 ## Modules
 
@@ -113,6 +128,5 @@ are `LLM_FALLBACK_USED` with `to="TEMPLATE"`, `reason="postcheck"`.)
 
 ## Not done here (SHOULD / OPTIONAL, waiting for the team lead's go-ahead)
 
-`router.py` (rule-based intents), `backends/ollama_backend.py`, `routing.py` + `health.py`
-(DEFAULT_ROUTES, circuit breaker), `cache.py`, `budget.py`; OPTIONAL: `backends/openai_backend.py`,
+`router.py` (rule-based intents); OPTIONAL:
 LLM intent fallback.

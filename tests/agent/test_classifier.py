@@ -27,6 +27,13 @@ def _ollama(stub: Any, events: Any, answer: str) -> tuple[LLMClassifier, Any]:
     return LLMClassifier(llm), backend
 
 
+def _remote(stub: Any, events: Any, answer: str) -> tuple[LLMClassifier, Any]:
+    """A remote (OpenAI-like) stub: the generic 0.95 cap applies, not the local 0.75 one."""
+    backend = stub(LLMBackend.OPENAI, [answer, answer], remote=True)
+    llm = LLM(mode="openai", events=events, backends={LLMBackend.OPENAI: backend})
+    return LLMClassifier(llm), backend
+
+
 def test_satisfies_protocol(events: Any) -> None:
     """T-AGT-07 proves AGT-15: LLMClassifier implements contracts.services.Classifier."""
     assert isinstance(LLMClassifier(LLM(mode="mock", events=events)), Classifier)
@@ -65,7 +72,7 @@ def test_label_outside_candidates_rejected(events: Any, stub: Any) -> None:
 
 def test_confidence_capped(events: Any, stub: Any) -> None:
     """T-AGT-07 proves AGT-15: model confidence is capped at 0.95 via Decimal(str(x))."""
-    clf, _ = _ollama(stub, events, '{"label": "6200", "confidence": 1.0}')
+    clf, _ = _remote(stub, events, '{"label": "6200", "confidence": 1.0}')
     res = clf.classify(_memo("CITY POWER"), CANDIDATES, LLMTask.CATEGORISE_TXN)
     assert res.label == "6200"
     assert res.confidence == Decimal("0.95")
@@ -74,7 +81,7 @@ def test_confidence_capped(events: Any, stub: Any) -> None:
 
 def test_confidence_from_str_not_float(events: Any, stub: Any) -> None:
     """T-AGT-07 proves AGT-15: 0.85 converts exactly, no binary float artefacts."""
-    clf, _ = _ollama(stub, events, '{"label": "6000", "confidence": 0.85}')
+    clf, _ = _remote(stub, events, '{"label": "6000", "confidence": 0.85}')
     res = clf.classify(_memo("RENT OCT"), CANDIDATES, LLMTask.CATEGORISE_TXN)
     assert res.confidence == Decimal("0.85")
 
@@ -113,3 +120,28 @@ def test_plain_str_rejected(events: Any) -> None:
             CANDIDATES,
             LLMTask.CATEGORISE_TXN,
         )
+
+
+def test_local_model_never_auto_posts(stub: Any) -> None:
+    """T-AGT-07 proves AGT-15, BKS-06: a local model's confidence is capped below the 0.80
+    threshold (it pre-fills the owner's choice); a remote answer keeps the 0.95 cap; the
+    label meanings from the chart of accounts are in the prompt facts."""
+    import json as _json
+    from decimal import Decimal as _D
+
+    from agent.classifier import LLMClassifier
+    from agent.llm import LLM
+    from contracts.enums import LLMBackend, LLMTask, SourceKind
+    from contracts.untrusted import as_untrusted
+
+    sure = _json.dumps({"label": "5000", "confidence": 0.99})
+    local = stub(LLMBackend.OLLAMA, [sure])
+    clf = LLMClassifier(LLM(mode="ollama", backends={LLMBackend.OLLAMA: local}), _D("0.80"))
+    text = as_untrusted("GRAIN DEPOT FLOUR", SourceKind.BANK, "t1")
+    r = clf.classify(text, ["5000", "6900"], LLMTask.CATEGORISE_TXN)
+    assert r.confidence == _D("0.75") and r.needs_confirmation
+    assert "5000 = " in local.calls[0][1][1]["content"]
+    remote = stub(LLMBackend.OPENAI, [sure], remote=True)
+    clf = LLMClassifier(LLM(mode="openai", backends={LLMBackend.OPENAI: remote}), _D("0.80"))
+    r = clf.classify(text, ["5000", "6900"], LLMTask.CATEGORISE_TXN)
+    assert r.confidence == _D("0.95") and not r.needs_confirmation

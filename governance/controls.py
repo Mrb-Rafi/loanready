@@ -385,11 +385,11 @@ _ROWS: tuple[tuple[str, str, str, tuple[str, ...], str, tuple[str, ...]], ...] =
     ),
     (
         "CTL-AI-07",
-        "Budget and rate guard for remote models (SHOULD; calls counted, budget not built yet)",
+        "Budget and rate guard for remote models",
         "CA",
         ("REG-AI-03",),
-        "agent.llm.LLM.remote_calls_today",
-        ("tests/agent/test_service.py::test_status_counts_remote_calls",),
+        "agent.budget.Budget, agent.backends.openai_backend.OpenAIBackend.generate",
+        ("tests/agent/test_budget.py", "tests/agent/test_backends.py"),
     ),
     (
         "CTL-AI-08",

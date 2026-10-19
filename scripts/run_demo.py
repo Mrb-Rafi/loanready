@@ -23,6 +23,7 @@ from infra.paths import DATA_DIR, REPO_ROOT, ensure_dirs
 from infra.settings import reset_settings
 from orchestrator.container import build_app
 from orchestrator.seed import load_or_generate_bundle, reset_app_db, seed_app
+from scripts._common import mock_settings
 
 EVIDENCE_DIR = REPO_ROOT / "evidence"
 DECISIONS = tuple(d.value for d in Decision)
@@ -276,7 +277,7 @@ def main(argv: list[str] | None = None) -> int:
     ensure_dirs()
     bundle, source = load_or_generate_bundle(generate=True)
     reset_app_db()
-    app = build_app(fakes=False)
+    app = build_app(mock_settings(), fakes=False)
     try:
         app.c.extras["seed"] = seed_app(app, bundle)
         print(f"Rina story, AS_OF {app.as_of} (bundle from {source})")

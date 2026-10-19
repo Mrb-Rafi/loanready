@@ -8,6 +8,12 @@ bumps `CONTRACTS_VERSION`, runs `python tasks.py freeze` and redistributes `cont
 
 (none)
 
+## 1.1.0 LLM settings (2026-10-19)
+
+Contracts unchanged. `infra/settings.py` and `.env.example`: new optional setting
+`OPENAI_TOTAL_MAX_USD` (all-time USD cap for prepaid OpenAI credit, default 0 = off),
+read by `agent.budget`. Manifest re-frozen.
+
 ## 1.1.0 tooling fixes (2026-10-19, clean-clone check)
 
 Contracts unchanged. `infra/` only, manifest re-frozen:

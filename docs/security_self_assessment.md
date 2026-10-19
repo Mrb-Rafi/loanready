@@ -84,9 +84,13 @@ the ticket, the token scope and the idempotency key on every write.
 - **Licensing for credit intermediation is not addressed.** LoanReady compares options and
   submits a pack to a pretend lender; it does not broker, advise on suitability or accept
   credit.
-- **Local model quality** is not assessed: in this build only the mock backend runs. The
-  Ollama and OpenAI backends, the remote budget guard (CTL-AI-07) and payee watchlist
-  screening (CTL-PAY-06) are not built.
+- **Model quality.** The small local model (`phi3:mini`) is slow on this hardware and often
+  confidently wrong; its category labels are therefore only suggestions the owner confirms.
+  Remote answers depend on the OpenAI model chosen. Every model answer is validated and its
+  numbers post-checked, and the demo and evidence never use a model. The OpenAI budget guard
+  (CTL-AI-07) caps calls and dollars, but its dollar figures are estimates from the prices
+  set in `.env`; OpenAI's own billing is the authority. Payee watchlist screening
+  (CTL-PAY-06) is not built.
 - **The approval token and ticket keys live in process memory**; a compromised host could
   bypass them. Hardware-backed keys and separate processes for the gate would be needed in
   production.
