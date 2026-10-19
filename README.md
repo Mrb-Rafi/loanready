@@ -98,6 +98,7 @@ The rules that make this safe are enforced by code and tests, not by convention:
   update or delete path; the sandbox keeps its own independent chain.
 - **Layering**: business packages never import each other; `lint-imports` checks it.
 
+Step-by-step use of every screen and command: [`docs/usage_guide.md`](docs/usage_guide.md).
 Details: [`docs/technical_doc.md`](docs/technical_doc.md),
 [`docs/security_self_assessment.md`](docs/security_self_assessment.md),
 [`docs/compliance_matrix.md`](docs/compliance_matrix.md).

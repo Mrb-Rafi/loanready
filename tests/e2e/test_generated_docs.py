@@ -59,7 +59,13 @@ def test_docs_cite_existing_tests() -> None:
     from infra.paths import REPO_ROOT
 
     missing = []
-    for doc in ("docs/security_self_assessment.md", "docs/technical_doc.md", "README.md"):
+    docs = (
+        "docs/security_self_assessment.md",
+        "docs/technical_doc.md",
+        "docs/usage_guide.md",
+        "README.md",
+    )
+    for doc in docs:
         text = (REPO_ROOT / doc).read_text(encoding="utf-8")
         for ref in re.findall(r"`(tests/[^`*]+?\.py)`", text):
             if not (REPO_ROOT / ref).exists():
