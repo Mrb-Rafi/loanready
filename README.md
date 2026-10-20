@@ -7,12 +7,15 @@ with every action behind a permission gate written in plain code.**
 2026 Shenzhen International FinTech Competition (FinTechathon) · International Track ·
 **Topic E: SME Finance Copilot** · Team **Korikath Nexus**
 
+**[Pitch deck (PDF)](docs/pdf/LoanReady_Pitch_Deck.pdf)** · [Technical documentation](docs/pdf/LoanReady_Technical_Documentation.pdf) · [Usage guide](docs/pdf/LoanReady_Usage_Guide.pdf)
+
 ---
 
 ## Documentation
 
 | Document | PDF | Source |
 |---|---|---|
+| **Pitch deck** (20 slides): goals, pain points and solutions, technology, finance, security and compliance, the AI layer, evidence | [LoanReady_Pitch_Deck.pdf](docs/pdf/LoanReady_Pitch_Deck.pdf) | |
 | **Technical documentation**: architecture, every subsystem with its formulas, AI layer, governance, sandbox, testing, configuration, performance, limitations | [LoanReady_Technical_Documentation.pdf](docs/pdf/LoanReady_Technical_Documentation.pdf) | [docs/technical_doc.md](docs/technical_doc.md) |
 | **Usage guide**: install, start, every screen and button, the approval dialog, a click-by-click demo script, turning on AI, commands, troubleshooting, FAQ | [LoanReady_Usage_Guide.pdf](docs/pdf/LoanReady_Usage_Guide.pdf) | [docs/usage_guide.md](docs/usage_guide.md) |
 | Security self-assessment: permission tiers, known-risk list, residual risks | | [docs/security_self_assessment.md](docs/security_self_assessment.md) |
