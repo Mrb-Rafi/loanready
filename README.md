@@ -93,23 +93,60 @@ for the screen is in the [usage guide](docs/pdf/LoanReady_Usage_Guide.pdf) (§8)
 
 ## Quick start
 
-Requirements: **Python 3.12**, about 1 GB of disk, a folder path without spaces (on Windows,
-not inside OneDrive). No AI model, API key, OCR software or database server is needed.
+Requirements: **Python 3.12** (the Windows installer installs it for you), about 1 GB of disk
+and an internet connection for the first install. No AI model, API key, OCR software or
+database server is needed.
 
-```
-git clone https://github.com/Mrb-Rafi/loanready.git
-cd loanready
+**Linux / macOS**: paste into a terminal:
 
-# Windows:  py -3.12 tasks.py setup        Linux/macOS:  python3.12 tasks.py setup
-python tasks.py setup      # creates .venv and installs requirements.lock exactly
-python tasks.py doctor     # every MUST row must be OK
-cp .env.example .env       # Windows: copy .env.example .env
-python tasks.py seed       # generate Rina's Bakery and load the sandbox and the books
-python tasks.py ui         # open http://127.0.0.1:8501
+```bash
+curl -fsSL https://raw.githubusercontent.com/Mrb-Rafi/loanready/main/install.sh | bash
 ```
 
-After `setup`, `tasks.py` switches into its own environment automatically, so plain `python`
-(or `py -3.12` on Windows) works for every command.
+**Windows 10/11**: paste into **PowerShell** (not as administrator):
+
+```powershell
+irm https://raw.githubusercontent.com/Mrb-Rafi/loanready/main/install.ps1 | iex
+```
+
+The installer downloads LoanReady into `~/loanready` (Windows: `%USERPROFILE%\loanready`),
+installs its packages, loads the demo data and starts the app at **http://127.0.0.1:8501**.
+Afterwards start it with `loanready` (Linux/macOS) or the **LoanReady** shortcut on the
+Windows Desktop / Start menu. Re-running the installer updates an existing copy.
+
+<details>
+<summary>Manual install (same result, step by step)</summary>
+
+Linux / macOS:
+
+```bash
+git clone https://github.com/Mrb-Rafi/loanready.git ~/loanready
+cd ~/loanready
+python3.12 tasks.py setup
+cp .env.example .env
+.venv/bin/python tasks.py doctor
+.venv/bin/python tasks.py seed
+.venv/bin/python tasks.py ui
+```
+
+Windows (PowerShell):
+
+```powershell
+git clone https://github.com/Mrb-Rafi/loanready.git $HOME\loanready
+cd $HOME\loanready
+py -3.12 tasks.py setup
+copy .env.example .env
+.venv\Scripts\python tasks.py doctor
+.venv\Scripts\python tasks.py seed
+.venv\Scripts\python tasks.py ui
+```
+
+</details>
+
+After `setup`, `tasks.py` switches into its own environment automatically, so any Python
+works for the commands below: `python3 tasks.py …` on Linux/macOS, `py tasks.py …` on Windows
+(both run inside the project folder). The installer's launcher takes the same targets from
+anywhere: `loanready demo` (Linux/macOS) or `%USERPROFILE%\loanready\loanready.cmd demo`.
 
 | Command | What it does |
 |---|---|

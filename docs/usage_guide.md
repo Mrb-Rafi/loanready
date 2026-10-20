@@ -69,101 +69,130 @@ every time you run it.
 | Need | Minimum | Notes |
 |---|---|---|
 | Operating system | Windows 10/11, Linux or macOS | Tested on Windows 11 and Linux Mint |
-| Python | **3.12** exactly | 3.11 or 3.13 will be refused by the setup check |
+| Python | **3.12** exactly | The Windows installer installs it for you; on Linux see §2.2 |
 | Disk space | about 1 GB | 620 MB is the Python packages LoanReady installs for itself |
 | Memory | 4 GB free | 8 GB+ if you also run a local AI model |
 | Internet | only for the first install | and for OpenAI, if you choose to use it |
 | Browser | any modern browser | Chrome, Edge, Firefox, Safari |
 
-You do **not** need: an AI model, an OpenAI account, OCR software, a database server or
+You do **not** need: an AI model, an OpenAI account, OCR software, a database server, git or
 any bank account. LoanReady runs fully without them.
 
-### 2.2 Check Python 3.12
+### 2.2 Linux only: make sure Python 3.12 is there
 
-Open a terminal (Windows: **PowerShell**; Linux/macOS: **Terminal**) and type:
+Most current Linux systems already have it (Ubuntu 24.04, Linux Mint 22, Fedora 39+). If the
+installer says Python 3.12 is missing, it prints the exact command for your system. On
+Ubuntu, Debian and Linux Mint that is:
 
-Windows:
-```
-py -3.12 --version
-```
-Linux / macOS:
-```
-python3.12 --version
+```bash
+sudo apt-get update && sudo apt-get install -y python3.12 python3.12-venv
 ```
 
-You should see `Python 3.12.x`. If you see "not found", install Python 3.12 from
-python.org (Windows: tick **Add python.exe to PATH** during installation) or with your
-Linux package manager, then try again.
-
-### 2.3 Where to put the project folder
-
-Put the `loanready` folder at a short path **without spaces**, for example:
-
-- Windows: `C:\dev\loanready`
-- Linux: `/opt/loanready` or `~/loanready`
-
-On Windows, **do not** put it inside a OneDrive-synced folder (Desktop or Documents are
-often synced): OneDrive locks files and breaks the database.
+On macOS: `brew install python@3.12`. On Windows you can skip this: the installer handles it.
 
 ---
 
 ## 3. Install (one time)
 
-All commands are typed in a terminal **inside the project folder** (the folder that contains
-`tasks.py`). Change into it first:
+### 3.1 The one-command install (recommended)
 
-Windows:
-```
-cd C:\dev\loanready
-```
-Linux / macOS:
-```
-cd /opt/loanready
+Copy **one** line for your system, paste it into a terminal and press **Enter**.
+
+**Linux / macOS**: open **Terminal** and paste:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/Mrb-Rafi/loanready/main/install.sh | bash
 ```
 
-### Step 1. Create LoanReady's own Python environment
+**Windows 10/11**: open **PowerShell** (Start menu → type `PowerShell` → **Windows
+PowerShell**; *not* "Run as administrator") and paste:
 
-Windows:
+```powershell
+irm https://raw.githubusercontent.com/Mrb-Rafi/loanready/main/install.ps1 | iex
 ```
-py -3.12 tasks.py setup
-```
-Linux / macOS:
-```
+
+The installer then does everything by itself, in 3-6 minutes:
+
+| Step | What happens |
+|---|---|
+| 1. Python | Finds Python 3.12. On Windows, if it is missing, installs it with `winget` (no administrator rights needed) |
+| 2. Download | Downloads LoanReady into `~/loanready` (Windows: `C:\Users\<you>\loanready`, or `C:\loanready` if your user folder has a space or is in OneDrive). Uses git if you have it, otherwise the GitHub ZIP |
+| 3. Packages | Creates LoanReady's own Python environment (`.venv`) and installs exactly the packages it needs |
+| 4. Settings and data | Creates `.env` with safe defaults (AI in "mock" mode, built-in simulator), checks the installation (`doctor`) and loads Rina's Bakery (`seed`) |
+| 5. Shortcut | Linux/macOS: a `loanready` command (and an app-menu entry on Linux). Windows: a **LoanReady** shortcut on the Desktop and in the Start menu |
+| 6. Start | Starts LoanReady. Open **http://127.0.0.1:8501** in your browser (it usually opens by itself) |
+
+It ends with `LoanReady is installed in …` and then `Local URL: http://127.0.0.1:8501`.
+**Installation is done**; go to §5 to find your way around the screen.
+
+> **Running it again is safe.** It keeps your `.env` and your data, and updates the program
+> if it was downloaded with git.
+
+> **Install somewhere else / do not start at the end.** Set an option before the command.
+> Linux/macOS: `LOANREADY_DIR=/opt/loanready LOANREADY_NO_START=1 bash -c "$(curl -fsSL https://raw.githubusercontent.com/Mrb-Rafi/loanready/main/install.sh)"`.
+> Windows: `$env:LOANREADY_DIR="D:\loanready"; $env:LOANREADY_NO_START="1"` on one line,
+> then the `irm … | iex` line.
+
+> **Prefer to read a script before running it?** Open
+> [install.sh](https://github.com/Mrb-Rafi/loanready/blob/main/install.sh) or
+> [install.ps1](https://github.com/Mrb-Rafi/loanready/blob/main/install.ps1) on GitHub,
+> or follow §3.2, which does the same steps by hand.
+
+### 3.2 Manual install (step by step)
+
+Use this if you cannot run the installer. Paste the block for your system one line at a
+time. You need Python 3.12 (§2.2; on Windows from python.org, ticking **Add python.exe to
+PATH**) and git (or download the ZIP from the GitHub page with **Code → Download ZIP** and
+unzip it to the folder named in the first line).
+
+**Linux / macOS:**
+
+```bash
+git clone https://github.com/Mrb-Rafi/loanready.git ~/loanready
+cd ~/loanready
 python3.12 tasks.py setup
-```
-
-This creates a folder called `.venv` and installs exactly the packages LoanReady needs. It
-takes 2-5 minutes and prints a long list of packages. It ends with a line like
-`var: …/var`.
-
-> From now on you can type `python tasks.py …` (Windows: `py -3.12 tasks.py …` also works).
-> LoanReady automatically switches into its own environment; you never need to "activate"
-> anything.
-
-### Step 2. Check the installation
-
-```
-python tasks.py doctor
-```
-
-You should see a list where every row marked **MUST** says **OK**, ending with
-`doctor: all MUST checks OK`. Rows marked INFO (Tesseract, OpenAI key) are optional.
-
-### Step 3. Create your settings file
-
-Windows (PowerShell):
-```
-copy .env.example .env
-```
-Linux / macOS:
-```
 cp .env.example .env
+.venv/bin/python tasks.py doctor
+.venv/bin/python tasks.py seed
+.venv/bin/python tasks.py ui
 ```
 
-`.env` holds your local settings. The defaults work as they are: AI in "mock" mode (no model
-needed) and the simulator running inside LoanReady.
+**Windows (PowerShell):**
 
-### Step 4 (optional). Run the tests
+```powershell
+git clone https://github.com/Mrb-Rafi/loanready.git $HOME\loanready
+cd $HOME\loanready
+py -3.12 tasks.py setup
+copy .env.example .env
+.venv\Scripts\python tasks.py doctor
+.venv\Scripts\python tasks.py seed
+.venv\Scripts\python tasks.py ui
+```
+
+What to expect: `setup` takes 2-5 minutes and ends with a line like `var: …/var`; `doctor`
+ends with `doctor: all MUST checks OK` (INFO rows such as Tesseract or the OpenAI key are
+optional); `seed` takes about 30 s and prints a summary; `ui` prints
+`Local URL: http://127.0.0.1:8501`.
+
+> **Folder rules.** Use a short path **without spaces**. On Windows, **do not** put the
+> folder inside OneDrive (Desktop and Documents are often synced): OneDrive locks files and
+> breaks the database.
+
+### 3.3 How to type commands in the rest of this guide
+
+The rest of this guide writes commands as `python tasks.py <target>`, for example
+`python tasks.py demo`. Type them in a terminal **inside the LoanReady folder** (`cd ~/loanready`;
+Windows: `cd $HOME\loanready`) using:
+
+| System | Type | Or, from any folder (after the one-command install) |
+|---|---|---|
+| Linux / macOS | `python3 tasks.py demo` | `loanready demo` |
+| Windows | `py tasks.py demo` | `~\loanready\loanready.cmd demo` |
+
+LoanReady switches into its own environment automatically; you never need to "activate"
+anything.
+
+### 3.4 Optional: run the tests
 
 ```
 python tasks.py test
@@ -172,20 +201,34 @@ python tasks.py test
 About 2 minutes. It should end with something like `719 passed, 4 skipped`. The skipped
 tests are features that are deliberately not built; that is normal.
 
-**Installation is done.**
-
 ---
 
 ## 4. Start LoanReady
 
-### Step 1. Load the bakery's data
+### Step 1. Start it
+
+- **Windows:** double-click **LoanReady** on the Desktop or in the Start menu.
+- **Linux / macOS:** type `loanready` in a terminal (Linux: or pick **LoanReady** in the app menu).
+- **Manual install:** `python tasks.py run` inside the folder.
+
+This loads the bakery's data the first time (about 30 s) and then starts the screen. When
+you see `Local URL: http://127.0.0.1:8501`, open that address in your browser. Keep the
+window open: closing it stops LoanReady.
+
+### Step 2. Stop LoanReady
+
+Click in the terminal window and press **Ctrl + C**.
+
+### Fresh demo data
+
+To reset the bakery to its starting state (before a demo or recording), stop LoanReady and
+run:
 
 ```
 python tasks.py seed
 ```
 
-The first time, this also generates the bakery's six months of records (about 10 s). It then
-loads everything into the simulator and the books (about 25 s) and prints a summary like:
+It prints a summary like:
 
 ```
   cash (1000+1010)   $2,400.40
@@ -195,26 +238,11 @@ loads everything into the simulator and the books (about 25 s) and prints a summ
   ...
 ```
 
-### Step 2. Start the screen
+Then start LoanReady again. You can also start the screen alone with `python tasks.py ui`.
 
-```
-python tasks.py ui
-```
-
-The first time, Streamlit (the screen toolkit) may ask for an e-mail address in the terminal:
-just press **Enter** to skip. When you see `Local URL: http://127.0.0.1:8501`, open that
-address in your browser. Keep the terminal open: closing it stops LoanReady.
-
-### Step 3. Stop LoanReady
-
-Click in the terminal and press **Ctrl + C**.
-
-> **Tip: one command for both steps.** `python tasks.py run` seeds the data if there is none
-> yet and then starts the screen.
-
-> **Important:** if you run `tasks.py seed` again while the screen is open, restart the
-> screen afterwards (Ctrl + C, then `python tasks.py ui`). Seeding replaces the database
-> underneath the running screen.
+> **Important:** if you run `tasks.py seed` while the screen is open, restart the screen
+> afterwards (Ctrl + C, then start it again). Seeding replaces the database underneath the
+> running screen.
 
 ---
 
@@ -818,8 +846,9 @@ without the real engine. The sidebar then shows a yellow *Demo data* warning.
 
 ## 12. Command reference
 
-Type each command in the project folder. On Windows, `py -3.12 tasks.py …` works the same as
-`python tasks.py …`.
+Type each command in the project folder. `python tasks.py …` stands for `python3 tasks.py …`
+on Linux/macOS and `py tasks.py …` on Windows; after the one-command install, `loanready …`
+(Linux/macOS) or `~\loanready\loanready.cmd …` (Windows) also works from any folder (§3.3).
 
 | Command | What it does | Time |
 |---|---|---|
@@ -849,6 +878,13 @@ Type each command in the project folder. On Windows, `py -3.12 tasks.py …` wor
 
 | Problem | Fix |
 |---|---|
+| Installer: *LoanReady needs Python 3.12 exactly* (Linux/macOS) | Run the install command it prints (§2.2), then paste the installer line again |
+| Installer: *Python 3.12 is missing its venv module* | Ubuntu/Debian/Mint: `sudo apt-get install -y python3.12-venv`, then run the installer again |
+| Installer (Windows): *installed but is not on PATH yet* | Close PowerShell, open a new one and paste the installer line again |
+| Installer (Windows): *winget is unavailable* | Install Python 3.12 from python.org (tick *Add python.exe to PATH*), open a new PowerShell, run the installer again |
+| Windows: *running scripts is disabled on this system* | Use the `irm … \| iex` line exactly as given (it needs no policy change); for `install.ps1` downloaded as a file run `powershell -ExecutionPolicy Bypass -File install.ps1` |
+| `curl: command not found` (Linux) | `sudo apt-get install -y curl` (or use the manual install, §3.2) |
+| `loanready: command not found` right after installing | Open a new terminal (it adds `~/.local/bin` to your PATH), or run `~/.local/bin/loanready` |
 | `py` or `python3.12` not found | Install Python 3.12 (Windows: tick *Add python.exe to PATH*), open a new terminal |
 | `doctor` says *Python version* is wrong | Use Python 3.12 exactly: `py -3.12 tasks.py setup` |
 | `doctor` says *lock mismatch* or extra packages | Someone installed packages by hand. Delete the `.venv` folder and run `setup` again |
@@ -857,7 +893,7 @@ Type each command in the project folder. On Windows, `py -3.12 tasks.py …` wor
 | Windows: "database is locked" or files cannot be deleted | Move the project out of OneDrive to a short path like `C:\dev\loanready`; stop the screen before `clean` |
 | `Port 8501 is not available` | LoanReady is already running in another terminal: use that one, or stop it with Ctrl + C |
 | The browser shows nothing | Wait 10-20 s on the first start; make sure the address is `http://127.0.0.1:8501` |
-| Streamlit asks for an e-mail in the terminal | Press Enter |
+| Streamlit asks for an e-mail in the terminal | Press Enter (the installer normally prevents this question) |
 
 ### 13.2 Using the screen
 
