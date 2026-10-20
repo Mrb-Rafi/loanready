@@ -1,8 +1,9 @@
-"""Build the PDF editions of the technical documentation and the usage guide.
+"""Build the PDF editions of the technical documentation, usage guide and security self-assessment.
 
-``python -m scripts.build_pdfs`` writes ``docs/pdf/LoanReady_Technical_Documentation.pdf``
-and ``docs/pdf/LoanReady_Usage_Guide.pdf`` from ``docs/technical_doc.md`` and
-``docs/usage_guide.md``.
+``python -m scripts.build_pdfs`` writes ``docs/pdf/LoanReady_Technical_Documentation.pdf``,
+``docs/pdf/LoanReady_Usage_Guide.pdf`` and ``docs/pdf/LoanReady_Security_Self_Assessment.pdf``
+from ``docs/technical_doc.md``, ``docs/usage_guide.md`` and
+``docs/security_self_assessment.md``.
 
 Route: pandoc (GitHub-flavoured Markdown → standalone HTML with a print stylesheet), then
 headless Chromium (HTML → A4 PDF with page numbers). Both are external tools, not Python
@@ -33,6 +34,11 @@ DOCS: tuple[tuple[str, str, str], ...] = (
         "LoanReady: Technical Documentation",
     ),
     ("docs/usage_guide.md", "LoanReady_Usage_Guide.pdf", "LoanReady: Usage Guide"),
+    (
+        "docs/security_self_assessment.md",
+        "LoanReady_Security_Self_Assessment.pdf",
+        "LoanReady: Security Self-Assessment",
+    ),
 )
 PDF_NAMES = {Path(src).name: pdf for src, pdf, _title in DOCS}
 

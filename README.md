@@ -7,7 +7,16 @@ with every action behind a permission gate written in plain code.**
 2026 Shenzhen International FinTech Competition (FinTechathon) · International Track ·
 **Topic E: SME Finance Copilot** · Team **Korikath Nexus**
 
-**[Pitch deck (PDF)](docs/pdf/LoanReady_Pitch_Deck.pdf)** · [Technical documentation](docs/pdf/LoanReady_Technical_Documentation.pdf) · [Usage guide](docs/pdf/LoanReady_Usage_Guide.pdf)
+### Submission deliverables
+
+| # | Deliverable | Link |
+|---|---|---|
+| 1 | **Technical documentation** | [LoanReady_Technical_Documentation.pdf](docs/pdf/LoanReady_Technical_Documentation.pdf) |
+| 2 | **Presentation deck** (10-minute talk, 20 slides) | [LoanReady_Pitch_Deck.pdf](docs/pdf/LoanReady_Pitch_Deck.pdf) |
+| 3 | **Source code** with README and tests | this repository: [github.com/Mrb-Rafi/loanready](https://github.com/Mrb-Rafi/loanready) · [Quick start](#quick-start) · [tests/](tests/) |
+| 4 | **Security self-assessment** (permission tiers, known-risk list, residual risks) | [LoanReady_Security_Self_Assessment.pdf](docs/pdf/LoanReady_Security_Self_Assessment.pdf) |
+| 5 | **Execution evidence** (sandbox operation logs, hash-chained action log, chain checks, test report) | [evidence/](evidence/README.md) |
+| | Usage guide (install and run, every screen, demo script) | [LoanReady_Usage_Guide.pdf](docs/pdf/LoanReady_Usage_Guide.pdf) |
 
 ---
 
@@ -18,7 +27,7 @@ with every action behind a permission gate written in plain code.**
 | **Pitch deck** (20 slides): goals, pain points and solutions, technology, finance, security and compliance, the AI layer, evidence | [LoanReady_Pitch_Deck.pdf](docs/pdf/LoanReady_Pitch_Deck.pdf) | |
 | **Technical documentation**: architecture, every subsystem with its formulas, AI layer, governance, sandbox, testing, configuration, performance, limitations | [LoanReady_Technical_Documentation.pdf](docs/pdf/LoanReady_Technical_Documentation.pdf) | [docs/technical_doc.md](docs/technical_doc.md) |
 | **Usage guide**: install, start, every screen and button, the approval dialog, a click-by-click demo script, turning on AI, commands, troubleshooting, FAQ | [LoanReady_Usage_Guide.pdf](docs/pdf/LoanReady_Usage_Guide.pdf) | [docs/usage_guide.md](docs/usage_guide.md) |
-| Security self-assessment: permission tiers, known-risk list, residual risks | | [docs/security_self_assessment.md](docs/security_self_assessment.md) |
+| **Security self-assessment**: permission tiers, known-risk list, residual risks | [LoanReady_Security_Self_Assessment.pdf](docs/pdf/LoanReady_Security_Self_Assessment.pdf) | [docs/security_self_assessment.md](docs/security_self_assessment.md) |
 | Compliance matrix: regulation → control → code → test → evidence (generated) | | [docs/compliance_matrix.md](docs/compliance_matrix.md) |
 | Permission tier table (generated from code) | | [docs/generated/tier_table.md](docs/generated/tier_table.md) |
 | Execution evidence: demo summary, hash-chained logs, chain checks, test report | | [evidence/](evidence/README.md) |
@@ -163,7 +172,7 @@ anywhere: `loanready demo` (Linux/macOS) or `%USERPROFILE%\loanready\loanready.c
 | `python tasks.py sandbox` | Run the simulated bank as a separate server on port 8100 |
 | `python -m agent.health` | Show the AI mode, available models, per-task routes and OpenAI budget |
 | `python -m scripts.capture_screenshots` | Re-take the usage guide's screenshots from the real app (needs Chromium) |
-| `python -m scripts.build_pdfs` | Rebuild the two PDFs (needs pandoc and Chromium) |
+| `python -m scripts.build_pdfs` | Rebuild the documentation PDFs (needs pandoc and Chromium) |
 
 Full instructions, every screen and troubleshooting: [usage guide](docs/pdf/LoanReady_Usage_Guide.pdf).
 

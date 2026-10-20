@@ -868,7 +868,7 @@ on Linux/macOS and `py tasks.py …` on Windows; after the one-command install, 
 | `python tasks.py clean` | Delete runtime data in `var/` (refuses while running) | seconds |
 | `python -m agent.health` | Show AI mode, available backends, routes and OpenAI budget | seconds |
 | `python -m scripts.capture_screenshots` | Re-take this guide's screenshots from the real app on a temporary copy of the data (needs Chromium; uses OpenAI if it is on) | ~5 min |
-| `python -m scripts.build_pdfs` | Rebuild the PDF editions of this guide and the technical documentation (needs pandoc and Chromium) | ~30 s |
+| `python -m scripts.build_pdfs` | Rebuild the PDF editions of this guide, the technical documentation and the security self-assessment (needs pandoc and Chromium) | ~30 s |
 
 ---
 
